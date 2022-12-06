@@ -16,7 +16,7 @@
           label="home"
         />
         <q-route-tab
-          to="/some/other/route"
+          to="/login"
           replace
           label="login"
         />
