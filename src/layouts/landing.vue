@@ -4,19 +4,24 @@
     <!-- (Optional) The Header -->
     <q-header elevated class="row">
       <q-toolbar class="col-auto">
-        <q-toolbar-title style="font-family:customfont">
+        <q-toolbar-title style="font-family:customfont"> 
           ticktrax
         </q-toolbar-title>
       </q-toolbar>
 
       <q-tabs>
-        <q-route-tab
-          :to="{name: 'profile', params: {id: 1}}"
+        <q-route-tab 
+          to="/"
           replace
           label="home"
         />
         <q-route-tab
-          to="/login"
+          :to="{name: 'profile', params: {id: 1}}"
+          replace
+          label="account"
+        />
+        <q-route-tab
+          to="login"
           replace
           label="login"
         />
