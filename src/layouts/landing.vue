@@ -2,14 +2,14 @@
   <q-layout view="hHh Lpr fFf"> <!-- Be sure to play with the Layout demo on docs -->
 
     <!-- (Optional) The Header -->
-    <q-header elevated class="row">
+    <q-header elevated class="row" style="background-color:skyblue; color:black;">
       <q-toolbar class="col-auto">
         <q-toolbar-title style="font-family:customfont"> 
           ticktrax
         </q-toolbar-title>
       </q-toolbar>
 
-      <q-tabs>
+      <q-tabs style="background-color: skyblue">
         <q-route-tab 
           to="/"
           replace
@@ -23,7 +23,12 @@
         <q-route-tab
           to="/signin"
           replace
-          label="signin"
+          label="sign in"
+        />
+        <q-route-tab
+          to="/register"
+          replace
+          label="sign up"
         />
       </q-tabs>
     </q-header>
