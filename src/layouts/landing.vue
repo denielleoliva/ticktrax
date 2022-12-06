@@ -21,9 +21,9 @@
           label="account"
         />
         <q-route-tab
-          to="login"
+          to="/signin"
           replace
-          label="login"
+          label="signin"
         />
       </q-tabs>
     </q-header>
