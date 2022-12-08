@@ -15,10 +15,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue';
 
 const props = defineProps({
   time: String,
 });
-const time = ref("");
+const time = ref<string>('');
 </script>

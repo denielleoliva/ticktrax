@@ -1,109 +1,56 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="leftDrawerOpen = !leftDrawerOpen"
-        />
+  <q-layout view="hHh Lpr fFf">
+    <!-- Be sure to play with the Layout demo on docs -->
 
-        <q-toolbar-title>
-          Quasar App
+    <!-- (Optional) The Header -->
+    <q-header
+      elevated
+      class="row justify-between"
+      style="background-color: #5cab7d; color: white"
+    >
+      <q-toolbar class="col-auto">
+        <q-toolbar-title style="font-family: customfont">
+          ticktrax
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
+        <q-tabs style="background-color: #5cab7d">
+          <q-route-tab to="/" replace label="home" />
+          <q-route-tab
+            :to="{ name: 'profile', params: { id: 1 } }"
+            replace
+            label="account"
+          />
+          <q-route-tab to="/signin" replace label="sign in" />
+          <q-route-tab to="/register" replace label="sign up" />
+          <q-route-tab to="/form" replace label="form" />
+        </q-tabs>
       </q-toolbar>
+
+      <q-btn
+        flat
+        :icon="Dark.isActive ? 'light_mode' : 'dark_mode'"
+        @click="() => Dark.set(!Dark.isActive)"
+      />
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-      content-class="bg-grey-1"
-    >
-      <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
-        >
-          Essential Links
-        </q-item-label>
-        <EssentialLink
-          v-for="link in essentialLinks"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
-    </q-drawer>
-
     <q-page-container>
+      <!-- This is where pages get injected -->
+
       <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
-
-const linksData = [
-  {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
-  },
-  {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
-  }
-]
+import { Dark } from 'quasar';
 
 export default {
-  name: 'MainLayout',
-  components: {
-    EssentialLink
-  },
-  data () {
+  // name: 'LayoutName',
+
+  data() {
     return {
-      leftDrawerOpen: false,
-      essentialLinks: linksData
-    }
-  }
-}
+      leftDrawer: false,
+      Dark,
+    };
+  },
+};
 </script>

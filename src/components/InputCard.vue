@@ -3,7 +3,7 @@
     <q-card-section>
       <div class="text-h6">
         {{ props.title
-        }}<span v-if="props.isRequired" class="text-red q-pl-xs">*</span>
+        }}<span v-if="props.isRequired" class="text-negative q-pl-xs">*</span>
       </div>
     </q-card-section>
 
@@ -25,17 +25,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, defineAsyncComponent } from "vue";
+import { ref, defineAsyncComponent } from 'vue';
+import { Question, IRadioElement } from './models';
 
-const InputElement = defineAsyncComponent(() => import("./InputElement.vue"));
+const InputElement = defineAsyncComponent(() => import('./InputElement.vue'));
 const CheckboxElement = defineAsyncComponent(
-  () => import("./CheckboxElement.vue")
+  () => import('./CheckboxElement.vue')
 );
-const RadioElement = defineAsyncComponent(() => import("./RadioElement.vue"));
-const DateElement = defineAsyncComponent(() => import("./DateElement.vue"));
-const TimeElement = defineAsyncComponent(() => import("./TimeElement.vue"));
-const FileElement = defineAsyncComponent(() => import("./FileElement.vue"));
-const SelectElement = defineAsyncComponent(() => import("./SelectElement.vue"));
+const RadioElement = defineAsyncComponent(() => import('./RadioElement.vue'));
+const DateElement = defineAsyncComponent(() => import('./DateElement.vue'));
+const TimeElement = defineAsyncComponent(() => import('./TimeElement.vue'));
+const FileElement = defineAsyncComponent(() => import('./FileElement.vue'));
+const SelectElement = defineAsyncComponent(() => import('./SelectElement.vue'));
 
 const componentElement = {
   InputElement,
@@ -47,42 +48,55 @@ const componentElement = {
   SelectElement,
 };
 
-const radioOptions = [
-  { val: "myValue", label: "myLabel" },
-  { val: "myValue2", label: "myLabel2" },
-];
+interface Question {
+  id: number;
+  typeString: string;
+  title: string;
+  isRequired: boolean;
+  description?: string;
+  options:
+    | MultipleChoice
+    | CheckBox
+    | ShortAnswer
+    | IRadioElement
+    | IInputElement
+    | ICheckboxElement
+    | ISelectElement;
+}
 
-const inputOptions = {
-  label: "myInputLabel",
-  hint: "Get a hint or take a hike",
-  required: true,
-};
+interface MultipleChoice {
+  options: string[];
+  response: string | null;
+}
 
-const checkboxOptions = [
-  { label: "myCheckboxLabel", color: "teal" },
-  { label: "myCheckboxLabel2", color: "red" },
-];
+interface CheckBox {
+  options: string[];
+  response: string[] | null;
+}
 
-const dateOptions = {
-  multiple: true,
-  range: false,
-};
+interface ShortAnswer {
+  response: string | null;
+}
 
-const selectOptions = {
-  values: ["hey", "this", "is", "kind", "of", "neat"],
-  label: "mySelectLabel",
-};
+interface IRadioElement {
+  option: { val: string; label: string };
+}
 
-const fileOptions = { multiple: true };
+interface IInputElement {
+  option: { label: string; hint: string | null; required: boolean };
+}
 
-const props = defineProps({
-  title: String,
-  subTitle: String,
-  isRequired: Boolean,
-  typeString: String,
-  description: String,
-  options: Array | Object,
-});
+interface ICheckboxElement {
+  option: { label: string; required: boolean };
+}
+
+interface ISelectElement {
+  values: string[];
+  label: string;
+}
+
+const props = defineProps<Question>();
 
 const isEditMode = ref(false);
+const editor = ref<string>('What you see is <b>what</b> you get.');
 </script>

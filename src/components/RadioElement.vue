@@ -1,21 +1,16 @@
 <template>
-  <div>
-    <template v-for="option in options">
-      <q-radio
-        v-model="userSelection"
-        :val="option.val"
-        :label="option.label"
-        :key="option.val"
-      />
-    </template>
-  </div>
+  <template v-for="option in options" :key="option.val">
+    <q-radio v-model="userSelection" :val="option.val" :label="option.label" />
+  </template>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue';
+const emit = defineEmits(['input', '$event']);
 
 const props = defineProps({
   options: { label: String, val: String },
 });
-const userSelection = ref("");
+console.log(props.options);
+const userSelection = ref<string>('');
 </script>
