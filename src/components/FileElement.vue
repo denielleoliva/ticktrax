@@ -11,8 +11,8 @@
   </q-file>
 </template>
 
-<script setup lang="ts">
-import { ref } from "vue";
+<script setup>
+import { ref } from 'vue';
 
 const props = defineProps({
   options: { multiple: Boolean },

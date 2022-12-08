@@ -19,14 +19,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref } from 'vue';
+const emit = defineEmits(['input', '$event']);
 const props = defineProps({
   options: {
     label: String,
     hint: String,
     required: Boolean,
-    isParagraph: Boolean,
+    type: String,
   },
 });
-const userEntry = ref("");
+console.log(props.options, "here's the props", props.options);
+const userEntry = ref<string>('');
 </script>
