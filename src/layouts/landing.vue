@@ -4,13 +4,13 @@
     <!-- (Optional) The Header -->
     <q-header elevated class="row" style="background-color:#5CAB7D; color:white;">
       <q-toolbar class="col-auto">
-        <q-toolbar-title style="font-family:customfont"> 
+        <q-toolbar-title style="font-family:customfont">
           ticktrax
         </q-toolbar-title>
       </q-toolbar>
 
       <q-tabs style="background-color: #5CAB7D">
-        <q-route-tab 
+        <q-route-tab
           to="/"
           replace
           label="home"
@@ -30,17 +30,28 @@
           replace
           label="sign up"
         />
+        <q-route-tab
+          to="/form"
+          replace
+          label="form"
+        />
       </q-tabs>
+      <q-btn
+        class="absolute-right"
+        flat
+        :icon="Dark.isActive ? 'light_mode' : 'dark_mode'"
+        @click="() => Dark.toggle()"
+      />
     </q-header>
 
-    
 
 
-    
+
+
 
     <q-page-container>
       <!-- This is where pages get injected -->
-      
+
 
       <router-view />
     </q-page-container>
@@ -49,12 +60,15 @@
 </template>
 
 <script>
+import { Dark } from 'quasar';
+
 export default {
   // name: 'LayoutName',
 
   data () {
     return {
-      leftDrawer: false
+      leftDrawer: false,
+      Dark,
     }
   }
 }
