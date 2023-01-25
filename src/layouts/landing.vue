@@ -16,11 +16,6 @@
           label="home"
         />
         <q-route-tab
-          :to="{name: 'profile', params: {id: 1}}"
-          replace
-          label="account"
-        />
-        <q-route-tab
           to="/signin"
           replace
           label="sign in"
@@ -35,6 +30,17 @@
           replace
           label="form"
         />
+        <q-btn-dropdown auto-close flat label="Account">
+          <q-list>
+            <q-item to="/profile/1" style="color:black; justify-content:left; align-content:center; padding:12px">
+              Edit Profile
+            </q-item>
+
+            <q-item to="/signin" style="color:black; justify-content:left; align-content:center; padding:12px">
+              Log Out
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
       </q-tabs>
       <q-btn
         class="absolute-right"
