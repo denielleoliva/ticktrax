@@ -3,25 +3,20 @@
         <h2>
             Create Account
         </h2>
-        <h6 style="margin:12px; font-size:medium"> First Name</h6>
         <!-- First Name -->
-        <q-input filled style="max-width: 500px; margin: 10px;"
+        <q-input filled label="First Name" style="max-width: 500px; margin: 10px;"
         v-model="fName" type="name"/>
-        <h6 style="margin:12px; font-size:medium"> Last Name</h6>
         <!-- Last Name -->
-        <q-input filled style="max-width: 500px; margin: 10px"
+        <q-input filled label="Last Name" style="max-width: 500px; margin: 10px"
         v-model="lName" type="name"/>
-        <h6 style="margin:12px; font-size:medium"> Email *</h6>
         <!-- Enter email -->
-        <q-input filled style="max-width: 500px; margin: 10px;"
+        <q-input filled label="Email" style="max-width: 500px; margin: 10px;"
         v-model="email" type="email"  />
-        <h6 style="margin:12px; font-size:medium"> Password *</h6>
         <!-- Enter Password -->
-        <q-input filled style="max-width: 500px; margin: 10px;"
+        <q-input filled label="Password" style="max-width: 500px; margin: 10px;"
             v-model="password" :type="isPwd ? 'password' : 'text'"/>
         <!-- Confirm Password -->
-        <h6 style="margin:12px; font-size:medium"> Confirm Password *</h6>
-        <q-input filled style="max-width: 500px; margin: 10px;" 
+        <q-input filled label="Confirm Password" style="max-width: 500px; margin: 10px;" 
             v-model="cPassword" :type="isPwd ? 'password' : 'text'"/>
         <div class="row">
             <q-btn style="align:center; margin-left:12px; margin-top:10px; background-color:skyblue"
