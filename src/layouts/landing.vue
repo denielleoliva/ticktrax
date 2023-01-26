@@ -30,6 +30,11 @@
           replace
           label="form"
         />
+        <q-route-tab
+          to="/ticks"
+          replace
+          label="ticks"
+        />
         <q-btn-dropdown auto-close flat label="Account">
           <q-list>
             <q-item to="/profile/1" style="color:black; justify-content:left; align-content:center; padding:12px">
