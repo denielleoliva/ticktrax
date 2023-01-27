@@ -43,7 +43,13 @@
         </q-btn-dropdown>
       </q-tabs>
       <q-btn
-        class="absolute-right"
+        class="absolute-right gt-xs"
+        flat
+        :icon="Dark.isActive ? 'light_mode' : 'dark_mode'"
+        @click="() => Dark.toggle()"
+      />
+      <q-btn
+        class="relative-position lt-sm"
         flat
         :icon="Dark.isActive ? 'light_mode' : 'dark_mode'"
         @click="() => Dark.toggle()"

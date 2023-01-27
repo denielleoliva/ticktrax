@@ -14,6 +14,7 @@ module.exports = function (/* ctx */) {
     // https://v1.quasar.dev/quasar-cli/supporting-ts
     supportTS: true,
 
+
     // https://v1.quasar.dev/quasar-cli/prefetch-feature
     // preFetch: true,
 
@@ -21,7 +22,6 @@ module.exports = function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://v1.quasar.dev/quasar-cli/boot-files
     boot: [
-
 
     ],
 
@@ -47,6 +47,10 @@ module.exports = function (/* ctx */) {
     // Full list of options: https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       vueRouterMode: 'hash', // available values: 'hash', 'history'
+      env: {
+        "MAPBOX_ACCESS_TOKEN":"pk.eyJ1IjoicnN1bHRhbiIsImEiOiJjbGRjcTF1bDMwNHNiM25wNm1oZ2dzbWg2In0.yMbTf053wvYrnzJwUyqqYQ"
+
+      },
 
       // transpile: false,
 

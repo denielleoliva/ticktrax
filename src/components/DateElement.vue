@@ -1,6 +1,8 @@
 <template>
-  <q-date
+
+  <q-input
     v-model="date"
+    type="date"
     minimal
     :range="options.range"
     :multiple="options.multiple"
