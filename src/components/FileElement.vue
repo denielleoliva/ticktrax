@@ -6,7 +6,7 @@
     @input="updateFile"
     :color="options.color"
     :multiple="options.multiple"
-    accept="image/*, .heic"
+    accept=".jpg, .heic"
     lazy-rules
     :rules="options.required ? [(val) => !!val || 'Field is required'] : null"
     model-value
