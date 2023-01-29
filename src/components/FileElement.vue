@@ -9,8 +9,6 @@
     accept=".jpg, .heic"
     lazy-rules
     :rules="options.required ? [(val) => !!val || 'Field is required'] : null"
-    model-value
-    @update:model-value="updateFile()"
   >
     <template v-slot:prepend>
       <q-icon name="photo_library" />
@@ -45,9 +43,7 @@ function updateFile(e) {
   let reader = new FileReader();
 
   const file = e[0];
-  console.log(file, "THE FILE")
   const blob = new Blob([file]);
-  console.log(blob, "EHLLO");
 
   reader.onload = (event) => {
     console.log(event.target.result);
@@ -62,7 +58,6 @@ function updateFile(e) {
   imageUrl.value = URL.createObjectURL(file);
 
   reader.readAsArrayBuffer(file);
-  console.log("HELLO HERE")
 
 
 }
@@ -73,10 +68,6 @@ async function captureImage () {
     resultType: CameraResultType.Uri
   })
 
-  // The result will vary on the value of the resultType option.
-  // CameraResultType.Uri - Get the result from image.webPath
-  // CameraResultType.Base64 - Get the result from image.base64String
-  // CameraResultType.DataUrl - Get the result from image.dataUrl
   imageSrc.value = image.webPath
 }
 
@@ -96,11 +87,6 @@ const handleUpload = () => {
     imageUrl.value = URL.createObjectURL(image.value);
   }
 }
-
-
-
-//$emit('customChange', { id: props.id, value: $event.target.files[0] })
-
 
 
 watch(image, (newValue, oldValue) => {
