@@ -1,6 +1,6 @@
 <template>
   <div>
-  <div v-for="option in options">
+  <span v-for="option in options">
     <q-checkbox
       :key="option.label"
       v-model="userSelections"
@@ -8,7 +8,7 @@
       :color="option.color"
       :val="option.label"
     />
-  </div>
+  </span>
   </div>
 </template>
 

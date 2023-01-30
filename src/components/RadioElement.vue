@@ -1,6 +1,6 @@
 <template>
-  <div>
-  <div v-for="option in options">
+  <div >
+  <span v-for="option in options">
     <q-radio
       :key="option.val"
       v-model="userSelection"
@@ -8,7 +8,7 @@
       :label="option.label"
       :color="option.color"
     />
-  </div>
+  </span>
   </div>
 </template>
 

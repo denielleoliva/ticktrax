@@ -1,8 +1,10 @@
 <template>
   <q-layout>
+
     <q-page
       class="row items-center q-pb-xl"
       :class="$q.dark.isActive ? null : 'bg-green-1'"
+
     >
       <div class="q-pa-md items-start q-gutter-md my-form">
         <q-card class="my-card">
@@ -46,6 +48,7 @@
 
 
 import InputCard from 'components/InputCard.vue';
+import MapElement from "components/MapElement.vue";
 import { ref } from 'vue';
 import { useFormStore } from '../store/form';
 //import { storeToRefs } from 'pinia';
@@ -58,7 +61,7 @@ import { useFormStore } from '../store/form';
 
 
 const formDescription = ref(
-  "This a tick tracking app, which is a tool that allows users to track and monitor the presence of ticks in their local area. With the app, users can report sightings of ticks and see a map of where ticks have been reported in their community. This information can help users avoid areas with a high concentration of ticks and take appropriate precautions to protect themselves from tick-borne illnesses. The form for the tick tracking app might ask for information such as the user's location, the date and time of the tick sighting, and any additional details about the tick. This information will be used to populate the map and provide users with valuable information about the presence of ticks in their area."
+  "Upload ticks in seconds!"
 );
 
 const checkboxOptions  = [
@@ -128,59 +131,65 @@ const questions = ref([
       hint: '',
       required: true,
     },
-  },
-  {
-    id: 4,
-    typeString: 'TimeElement',
-    title: 'What time did you photo of the tick?',
-    isRequired: false,
-    userInput: null,
-    //description: 'You may select a date below.',
-    options: { time: '', color: 'green' },
-  },
-  {
-    id: 5,
-    typeString: 'RadioElement',
-    title: 'What is the color of the tick from the photo?',
-    isRequired: false,
-    userInput: null,
-    description:
-      "You can only select one option. If there're multiple colors, select the most dominant color.",
-    options: radioOptions,
-  },
-  {
-    id: 6,
-    typeString: 'InputElement',
-    title: 'What is the size of the tick?',
-    isRequired: true,
-    userInput: null,
-    description: 'From a scale of 1-10, how big is the tick?',
-    options: { ...inputOptions, type: 'number' },
-  },
-  {
-    id: 7,
-    typeString: 'InputElement',
-    title: 'Describe any distinguishing features of the tick.',
-    isRequired: false,
-    userInput: null,
-    description: 'Enter any additional information about the tick.',
-    options: {
-      ...inputOptions,
-      label: 'Enter your description here',
-      hint: '',
-      required: false,
-    },
-  },
-  {
-    id: 8,
-    typeString: 'CheckboxElement',
-    title:
-      'If you have been bitten by a tick, did you experienced any of the following symptoms?',
-    isRequired: false,
-    userInput: null,
-    description: 'Select all that apply.',
-    options: checkboxOptions,
-  },
+  }
+  // {
+  //   id: 3,
+  //   typeString: 'InputElement',
+  //   title: 'Where did you take the photo of the tick?',
+  //   isRequired: true,
+  //   userInput: null,
+  //   description: 'Enter any additional information about the tick.',
+  //   options: {
+  //     ...inputOptions,
+  //     type: 'text',
+  //     label: 'Enter the location here',
+  //     hint: '',
+  //     required: true,
+  //   },
+  // },
+  // {
+  //   id: 4,
+  //   typeString: 'RadioElement',
+  //   title: 'What is the color of the tick from the photo?',
+  //   isRequired: false,
+  //   userInput: null,
+  //   description:
+  //     "You can only select one option. If there're multiple colors, select the most dominant color.",
+  //   options: radioOptions,
+  // },
+  // {
+  //   id: 5,
+  //   typeString: 'InputElement',
+  //   title: 'What is the size of the tick?',
+  //   isRequired: true,
+  //   userInput: null,
+  //   description: 'From a scale of 1-10, how big is the tick?',
+  //   options: { ...inputOptions, type: 'number' },
+  // },
+  // {
+  //   id: 6,
+  //   typeString: 'InputElement',
+  //   title: 'Describe any distinguishing features of the tick.',
+  //   isRequired: false,
+  //   userInput: null,
+  //   description: 'Enter any additional information about the tick.',
+  //   options: {
+  //     ...inputOptions,
+  //     label: 'Enter your description here',
+  //     hint: '',
+  //     required: false,
+  //   },
+  // },
+  // {
+  //   id: 7,
+  //   typeString: 'CheckboxElement',
+  //   title:
+  //     'If you have been bitten by a tick, did you experienced any of the following symptoms?',
+  //   isRequired: false,
+  //   userInput: null,
+  //   description: 'Select all that apply.',
+  //   options: checkboxOptions,
+  // },
 ]);
 
 //store.setFormState(questions);
@@ -188,10 +197,11 @@ const questions = ref([
 userInput.value = Array(questions.value.length);
 </script>
 
-<style scoped>
-.my-form {
-  margin: auto;
-  max-width: 90vw;
-  width: 640px;
-}
+<style lang="sass" scoped >
+
+.my-form
+  margin: auto
+  max-width: 90vw
+  width: 640px
+
 </style>
