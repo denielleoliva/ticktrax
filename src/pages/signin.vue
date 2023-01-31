@@ -21,7 +21,7 @@
                 />
             </template>
         </q-input>
-        <q-btn style="margin-left:5px; margin-top:10px"
+        <q-btn style="background-color:#21ba45; margin-left:5px; margin-top:10px;"
             @click="signIn(email, password)">
             Sign in
         </q-btn>

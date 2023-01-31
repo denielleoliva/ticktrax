@@ -37,11 +37,11 @@
         />
         <q-btn-dropdown auto-close flat label="Account">
           <q-list>
-            <q-item to="/profile/1" style="color:black; justify-content:left; align-content:center; padding:12px">
+            <q-item to="/profile/1" style="justify-content:left; align-content:center; padding:12px">
               Edit Profile
             </q-item>
 
-            <q-item to="/signin" style="color:black; justify-content:left; align-content:center; padding:12px">
+            <q-item to="/signin" style="justify-content:left; align-content:center; padding:12px">
               Log Out
             </q-item>
           </q-list>

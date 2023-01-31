@@ -1,49 +1,56 @@
 <template>
-    <div class="q-pa-md row items-start q-gutter-md">
-        <q-card>
-            <div class="row q-pt-lg">
-                <q-space/>
-                <q-img img style="max-height:350px; max-width:300px;" :ratio="1"
-                    src="https://www.healthvermont.gov/sites/default/files/images/2019/01/hs_id_vzd_blackleggedtick.jpg"/>
-                <q-space/>
+    <div class="q-pa-md row items-start q-gutter-md" style="justify-content:center;">
+        <q-card class="tickCard shadow-10">
+            <q-img img style="max-height:500px; max-width:300px;" :ratio="1"
+                src="https://cdn.quasar.dev/img/parallax2.jpg">
+                <!-- src="https://www.healthvermont.gov/sites/default/files/images/2019/01/hs_id_vzd_blackleggedtick.jpg"/> -->
+            </q-img>
+            <div class="caption">
+                <div class="title">
+                    <!-- Blacklegged tick -->
+                    temp pic 1
+                </div>
+                <div class="subtitle"> 
+                    <!-- Ixodes scapularis -->
+                    bridge
+                </div>
+                <div class="body">
+                    Lorem ipsum dolor sit amet, 
+                    consectetur adipiscing elit, 
+                    sed do eiusmod tempor incididunt 
+                    ut labore et dolore magna aliqua. 
+                    Ut enim ad minim veniam, quis nostrud 
+                    exercitation ullamco laboris nisi ut 
+                    aliquip ex ea commodo consequat.
+                    <!-- Throughout Vermont wooded area
+                    and fields with tall grass and brush -->
+                </div>
             </div>
-
-            <q-card-section class="q-pa-md">
-                <div class="tickName">
-                    Blacklegged tick (Ixodes scapularis)
-                </div>
-                <div class="caption">
-                    throughout Vermont wooded area
-                    and fields with tall grass and brush
-                </div>
-                <!-- <div>  Blacklegged tick(Ixodes scapularis)</div>
-                <div>  throughout Vermont wooded areas 
-                        and fields with tall grass and brush</div> -->
-            </q-card-section>
         </q-card>
         
-        <q-card>
-            <div class="row q-pt-lg">
-                <q-space/>
-                <q-img img style="max-height:300px; max-width:300px;" :ratio="1"
-                    src="https://www.healthvermont.gov/sites/default/files/images/2019/01/hs_id_vzd_browndogtick.jpg"/>
-                <q-space/>
+        <q-card class="tickCard shadow-10">
+            <q-img img style="max-height:500px; max-width:300px;" :ratio="1"
+                src="https://cdn.quasar.dev/img/mountains.jpg"/>
+                <!-- src="https://www.healthvermont.gov/sites/default/files/images/2019/01/hs_id_vzd_browndogtick.jpg" -->
+            <div class="caption">
+                <div class="title">
+                    <!-- Lone star tick  -->
+                    temp pic 2
+                </div>
+                <div class="subtitle">
+                    <!-- Ambylomma americanum -->
+                    large hill
+                </div>
+                <div class="body">
+                    Lorem ipsum dolor sit amet, 
+                    consectetur adipiscing elit, 
+                    sed do eiusmod tempor incididunt 
+                    ut labore et dolore magna aliqua. 
+                    Ut enim ad minim veniam, quis nostrud 
+                    exercitation ullamco laboris nisi ut 
+                    aliquip ex ea commodo consequat.
+                </div>
             </div>
-            <!-- <q-img style="height:25%; width:25%" ratio="1"
-                src="https://www.healthvermont.gov/sites/default/files/images/2019/01/hs_id_vzd_browndogtick.jpg"
-                /> -->
-
-            <q-card-section>
-                <div class="tickName">
-                    Lone star tick (Ambylomma americanum)
-                </div>
-                <div class="caption">
-                    wherever humans and dogs live including indoors, unlike other tick species
-                </div>
-                <!-- <div>Blacklegged tick (Ixodes scapularis)</div>
-                <div>  throughout Vermont wooded area
-                        and fields with tall grass and brush</div> -->
-            </q-card-section>
         </q-card>
     </div>
   </template>
@@ -53,13 +60,32 @@
 </script>
 
 <style>
-.tickName{
-    font-size: medium;
-    font-weight: bold;
+.body{
+    font-size: smaller;
     justify-content: center;
 }
-.caption{
+.caption {
+    max-height:200px;
+    margin:5px;
+    padding:5px;
+}
+.tickCard{
+    max-height:500px;
+    max-width:300px;
+    border:2px;
+    border-color:black;
+    border-radius:20px;
+    /* box-shadow: 0 4px 8px 0 grey, 0 6px 25px 0 lightgrey; */
+}
+.title{
+    font-size: medium;
+    font-weight: bolder;
+    justify-content: center;
+}
+.subtitle{
     font-size: small;
+    font-style: italic;
+    font-weight: bold;
     justify-content: center;
 }
 </style>
