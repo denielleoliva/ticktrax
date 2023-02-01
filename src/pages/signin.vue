@@ -1,34 +1,36 @@
 <template>
-    <q-page padding style="font-family: customfont; margin:10px">
-        <h2>
-            Sign Into Your Account
-        </h2>
-        <h3 v-if="(this.authFail === true)">
-            Sign in failed... please try again
-        </h3>
-        <!-- Enter email -->
-        <q-input filled label="Email" style="max-width: 500px; margin: 5px;"
-        v-model="email" type="email"  />
-        <!-- Enter Password -->
-        <q-input filled label="Password" style="max-width: 500px; margin: 5px;"
-            v-model="password" :type="isPwd ? 'password' : 'text'">
-            <!-- Password has see password text toggle -->
-            <template v-slot:append>
-                <q-icon
-                    :name="isPwd ? 'visibility_off' : 'visibility'"
-                    class="cursor-pointer"
-                    @click="isPwd = !isPwd"
-                />
-            </template>
-        </q-input>
-        <q-btn style="background-color:#21ba45; margin-left:5px; margin-top:10px;"
-            @click="signIn(email, password)">
-            Sign in
-        </q-btn>
-    </q-page>
+    <div class="row" style="justify-content:center">
+        <q-page padding style="font-family: customfont; margin:5px">
+            <h3>
+                Sign Into Your Account
+            </h3>
+            <h3 v-if="(this.authFail === true)">
+                Sign in failed... please try again
+            </h3>
+            <!-- Enter email -->
+            <q-input filled label="Email" style="max-width: 500px; margin: 5px;"
+            v-model="email" type="email"  />
+            <!-- Enter Password -->
+            <q-input filled label="Password" style="max-width: 500px; margin: 5px;"
+                v-model="password" :type="isPwd ? 'password' : 'text'">
+                <!-- Password has see password text toggle -->
+                <template v-slot:append>
+                    <q-icon
+                        :name="isPwd ? 'visibility_off' : 'visibility'"
+                        class="cursor-pointer"
+                        @click="isPwd = !isPwd"
+                    />
+                </template>
+            </q-input>
+            <q-btn color="info" style="margin-left:5px; margin-top:10px;"
+                @click="signIn(email, password)">
+                Sign in
+            </q-btn>
+        </q-page>
+    </div>
   </template>
   
-  <script>
+<script>
 import { ref } from 'vue'
 
 export default{

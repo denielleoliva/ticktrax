@@ -75,7 +75,6 @@
     border:2px;
     border-color:black;
     border-radius:20px;
-    /* box-shadow: 0 4px 8px 0 grey, 0 6px 25px 0 lightgrey; */
 }
 .title{
     font-size: medium;
