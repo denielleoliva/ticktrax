@@ -50,6 +50,11 @@
           replace
           label="log out"
         />
+        <q-route-tab
+          to="/list"
+          replace
+          label="list"
+          />
       </q-tabs>
       <q-btn
         class="absolute-right"

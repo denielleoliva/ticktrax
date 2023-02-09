@@ -31,7 +31,7 @@
                 </div>
                 
                 <q-space/>
-                <q-btn type="submit" value="Send" style="place-self:end; margin:10px; background-color:#5CAB7D;" color="info">
+                <q-btn type="submit" value="Send" style="place-self:end; margin:10px; background-color:#5CAB7D;" color="primary">
                     submit
                 </q-btn>
                 <input type="hidden" name="recipient" value="ticktrax.unr@gmail.com" />

@@ -26,7 +26,7 @@
             <q-input filled label="Confirm Password" style="max-width: 500px; margin: 10px;" 
                 v-model="cPassword" :type="isPwd ? 'password' : 'text'"/>
             <div class="row">
-                <q-btn color="info" style="align:center; margin-left:12px; margin-top:10px; background-color:#21ba45;"
+                <q-btn color="primary" style="align:center; margin-left:12px; margin-top:10px; background-color:#21ba45;"
                     @click="register(fName, lName, email, password, cPassword)">
                     Sign up
                 </q-btn>
