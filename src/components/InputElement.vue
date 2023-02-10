@@ -4,6 +4,7 @@
     :label="options.label"
     :hint="options.hint"
     :type="options.type"
+    clearable
     lazy-rules
     :rules="
       options.required

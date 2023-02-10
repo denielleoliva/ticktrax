@@ -15,12 +15,19 @@ import { ref, watch } from 'vue';
 
 const emit = defineEmits(['customChange']);
 const props = defineProps({
-  options: { range: Boolean | null, multiple: Boolean | null, color: String },
+  userInput: String,
+  options: Object,
   id: Number,
 });
 
 const date = ref<string>('');
+if (props.userInput) {
+  date.value = props.userInput;
+}
+console.log(props.userInput)
+
 watch(date, (newValue, oldValue) => {
+  console.log(newValue)
   emit('customChange', { id: props.id, value: newValue });
 });
 </script>

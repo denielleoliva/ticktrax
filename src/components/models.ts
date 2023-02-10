@@ -20,8 +20,7 @@ export interface IRadioElement {
 }
 
 interface ISelectElement {
-  values: string[];
-  label: string;
+  option: {value: string; label: string}[];
   color?: string;
 }
 

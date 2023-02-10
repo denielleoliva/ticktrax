@@ -16,18 +16,18 @@
       </div>
       <div v-else>{{ props.description }}{{ props.modelValue }}</div>
     </q-card-section>
-    <q-card-section class="q-pt-none gt-xs" style="max-width: 300px">
+    <q-card-section class="q-pt-none gt-xs" :style="props.typeString !== 'MapElement' ? 'max-width: 300px': ''">
       <component
         :is="componentElement[props.typeString]"
         :options="props.options"
-        @customChange="logChange"
+        :user-input="props.userInput"
+        @customChange="callBackFunc"
         @emptyField="requiredFieldEmpty"
         :id="props.id"
       ></component>
     </q-card-section>
     <div class="lt-sm">
     <q-card-actions>
-
       <q-space />
 
       <q-btn
@@ -51,11 +51,12 @@
           <div v-else>{{ props.description }}{{ props.modelValue }}</div>
         </q-card-section>
 
-    <q-card-section class="q-pt-none" style="max-width: 300px">
+    <q-card-section class="q-pt-none" :style="props.typeString !== 'MapElement' ? 'max-width: 300px': ''">
       <component
         :is="componentElement[props.typeString]"
         :options="props.options"
-        @customChange="logChange"
+        :user-input="props.userInput"
+        @customChange="callBackFunc"
         @emptyField="requiredFieldEmpty"
         :id="props.id"
       ></component>
@@ -73,10 +74,12 @@
 </style>
 
 <script setup lang="ts">
-import { ref, defineAsyncComponent, watch } from 'vue';
+import { ref, defineAsyncComponent, watch, defineEmits } from 'vue';
 import { Question, IRadioElement } from './models';
 
 const isRedBorderActive = ref(false);
+
+const emit = defineEmits(['getMetaData', 'getCanIdTick', 'getTickType'])
 
 const requiredFieldEmpty = (isError: boolean) => {
   isRedBorderActive.value = isError;
@@ -92,15 +95,20 @@ const DateElement = defineAsyncComponent(() => import('./DateElement.vue'));
 const TimeElement = defineAsyncComponent(() => import('./TimeElement.vue'));
 const FileElement = defineAsyncComponent(() => import('./FileElement.vue'));
 const SelectElement = defineAsyncComponent(() => import('./SelectElement.vue'));
+const MapElement = defineAsyncComponent(() => import('./MapElement.vue'));
 
-const example = ref('');
 
-watch(example, (newValue, oldValue) => {
-  console.log(newValue);
-});
 
 function logChange(value: any) {
-  console.log('logChange', value.id);
+  emit('getMetaData', value);
+}
+
+function sendCanIdTickResponse(value: boolean) {
+  emit('getCanIdTick', value);
+}
+
+function sendGetTickType(value: string) {
+  emit('getTickType', value);
 }
 
 const componentElement = {
@@ -111,6 +119,7 @@ const componentElement = {
   TimeElement,
   FileElement,
   SelectElement,
+  MapElement,
 };
 
 type QuestionType = MultipleChoice | CheckBox | ShortAnswer | IRadioElement | IInputElement | ICheckboxElement | ISelectElement
@@ -121,7 +130,7 @@ interface Question {
   typeString: string;
   title: string;
   isRequired: boolean;
-
+  userInput?: string | number[];
   description?: string;
   options: QuestionType;
 }
@@ -144,6 +153,8 @@ interface IRadioElement {
   option: { val: string; label: string };
 }
 
+
+
 interface IInputElement {
   option: { label: string; hint: string | null; required: boolean };
 }
@@ -153,12 +164,21 @@ interface ICheckboxElement {
 }
 
 interface ISelectElement {
-  values: string[];
-  label: string;
+ option: {value: string; label: string}[];
 }
 
 
 const props = defineProps<Question>();
+const callBackFunc = ref<any>(null);
+
+if (props.typeString === 'RadioElement') {
+  callBackFunc.value = sendCanIdTickResponse;
+} else if (props.typeString === 'SelectElement') {
+  callBackFunc.value = sendGetTickType;
+} else {
+  callBackFunc.value = logChange;
+}
+
 
 const expanded = ref(false);
 

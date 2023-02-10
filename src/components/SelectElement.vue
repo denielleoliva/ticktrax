@@ -1,18 +1,22 @@
 <template>
-  <q-select v-model="model" :options="options.values" :label="options.label" />
+  <q-select v-model="model" :options="options.dropdownValues" :color="options.color" :label="options.boxLabel" />
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 
+const model = ref<string>('')
+
 const emit = defineEmits(['customChange']);
 const props = defineProps({
-  options: { values: Array, label: String },
+  userInput: String,
+  options: Object,
+  label: String,
   id: Number,
 });
 //const options = props.options;
-const selectedValue = ref<string>('');
-watch(selectedValue, (newValue, oldValue) => {
-  emit('customChange', { id: props.id, value: newValue });
+
+watch(model, (newValue, oldValue) => {
+  emit('customChange', newValue);
 });
 </script>

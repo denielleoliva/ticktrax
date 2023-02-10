@@ -12,14 +12,20 @@
   },
   "dependencies": {
     "@capacitor/camera": "^4.1.4",
+    "@capacitor/geolocation": "^4.1.0",
     "@ionic/pwa-elements": "^3.1.1",
     "@quasar/extras": "^1.0.0",
     "core-js": "^3.6.5",
-    "pinia": "^2.0.29",
-    "quasar": "^1.0.0"
+    "heic-convert": "^1.2.4",
+    "js-cookie": "^3.0.1",
+    "mapbox-gl": "^0.53.1",
+    "pinia": "^2.0.30",
+    "quasar": "^1.0.0",
+    "vue-mapbox": "^0.4.1"
   },
   "devDependencies": {
-    "@quasar/app": "^2.0.0"
+    "@quasar/app": "^2.0.0",
+    "workerize-loader": "^2.0.2"
   },
   "browserslist": [
     "last 10 Chrome versions",

@@ -17,13 +17,14 @@ import { ref, watch } from 'vue';
 
 const emit = defineEmits(['customChange']);
 const props = defineProps({
-  options: { label: String, val: String, color: String },
+  options: Array,
   id: Number,
 });
 
-console.log(props.options);
+
 const userSelection = ref<string | null>(null);
 watch(userSelection, (newValue, oldValue) => {
-  emit('customChange', { id: props.id, value: newValue });
+  console.log(newValue, "Radio");
+  emit('customChange', newValue);
 });
 </script>
