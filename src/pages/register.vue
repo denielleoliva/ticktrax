@@ -7,27 +7,27 @@
             <q-banner class="col"  v-if="(registerSuccess === true)" rounded style="align-content: center; padding:12px; font-size:large; background-color: #21ba45;">
                 Account Creation Successful!
             </q-banner>
-            <q-banner v-if="(registerSuccess === false)" rounded style="align-content:center; padding:12px;  font-size:large; background-color: red">
+            <q-banner v-if="(registerSuccess === false)" rounded style="align-content:center; padding:12px;  font-size:large; background-color: pink">
                 Account Creation Failed...
             </q-banner>
             <!-- First Name -->
             <q-input filled label="First Name" style="max-width: 500px; margin: 10px;"
-            v-model="fName" type="name"/>
+            v-model="fields.firstName" type="name"/>
             <!-- Last Name -->
             <q-input filled label="Last Name" style="max-width: 500px; margin: 10px"
-            v-model="lName" type="name"/>
+            v-model="fields.lastName" type="name"/>
             <!-- Enter email -->
             <q-input filled label="Email" style="max-width: 500px; margin: 10px;"
-            v-model="email" type="email"  />
+            v-model="fields.email" type="email"  />
             <!-- Enter Password -->
             <q-input filled label="Password" style="max-width: 500px; margin: 10px;"
-                v-model="password" :type="isPwd ? 'password' : 'text'"/>
+                v-model="fields.password" :type="isPwd ? 'password' : 'text'"/>
             <!-- Confirm Password -->
             <q-input filled label="Confirm Password" style="max-width: 500px; margin: 10px;" 
-                v-model="cPassword" :type="isPwd ? 'password' : 'text'"/>
+                v-model="fields.confirmPassword" :type="isPwd ? 'password' : 'text'"/>
             <div class="row">
                 <q-btn color="primary" style="align:center; margin-left:12px; margin-top:10px; background-color:#21ba45;"
-                    @click="register(fName, lName, email, password, cPassword)">
+                    @click="register()">
                     Sign up
                 </q-btn>
                 <div class="col" v-if="(registerSuccess === false)" style="align-content: center; padding:12px; font-size:large"> 
@@ -46,6 +46,23 @@ import { ref } from 'vue'
 export default{
     data () {
         return {
+
+        }
+    },
+    setup () 
+    {
+        return {
+
+            fields: ref({
+                firstName: ref(''),
+                lastName: ref(''),
+                email: ref(''),
+                password: ref(''),
+                confirmPassword: ref('')
+            }),
+
+            // password: ref(''),
+            isPwd: ref(true),
             leftDrawer: false,
             signedIn: false,
             authFail: false,
@@ -54,52 +71,78 @@ export default{
                 default: null,
                 required: true,
             }
-        }
-    },
-    setup () 
-    {
-        return {
-            password: ref(''),
-            isPwd: ref(true),
-            email: ref(''),
-            fName: ref(''),
-            lName: ref(''),
-            cPassword: ref('')
+            // email: ref(''),
+            // fName: ref(''),
+            // lName: ref(''),
+            // cPassword: ref('')
         }
     },
     methods:{
-            signIn(email, password) 
+            //  for my reference
+            // signIn(email, password) 
+            // {
+            //     const authenticated = email === "jdoe@fakemail.com" && password == "fakePassword123!"
+            //     if(authenticated)
+            //     {
+            //         this.signedIn = true,
+            //         this.authFail = false,
+            //         this.$router.push('/profile/1/')
+            //         console.log("signedIn =" + this.signedIn + " authFail =" + this.authFail)
+            //     }
+            //     else
+            //     {
+            //         this.authFail = true,
+            //         console.log("authentication failed")
+            //     }
+            // }, 
+            // for demo purposes only
+            // register(fName, lName, email, password, cPassword)
+            // {
+            //     const validRegister = password === cPassword && password !== "" && cPassword !== "" && email !== ""
+            //     if(validRegister)
+            //     {
+            //         console.log(fName + " " + lName + " " + email + " " + password + " ")
+            //         //send fName, lName, email, password to db
+            //         this.registerSuccess = true
+            //         this.$router.push('/2fa')
+            //     }
+            //     else
+            //     {
+            //         console.log(validRegister)
+            //         this.registerSuccess = false
+            //     }
+            // },
+            // post data to api
+            register()
             {
-                const authenticated = email === "jdoe@fakemail.com" && password == "fakePassword123!"
-                if(authenticated)
-                {
-                    this.signedIn = true,
-                    this.authFail = false,
-                    this.$router.push('/profile/1/')
-                    console.log("signedIn =" + this.signedIn + " authFail =" + this.authFail)
-                }
-                else
-                {
-                    this.authFail = true,
-                    console.log("authentication failed")
-                }
-            }, 
-            register(fName, lName, email, password, cPassword)
-            {
-                const validRegister = password === cPassword && password !== "" && cPassword !== "" && email !== ""
-                if(validRegister)
-                {
-                    console.log(fName + " " + lName + " " + email + " " + password + " ")
-                    //send fName, lName, email, password to db
-                    this.registerSuccess = true
-                    this.$router.push('/2fa')
-                }
-                else
-                {
-                    console.log(validRegister)
-                    this.registerSuccess = false
-                }
-            },
+                //  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
+                //  url for our api connection (this doesn't work yet but I think this is the format we want the fetch)
+                const url = '192.168.1.10:5095/auth'
+
+                fetch(url, {
+                    //  this means we add to database
+                    method: 'POST',
+
+                    //  this means we are adding of type json
+                    headers: {
+                        'Content-Type' : 'application/json',
+                    },
+
+                    //  this are the fields in json format (hopefully)
+                    body: JSON.stringify(this.fields)
+                })
+                .then((response) => response.json)
+
+                //  reporting successful post
+                .then((data) => {
+                    console.log('API POST', data)
+                })
+
+                //  reported failed post
+                .catch((error) => {
+                    console.error('API POST FAIL', error)
+                })
+            }
         }
     }
 </script>

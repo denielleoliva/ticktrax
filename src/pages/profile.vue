@@ -24,12 +24,7 @@
                 </q-item-section>
               </q-item>
 
-              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                <q-item-section>
-                  <q-input dark color="white" dense v-model="user_details.user_name" label="User Name"/>
-                </q-item-section>
-              </q-item>
-              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+              <q-item class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <q-item-section>
                   <q-input dark color="white" dense v-model="user_details.email" label="Email Address"/>
                 </q-item-section>
@@ -44,15 +39,10 @@
                   <q-input dark color="white" dense v-model="user_details.last_name" label="Last Name"/>
                 </q-item-section>
               </q-item>
-              <q-item class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <q-item-section>
-                  <q-input dark color="white" type="textarea" dense v-model="user_details.about" label="About"/>
-                </q-item-section>
-              </q-item>
             </q-list>
           </q-card-section>
           <q-card-actions align="right">
-            <q-btn class="text-capitalize bg-info text-white">Update User Info</q-btn>
+            <q-btn class="text-capitalize bg-info text-white" @click="updateUserInfo()">Update User Info</q-btn>
           </q-card-actions>
         </q-card>
       </div>
@@ -100,7 +90,7 @@
             </q-item>
           </q-card-section>
           <q-card-actions align="right">
-            <q-btn class="text-capitalize bg-info text-white">Change Password</q-btn>
+            <q-btn class="text-capitalize bg-info text-white" @click="changePassword()">Change Password</q-btn>
           </q-card-actions>
 
         </q-card>
@@ -110,16 +100,45 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue'
-export default defineComponent({
-  name: "UserProfile",
-  setup() {
-    return {
-      user_details: {},
-      password_dict: {}
+import { ref } from 'vue'
+  export default{
+    setup () {
+      return {
+        user_details : ref({
+          email: ref(''),
+          first_name: ref(''),
+          last_name: ref(''),
+        }),
+        password_dict : ref({
+          current_password: ref(''),
+          new_password: ref(''),
+          confirm_new_password: ref(''),
+        })
+      }
+    },
+    methods:{
+      updateUserInfo(){
+
+        const payload = '[' + JSON.stringify({
+          "email" : this.user_details.email,
+          "firstName" : this.user_details.first_name,
+          "lastName" : this.user_details.last_name
+        }) + ']'
+
+        console.log(payload)
+      },
+      changePassword(){
+
+        const payload = '[' + JSON.stringify({
+          "current password" : this.password_dict.current_password,
+          "new password" : this.password_dict.new_password,
+          "confirm new password" : this.password_dict.confirm_new_password,
+        }) + ']'
+
+        console.log(payload)
+      }
     }
   }
-})
 </script>
 
 <style scoped>
