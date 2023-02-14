@@ -35,6 +35,7 @@
 <script>
 // import { response } from 'express'
 import { ref } from 'vue'
+import { axios } from 'boot/axios'
 
 export default{
     data () {
@@ -79,35 +80,59 @@ export default{
             //     console.log("authentication failed")
             // }
             
-            //  place the api call here
+            //  place the api call here (using fetch)
 
             //  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
             //  url for our api connection (this doesn't work yet but I think this is the format we want the fetch)
-            const url = '192.168.1.10:5095/auth'
+            // const url = '192.168.1.10:5095/auth'
 
-            fetch(url, {
-                //  this means we add to database
-                method: 'POST',
+            // fetch(url, {
+            //     //  this means we add to database
+            //     method: 'POST',
 
-                //  this means we are adding of type json
+            //     //  this means we are adding of type json
+            //     headers: {
+            //         'Content-Type' : 'application/json',
+            //     },
+
+            //     //  this are the fields in json format (hopefully)
+            //     body: JSON.stringify(this.fields)
+            // })
+            // .then((response) => response.json)
+
+            // //  reporting successful post
+            // .then((data) => {
+            //     console.log('API POST', data)
+            // })
+
+            // //  reported failed post
+            // .catch((error) => {
+            //     console.error('API POST FAIL', error)
+            // })
+            //  api call here using axios
+
+            const url = 'localhost:5095/auth'
+            const api = axios.create({
+                 baseURL: 'localhost:5095/auth',
+                 proxy: false
+            })
+
+
+            // return api.post('/auth/register', this.credentials)
+            //     .then(response => {
+            //     api.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token
+            //     commit('login', {token: response.data.token, user: response.data.user})
+            //     })
+            const res = await api.post(url, JSON.stringify(this.fields), {
                 headers: {
-                    'Content-Type' : 'application/json',
-                },
+                    // 'application/json' is the modern content-type for JSON, but some
+                    // older servers may use 'text/json'.
+                    // See: http://bit.ly/text-json
+                    'content-type': 'text/json'
+                }
+            });
 
-                //  this are the fields in json format (hopefully)
-                body: JSON.stringify(this.fields)
-            })
-            .then((response) => response.json)
-
-            //  reporting successful post
-            .then((data) => {
-                console.log('API POST', data)
-            })
-
-            //  reported failed post
-            .catch((error) => {
-                console.error('API POST FAIL', error)
-            })
+            res.data.headers['Content-Type']; // text/json
         }   
     }
 }
