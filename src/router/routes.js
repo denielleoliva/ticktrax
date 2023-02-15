@@ -9,7 +9,11 @@ const routes = [
       { path: '/dan', component: () => import('pages/dan.vue') },
       { path: '/signin', component: () => import('src/pages/signin.vue') },
       { path: '/register', component: () => import('src/pages/register.vue')},
-      { path: '/form', component: () => import('pages/formPage.vue')}
+      { path: '/form', component: () => import('pages/formPage.vue')},
+      { path: '/ticks', component: () => import('src/pages/ticks.vue')},
+      { path: '/feedback', component: () => import('src/pages/feedback.vue')},
+      { path: '/2fa', component: () => import('src/pages/2fa.vue')},
+      { path: '/list', component: () => import('src/pages/list')}
     ]
   },
 

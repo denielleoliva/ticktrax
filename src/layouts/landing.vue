@@ -30,17 +30,31 @@
           replace
           label="form"
         />
-        <q-btn-dropdown auto-close flat label="Account">
-          <q-list>
-            <q-item to="/profile/1" style="color:black; justify-content:left; align-content:center; padding:12px">
-              Edit Profile
-            </q-item>
-
-            <q-item to="/signin" style="color:black; justify-content:left; align-content:center; padding:12px">
-              Log Out
-            </q-item>
-          </q-list>
-        </q-btn-dropdown>
+        <q-route-tab
+          to="/ticks"
+          replace
+          label="ticks"
+        />
+        <q-route-tab
+          to="/profile/1"
+          replace
+          label="Edit Profile"
+        />
+        <q-route-tab
+          to="/feedback"
+          replace
+          label="leave feedback"
+        />
+        <q-route-tab
+          to="/signin"
+          replace
+          label="log out"
+        />
+        <q-route-tab
+          to="/list"
+          replace
+          label="list"
+          />
       </q-tabs>
       <q-btn
         class="absolute-right gt-xs"
