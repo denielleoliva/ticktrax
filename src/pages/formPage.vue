@@ -28,12 +28,12 @@
         </template>
         <div class="row justify-between">
           <div>
-            <q-btn color="positive" label="Submit" @click="store.counter++" />
+            <q-btn color="primary" label="Submit" @click="store.counter++" />
           </div>
           <div>
             <q-btn
               flat
-              color="positive"
+              color="primary"
               label="Clear form"
               @click="store.counter--"
             />
