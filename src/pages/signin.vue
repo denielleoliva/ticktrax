@@ -59,10 +59,12 @@ export default{
         }
     },
     methods:{
+        // pretty sure we need a forgot password feature (dunno how to do php type things :C)
         forgotPassword()
         {
 
         },  
+        // async because the api call has promise :thumbs-up:
         async signIn() 
         {
             // //  for demo purposes
@@ -111,28 +113,60 @@ export default{
             // })
             //  api call here using axios
 
+            // https://masteringjs.io/tutorials/axios/json
+            // https://stackoverflow.com/questions/49529201/node-js-axios-wont-connect-to-localhost
+
+            //  api call starts here :)
+            //  i left the fetch just in case we want to go back to that
+
+            //  set our url (hopefully this works for the vm)
+            //  note: console was unhappy about localhost:5095
+            //  removing port (idk why) will prompt a 404 error 
+            //  we expect this beceause localhost isn't pointed to anything
+            //  I believe we need a non-localhost url here :c
             const url = 'localhost:5095/auth'
+
+            //  specify the connection further
             const api = axios.create({
-                 baseURL: 'localhost:5095/auth',
-                 proxy: false
+                //  url specified above
+                baseURL: url,
+
+                //  of type post
+                method: 'POST',
+
+                // tells axios theres no proxy
+                // otherwise will try to set default proxy (why axios?)
+                proxy: false
             })
 
-
-            // return api.post('/auth/register', this.credentials)
-            //     .then(response => {
-            //     api.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.token
-            //     commit('login', {token: response.data.token, user: response.data.user})
-            //     })
-            const res = await api.post(url, JSON.stringify(this.fields), {
-                headers: {
-                    // 'application/json' is the modern content-type for JSON, but some
-                    // older servers may use 'text/json'.
-                    // See: http://bit.ly/text-json
-                    'content-type': 'text/json'
+            //  axios will return (async) a response from the post
+            const response = await api(
+                //  "fields" is an object that is being json'ified through JSON.stringify()
+                JSON.stringify(this.fields), 
+                {
+                    //  specifies the body is json type
+                    headers: 
+                    {
+                        'content-type': 'text/json'
+                    }
                 }
-            });
+            );
 
-            res.data.headers['Content-Type']; // text/json
+            // we have the response of type json now
+            console.log(response.data.JSON)
+
+            //  from here we need to make sure that res indicates a good sign in and continue from there
+            //  I haven't implemented this because I'm not sure what res is going to return
+
+            // if we find good authentication
+            // if (res.data.includes("authenticated"))
+            // {
+            //     //  route to the edit profile page with the token for that specific user
+            // }
+            //  otherwise we set authFail to true and pop the q-banner :thumbs-up:
+            // else{
+            //     this.authFail = true
+            // }
         }   
     }
 }
