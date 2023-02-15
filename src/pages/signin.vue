@@ -31,7 +31,7 @@
         </q-page>
     </div>
   </template>
-  
+
 <script>
 // import { response } from 'express'
 import { ref } from 'vue'
@@ -45,7 +45,7 @@ export default{
             authFail: null,
         }
     },
-    setup () 
+    setup ()
     {
         return {
             credentials: ref({
@@ -63,9 +63,9 @@ export default{
         forgotPassword()
         {
 
-        },  
+        },
         // async because the api call has promise :thumbs-up:
-        async signIn() 
+        async signIn()
         {
             // //  for demo purposes
             // const authenticated = email === "jdoe@fakemail.com" && password == "fakePassword123!"
@@ -81,7 +81,7 @@ export default{
             //     this.authFail = true,
             //     console.log("authentication failed")
             // }
-            
+
             //  place the api call here (using fetch)
 
             //  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
@@ -121,10 +121,12 @@ export default{
 
             //  set our url (hopefully this works for the vm)
             //  note: console was unhappy about localhost:5095
-            //  removing port (idk why) will prompt a 404 error 
+            //  removing port (idk why) will prompt a 404 error
             //  we expect this beceause localhost isn't pointed to anything
             //  I believe we need a non-localhost url here :c
-            const url = 'localhost:5095/auth'
+            const url = 'http://127.0.0.1:5000/auth'
+
+          console.log("HELLo")
 
             //  specify the connection further
             const api = axios.create({
@@ -134,20 +136,23 @@ export default{
                 //  of type post
                 method: 'POST',
 
+              data: JSON.stringify(this.fields),
+
                 // tells axios theres no proxy
                 // otherwise will try to set default proxy (why axios?)
-                proxy: false
+                proxy: true
             })
+
 
             //  axios will return (async) a response from the post
             const response = await api(
                 //  "fields" is an object that is being json'ified through JSON.stringify()
-                JSON.stringify(this.fields), 
+                JSON.stringify(this.fields),
                 {
                     //  specifies the body is json type
-                    headers: 
+                    headers:
                     {
-                        'content-type': 'text/json'
+                        'content-type': 'application/json'
                     }
                 }
             );
@@ -167,7 +172,7 @@ export default{
             // else{
             //     this.authFail = true
             // }
-        }   
+        }
     }
 }
 </script>
