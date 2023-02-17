@@ -16,45 +16,50 @@
           label="home"
         />
         <q-route-tab
-          to="/signin"
-          replace
-          label="sign in"
-        />
-        <q-route-tab
-          to="/register"
-          replace
-          label="sign up"
-        />
-        <q-route-tab
           to="/form"
           replace
           label="form"
         />
-        <q-route-tab
-          to="/ticks"
-          replace
-          label="ticks"
-        />
-        <q-route-tab
-          to="/profile/1"
-          replace
-          label="Edit Profile"
-        />
-        <q-route-tab
-          to="/feedback"
-          replace
-          label="leave feedback"
-        />
-        <q-route-tab
-          to="/signin"
-          replace
-          label="log out"
-        />
-        <q-route-tab
-          to="/list"
-          replace
-          label="list"
+        <q-btn-dropdown flat label="Account" >
+          <q-route-tab
+            to="/signin"
+            replace
+            label="sign in"
           />
+          <q-route-tab
+            to="/register"
+            replace
+            label="sign up"
+          />
+          <q-route-tab
+            to="/ticks"
+            replace
+            label="ticks"
+          />
+          <q-route-tab
+            to="/profile/1"
+            replace
+            label="Edit Profile"
+          />
+          <q-route-tab
+            to="/feedback"
+            replace
+            label="leave feedback"
+          />
+          <q-route-tab
+            to="/signin"
+            replace
+            label="log out"
+          />
+          <q-route-tab
+            to="/list"
+            replace
+            label="list"
+            />
+          </q-list>
+        </q-menu>
+      </q-btn-dropdown>
+
       </q-tabs>
       <q-btn
         class="absolute-right gt-xs"
@@ -74,10 +79,10 @@
       ticktrax
     </q-toolbar-title> -->
 
-    <q-footer v-if="$q.platform.is.mobile" elevated style="background-color:#5CAB7D; color:black;">
+    <q-footer v-if="$q.platform.is.mobile" elevated style="background-color:#5CAB7D; color:white;">
       <q-tabs class="row" style="background-color: #5CAB7D;">
         <q-route-tab
-          to="/ticks"
+          to="/"
           replace
         >
           <q-icon name="home" size="2em"/>

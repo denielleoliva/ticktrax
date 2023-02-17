@@ -27,7 +27,7 @@
                 </div>
                 
                 <q-space/>
-                <q-btn :href="'mailto:ticktrax.unr@gmail.com?cc=' + form.email + ' &subject=' + form.subject + '&body=' + form.message"
+                <q-btn class="q-ml-sm" :href="'mailto:ticktrax.unr@gmail.com?cc=' + form.email + ' &subject=' + form.subject + '&body=' + form.message"
                     color="primary">
                     Send Email
                 </q-btn>
