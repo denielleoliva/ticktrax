@@ -2,14 +2,14 @@
   <q-layout view="hHh Lpr fFf"> <!-- Be sure to play with the Layout demo on docs -->
 
     <!-- (Optional) The Header -->
-    <q-header elevated class="row" style="background-color:#5CAB7D; color:white;">
+    <q-header v-if="$q.platform.is.desktop" elevated class="row" style="background-color:#5CAB7D; color:white;">
       <q-toolbar class="col-auto">
         <q-toolbar-title style="font-family:customfont">
           ticktrax
         </q-toolbar-title>
       </q-toolbar>
 
-      <q-tabs style="background-color: #5CAB7D">
+      <q-tabs  style="background-color: #5CAB7D">
         <q-route-tab
           to="/"
           replace
@@ -70,10 +70,32 @@
       />
     </q-header>
 
+    <!-- <q-toolbar-title class="q-pa-sm" style="font-family:customfont; background-color:#5CAB7D">
+      ticktrax
+    </q-toolbar-title> -->
 
-
-
-
+    <q-footer v-if="$q.platform.is.mobile" elevated style="background-color:#5CAB7D; color:black;">
+      <q-tabs class="row" style="background-color: #5CAB7D;">
+        <q-route-tab
+          to="/ticks"
+          replace
+        >
+          <q-icon name="home" size="2em"/>
+        </q-route-tab>
+        <q-route-tab
+          to="/form"
+          replace
+        >
+          <q-icon name="add_circle" size="3em"/>
+        </q-route-tab>
+        <q-route-tab
+          to="/profile/1"
+          replace
+        >
+          <q-icon name="person" size="2em"/>
+        </q-route-tab>
+      </q-tabs>
+    </q-footer>
 
     <q-page-container>
       <!-- This is where pages get injected -->
