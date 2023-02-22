@@ -1,8 +1,8 @@
 <template>
   <q-page align="center">
-    <div class="translateUp" >
-      <h1 style="font-family:customfont; font-size:xx-large">
-        Welcome to ticktrax
+    <div class="translateUp" style="justify-content:center; text-align:-moz-center;">
+      <h1 style="font-family:customfont; font-size:xx-large;">
+        Welcome to ticktrax 
         <q-img src="../assets/ticktrax.png" width="50px"/>
       </h1>
     </div>
@@ -44,6 +44,7 @@ export default {
 }
 
 @keyframes translate {
+  0% {  }
   100% {  transform: translateY(200%) }
 }
 
