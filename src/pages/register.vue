@@ -10,21 +10,24 @@
             <q-banner v-if="(registerSuccess === false)" rounded style="align-content:center; padding:12px;  font-size:large; background-color: pink">
                 Account Creation Failed...
             </q-banner>
-            <!-- First Name -->
+            <!-- First Name 
             <q-input filled label="First Name" style="max-width: 500px; margin: 10px;"
-            v-model="fields.firstName" type="name"/>
-            <!-- Last Name -->
+            v-model="fields.firstName" type="name"/> -->
+            <!-- Last Name 
             <q-input filled label="Last Name" style="max-width: 500px; margin: 10px"
-            v-model="fields.lastName" type="name"/>
+            v-model="fields.lastName" type="name"/> -->
+            <!--UserName -->
+            <q-input filled label="UserName" style="max-width: 500px; margin: 10px"
+            v-model="fields.username" type="name"/>
             <!-- Enter email -->
             <q-input filled label="Email" style="max-width: 500px; margin: 10px;"
             v-model="fields.email" type="email"  />
             <!-- Enter Password -->
             <q-input filled label="Password" style="max-width: 500px; margin: 10px;"
                 v-model="fields.password" :type="isPwd ? 'password' : 'text'"/>
-            <!-- Confirm Password -->
+            <!-- Confirm Password 
             <q-input filled label="Confirm Password" style="max-width: 500px; margin: 10px;" 
-                v-model="fields.confirmPassword" :type="isPwd ? 'password' : 'text'"/>
+                v-model="fields.confirmPassword" :type="isPwd ? 'password' : 'text'"/> -->
             <div class="row">
                 <q-btn color="primary" style="align:center; margin-left:12px; margin-top:10px; background-color:#21ba45;"
                     @click="register()">
@@ -54,11 +57,12 @@ export default{
         return {
 
             fields: ref({
-                firstName: ref(''),
-                lastName: ref(''),
+                //firstName: ref(''),
+                //lastName: ref(''),
                 email: ref(''),
                 password: ref(''),
-                confirmPassword: ref('')
+                username: ref(''),
+                //confirmPassword: ref('')
             }),
 
             // password: ref(''),
@@ -78,46 +82,13 @@ export default{
         }
     },
     methods:{
-            //  for my reference
-            // signIn(email, password) 
-            // {
-            //     const authenticated = email === "jdoe@fakemail.com" && password == "fakePassword123!"
-            //     if(authenticated)
-            //     {
-            //         this.signedIn = true,
-            //         this.authFail = false,
-            //         this.$router.push('/profile/1/')
-            //         console.log("signedIn =" + this.signedIn + " authFail =" + this.authFail)
-            //     }
-            //     else
-            //     {
-            //         this.authFail = true,
-            //         console.log("authentication failed")
-            //     }
-            // }, 
-            // for demo purposes only
-            // register(fName, lName, email, password, cPassword)
-            // {
-            //     const validRegister = password === cPassword && password !== "" && cPassword !== "" && email !== ""
-            //     if(validRegister)
-            //     {
-            //         console.log(fName + " " + lName + " " + email + " " + password + " ")
-            //         //send fName, lName, email, password to db
-            //         this.registerSuccess = true
-            //         this.$router.push('/2fa')
-            //     }
-            //     else
-            //     {
-            //         console.log(validRegister)
-            //         this.registerSuccess = false
-            //     }
-            // },
+           
             // post data to api
             register()
             {
                 //  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
                 //  url for our api connection (this doesn't work yet but I think this is the format we want the fetch)
-                const url = '192.168.1.10:5095/auth'
+                const url = 'http://localhost:5095/auth'
 
                 fetch(url, {
                     //  this means we add to database
@@ -127,9 +98,10 @@ export default{
                     headers: {
                         'Content-Type' : 'application/json',
                     },
+                    mode: 'cors',
 
                     //  this are the fields in json format (hopefully)
-                    body: JSON.stringify(this.fields)
+                    body: JSON.stringify({username: this.fields.username, email: this.fields.email, password: this.fields.password})
                 })
                 .then((response) => response.json)
 
