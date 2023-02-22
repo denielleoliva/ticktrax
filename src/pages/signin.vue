@@ -35,7 +35,7 @@
 <script>
 // import { response } from 'express'
 import { ref } from 'vue'
-import { axios } from 'boot/axios'
+//import { axios } from 'boot/axios'
 
 export default{
     data () {
@@ -67,50 +67,50 @@ export default{
         // async because the api call has promise :thumbs-up:
         async signIn() 
         {
-            // //  for demo purposes
-            // const authenticated = email === "jdoe@fakemail.com" && password == "fakePassword123!"
-            // if(authenticated)
-            // {
-            //     this.signedIn = true,
-            //     this.authFail = false,
-            //     this.$router.push('/profile/1/')
-            //     console.log("signedIn =" + this.signedIn + " authFail =" + this.authFail)
-            // }
-            // else
-            // {
-            //     this.authFail = true,
-            //     console.log("authentication failed")
-            // }
+            //  for demo purposes
+            const authenticated = email === "fran@unr.edu" && password == "Password!1"
+            if(authenticated)
+            {
+                 this.signedIn = true,
+                 this.authFail = false,
+                 this.$router.push('/profile/1/')
+                 console.log("signedIn =" + this.signedIn + " authFail =" + this.authFail)
+             }
+             else
+             {
+                 this.authFail = true,
+                 console.log("authentication failed")
+             }
             
             //  place the api call here (using fetch)
 
             //  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
             //  url for our api connection (this doesn't work yet but I think this is the format we want the fetch)
-            // const url = '192.168.1.10:5095/auth'
+            const url = 'localhost:5095/auth'
 
-            // fetch(url, {
-            //     //  this means we add to database
-            //     method: 'POST',
+            fetch(url, {
+                 //  this means we add to database
+                 method: 'POST',
 
-            //     //  this means we are adding of type json
-            //     headers: {
-            //         'Content-Type' : 'application/json',
-            //     },
+                 //  this means we are adding of type json
+                 headers: {
+                     'Content-Type' : 'application/json',
+                 },
 
-            //     //  this are the fields in json format (hopefully)
-            //     body: JSON.stringify(this.fields)
-            // })
-            // .then((response) => response.json)
+                 //  this are the fields in json format (hopefully)
+                 body: JSON.stringify(this.fields)
+             })
+             .then((response) => response.json)
 
-            // //  reporting successful post
-            // .then((data) => {
-            //     console.log('API POST', data)
-            // })
+             //  reporting successful post
+             .then((data) => {
+                 console.log('API POST', data)
+             })
 
-            // //  reported failed post
-            // .catch((error) => {
-            //     console.error('API POST FAIL', error)
-            // })
+             //  reported failed post
+             .catch((error) => {
+                 console.error('API POST FAIL', error)
+             })
             //  api call here using axios
 
             // https://masteringjs.io/tutorials/axios/json
@@ -124,33 +124,33 @@ export default{
             //  removing port (idk why) will prompt a 404 error 
             //  we expect this beceause localhost isn't pointed to anything
             //  I believe we need a non-localhost url here :c
-            const url = 'localhost:5095/auth'
+            //const url = 'localhost:5000/auth'
 
             //  specify the connection further
-            const api = axios.create({
-                //  url specified above
-                baseURL: url,
+            //const api = axios.create({
+            //    //  url specified above
+            //    baseURL: url,
 
                 //  of type post
-                method: 'POST',
+            //    method: 'POST',
 
                 // tells axios theres no proxy
                 // otherwise will try to set default proxy (why axios?)
-                proxy: false
-            })
+            //    proxy: false
+            //})
 
             //  axios will return (async) a response from the post
-            const response = await api(
+            //const response = await api(
                 //  "fields" is an object that is being json'ified through JSON.stringify()
-                JSON.stringify(this.fields), 
-                {
+            //    JSON.stringify(this.fields), 
+            //    {
                     //  specifies the body is json type
-                    headers: 
-                    {
-                        'content-type': 'text/json'
-                    }
-                }
-            );
+            //        headers: 
+            //        {
+            //            'content-type': 'text/json'
+            //        }
+            //    }
+            //);
 
             // we have the response of type json now
             console.log(response.data.JSON)
