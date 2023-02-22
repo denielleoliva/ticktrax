@@ -94,9 +94,7 @@
           </q-card-actions>
 
         </q-card>
-        <q-card class="bg-red text-white q-mt-lg" align="center">
-          <q-btn class="text-capitalize bg-red text-white" flat style="padding-right:45%; padding-left:45%;" @click="deleteUserInfo()">Delete Account</q-btn>
-        </q-card>
+        <q-btn class="q-mt-sm text-capitalize bg-red text-white" style="width:100%" flat @click="deleteUserInfo()">Delete Account</q-btn>
 
         <q-dialog v-model="confirmDelete" persistent>
           <q-card class="q-ma-lg row">
