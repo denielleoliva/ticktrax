@@ -94,6 +94,24 @@
           </q-card-actions>
 
         </q-card>
+        <q-btn class="q-mt-sm text-capitalize bg-red text-white" style="width:100%" flat @click="deleteUserInfo()">Delete Account</q-btn>
+
+        <q-dialog v-model="confirmDelete" persistent>
+          <q-card class="q-ma-lg row">
+            <q-textarea class="q-ma-lg" style="font-size:large">
+              Are you sure you want to delete your account? We will keep your tick data, but any 
+              personal information will be deleted!
+            </q-textarea>
+            <q-btn class="q-ma-lg bg-primary text-white" @click="deleteUserInfo()">
+              Yes, delete my account
+            </q-btn>
+            <q-space/>
+            <q-btn class="q-ma-lg bg-red text-white" @click="confirmDelete = false">
+              Wait! take me back!
+            </q-btn>            
+
+          </q-card>
+        </q-dialog>
       </div>
     </div>
   </q-page>
@@ -113,10 +131,17 @@ import { ref } from 'vue'
           current_password: ref(''),
           new_password: ref(''),
           confirm_new_password: ref(''),
-        })
+        }),
+        confirmDelete: ref(false),
       }
     },
     methods:{
+      deleteUserInfo(){
+        //  theoretically there is an delete api call here using something that works on localhost
+
+        //  for now we just close it
+        this.confirmDelete = false
+      },  
       updateUserInfo(){
 
         const payload = '[' + JSON.stringify({
