@@ -145,6 +145,44 @@ function onSubmit() {
   }
 
   //Send to backend TBD
+  
+  //photo
+  //latitude
+  //longitude
+  //caption
+  //time  
+
+  const caption = 'we do not have captions right now'
+
+  const formattedDateTime = new Date(date.value)
+
+  console.log(date.value)
+  console.log(formattedDateTime)
+
+
+  const url = 'http://localhost:5095/submission/'
+
+  fetch(url, {
+      //  this means we add to database
+      method: 'POST',
+
+      //  this means we are adding of type json
+      headers: {
+      'Content-Type' : 'application/json',
+      },
+
+      //  this are the fields in json format (hopefully)
+      body: JSON.stringify({photo: formData.image, latitude: coords.value[0], longitude: coords.value[1], caption: caption, time: formattedDateTime})
+  })
+  .then((response) => {
+    console.log('API POST SUCCESS', response.body)
+  })
+
+  //  reported failed post
+  .catch((error) => {
+      console.error('API POST FAIL', error)
+
+  })
 }
 
 
