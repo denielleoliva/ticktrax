@@ -59,7 +59,7 @@ export default{
         // async because the api call has promise :thumbs-up:
         signIn() 
         {
-            const url = 'localhost:5095/auth'
+            const url = 'http://localhost:5095/auth/signin'
 
             fetch(url, {
                 //  this means we add to database
@@ -73,11 +73,24 @@ export default{
                 //  this are the fields in json format (hopefully)
                 body: JSON.stringify({email: this.credentials.email, password: this.credentials.password})
             })
-            .then((response) => response.json)
+            .then((response) => {
+                if(response.body.locked)
+                {
+                    const elem = document.getElementById("invalid");
 
-            //  reporting successful post
-            .then((data) => {
-                console.log('API POST', data)
+                    elem.classList.add("giveShake")
+
+                    setTimeout(() => {
+                        elem.classList.remove("giveShake")
+                    }, 1000);
+
+                    this.authFail = true                
+                }
+                else
+                {
+                    console.log('API POST', response.body)
+                    this.$router.push('/profile/1')
+                }
             })
 
             //  reported failed post
