@@ -83,6 +83,10 @@ export default{
     methods:{
            
             // post data to api
+            //  password should have: 1 uppercase, 1 number, 1 special character
+            //  email should be a valid email
+            //  username should be unique
+
             register()
             {
                 //  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
