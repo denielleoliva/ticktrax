@@ -23,7 +23,7 @@
                 </template>
             </q-input>
             <div class="row">
-                <q-btn id="invalid" color="primary" style="margin-left:5px; margin-top:10px;"
+                <q-btn id="signInButton" color="primary" style="margin-left:5px; margin-top:10px;"
                     @click="signIn()">
                     Sign in
                 </q-btn>
@@ -34,6 +34,7 @@
   
 <script>
 import { ref } from 'vue'
+var token
 
 export default{
     data () 
@@ -42,12 +43,8 @@ export default{
             leftDrawer: false,
             signedIn: false,
             authFail: null,
-        }
-    },
-    setup () 
-    {
-        return {
-            credentials: ref({
+
+                        credentials: ref({
                 email : ref(''),
                 password : ref('')
             }),
@@ -55,13 +52,21 @@ export default{
             isPwd: ref(true),
         }
     },
+    setup () 
+    {
+        return {
+
+        }
+    },
     methods:{
         // async because the api call has promise :thumbs-up:
-        signIn() 
+        async signIn() 
         {
+            //  url for signin
             const url = 'http://localhost:5095/auth/signin'
 
-            fetch(url, {
+            //  api call
+            await fetch(url, {
                 //  this means we add to database
                 method: 'POST',
 
@@ -73,41 +78,34 @@ export default{
                 //  this are the fields in json format (hopefully)
                 body: JSON.stringify({email: this.credentials.email, password: this.credentials.password})
             })
-            .then((response) => {
-                if(response.body.locked)
-                {
-                    const elem = document.getElementById("invalid");
+            //  unravel the response
+            .then(response => response.json())
 
-                    elem.classList.add("giveShake")
-
-                    setTimeout(() => {
-                        elem.classList.remove("giveShake")
-                    }, 1000);
-
-                    this.authFail = true                
-                }
-                else
-                {
-                    console.log('API POST', response.body)
-                    this.$router.push('/profile/1')
-                }
+            //  if we got a proper response
+            .then(data => {
+                this.$router.push('/profile/1')
             })
 
-            //  reported failed post
-            .catch((error) => {
-                console.error('API POST FAIL', error)
+            //  if we got an error response
+           .catch(error => {
+                //  indicate an error occured
+                console.log("API POST FAILED", error)
 
-                const elem = document.getElementById("invalid");
+                //  grab the element
+                const elem = document.getElementById("signInButton");
 
+                //  add the animtion
                 elem.classList.add("giveShake")
 
+                //  wait for animation to complete
                 setTimeout(() => {
+                    //  remove animation class (to allow replay)
                     elem.classList.remove("giveShake")
                 }, 1000);
 
+                //  set flag to try (pops banner)
                 this.authFail = true
             })
-
         }
     }
 }

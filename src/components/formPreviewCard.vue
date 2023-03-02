@@ -127,8 +127,9 @@ function goBack() {
 }
 
 function onClickedMarker(coords) {
-  console.log('clicked marker');
   coords.value = coords;
+  console.log('clicked marker', coords.value);
+
 }
 
 function onSubmit() {
@@ -143,6 +144,8 @@ function onSubmit() {
   for (let pair of formData.entries()) {
     console.log(pair[0]+ ', ' + pair[1]);
   }
+
+  console.log("coords value", coords.value)
 
   //Send to backend TBD
   
@@ -181,7 +184,6 @@ function onSubmit() {
   //  reported failed post
   .catch((error) => {
       console.error('API POST FAIL', error)
-
   })
 }
 
