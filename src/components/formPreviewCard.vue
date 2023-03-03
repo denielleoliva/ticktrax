@@ -22,7 +22,7 @@
           What we need from you:
           <div class="column">
             <div class="col-4 col-md-6 text-bold q-pa-sm" v-show="date === ''">Date and time</div>
-            <div class="col-4 col-md-6 text-bold q-pa-sm" v-show="coords.length === 2 && coords[0] === 0 && coords[1] === 0">Location</div>
+            <div class="col-4 col-md-6 text-bold q-pa-sm" v-show="coords[0] === 0 && coords[1] === 0">Location</div>
           </div>
         </q-card-section>
 
@@ -47,31 +47,27 @@
 <!--            {{date}}-->
 <!--            <q-icon name="edit" class="q-pb-sm"/>-->
             <q-input filled v-model="date" class="q-pb-md">
-              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                <q-date v-model="date" mask="YYYY-MM-DD          HH:mm" minimal >
-                  <div class="row items-center justify-end">
-                    <q-btn v-close-popup label="Close" color="grey" flat />
-                    <q-btn label="Next" color="primary" flat >
-                      <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                        <q-time v-model="date" mask="YYYY-MM-DD          HH:mm" format24h minimal>
-                          <div class="row items-center justify-end">
-                            <q-btn v-close-popup label="Close" color="primary" flat />
-                          </div>
-                        </q-time>
-                      </q-popup-proxy>
-                    </q-btn>
-                  </div>
-                </q-date>
-              </q-popup-proxy>
               <template v-slot:prepend>
-                <q-icon name="event" class="cursor-pointer" color="primary">
-
+                <q-icon name="event" class="cursor-pointer">
+                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                    <q-date v-model="date" mask="YYYY-MM-DD HH:mm">
+                      <div class="row items-center justify-end">
+                        <q-btn v-close-popup label="Close" color="primary" flat />
+                      </div>
+                    </q-date>
+                  </q-popup-proxy>
                 </q-icon>
               </template>
 
-
               <template v-slot:append>
-                <q-icon name="access_time" class="cursor-pointer time-icon" color="primary">
+                <q-icon name="access_time" class="cursor-pointer">
+                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                    <q-time v-model="date" mask="YYYY-MM-DD HH:mm" format24h>
+                      <div class="row items-center justify-end">
+                        <q-btn v-close-popup label="Close" color="primary" flat />
+                      </div>
+                    </q-time>
+                  </q-popup-proxy>
                 </q-icon>
               </template>
             </q-input>
@@ -109,7 +105,7 @@ const alert = ref(false);
 const props = defineProps(['metaData']);
 const emit = defineEmits(['setPreviewCard'])
 
-//console.log(props.metaData, "metaData")
+console.log(props.metaData, "metaData")
 coords.value = [props.metaData.coords.long, props.metaData.coords.lat];
 date.value = props.metaData.dateTime ? dateAdapter(props.metaData.dateTime): '';
 
@@ -117,35 +113,28 @@ if (date.value === '') {
   alert.value = true;
 }
 
-
+watch(date, ()=> {
+  console.log(date.value)
+})
 watch(() => Dark.isActive, val => {
   isDarkMode.value = val;
+  console.log(props.metaData);
 
-});
-
-watch(date, (val)=> {
-  console.log(val, "DAYTE")
 })
 
 function goBack() {
   emit('setPreviewCard', false)
 }
 
-<<<<<<< Updated upstream
 function onClickedMarker(coords) {
   coords.value = coords;
   console.log('clicked marker', coords.value);
 
-=======
-function onClickedMarker(lngLat) {
-  coords.value = lngLat;
->>>>>>> Stashed changes
 }
 
 function onSubmit() {
-  if (date.value === '' || coords.value.length > 2 || (coords.value[0] === 0 && coords.value[1] === 0)) {
+  if (date.value === '' || (coords.value[0] !== 0 && coords.value[1] !== 0)) {
     alert.value = true;
-    return;
   }
   const formData = new FormData();
   formData.append('image', props.metaData.pngImage);
@@ -156,11 +145,7 @@ function onSubmit() {
     console.log(pair[0]+ ', ' + pair[1]);
   }
 
-<<<<<<< Updated upstream
   console.log("coords value", coords.value)
-=======
-  console.log("Coords value:", coords.value);
->>>>>>> Stashed changes
 
   //Send to backend TBD
   
@@ -248,10 +233,6 @@ function onSubmit() {
   grid-area: 1 / 3 / 4 / 6
 .div3
   grid-area: 4 / 3 / 5 / 6
-
-.time-icon
-  position: absolute
-  right: 68px
 
 
 </style>

@@ -9,7 +9,7 @@ export function extractMetaData(e) {
 
   return new Promise((resolve,reject) => {
     reader.onload = (event) => {
-      //console.log(event.target.result);
+      console.log(event.target.result);
       let photoMetadata = null;
       if (file.name.toLowerCase().endsWith(".heic")) {
         photoMetadata = findEXIFinHEIC(event.target.result);
@@ -17,7 +17,7 @@ export function extractMetaData(e) {
         photoMetadata = findEXIFinJPEG(event.target.result);
       }
 
-      //console.log(photoMetadata);
+      console.log(photoMetadata);
       let coords = DMStoDD(photoMetadata);
       let dateTime = photoMetadata['DateTime'];
 
@@ -78,7 +78,7 @@ export function dateAdapter(dateString) {
   const re = /(?<year>\d{4}):(?<month>\d{2}):(?<day>\d{2})\s(?<hour>\d{2}):(?<minute>\d{2}):(?<seconds>\d{2})/;
   const {year, month, day, hour, minute} = dateString.match(re).groups;
 
-  return year + '-' + month + '-' + day + ' '.repeat(10) + hour + ':' + minute;
+  return year + '-' + month + '-' + day + ' ' + hour + ':' + minute;
 }
 
 export function JSONtoGeoJSON(jsonData) {
@@ -88,8 +88,12 @@ export function JSONtoGeoJSON(jsonData) {
     type: "FeatureCollection",
     features: []
   }
-
+  let i = 0;
   for (let row of jsonData.table.rows) {
+    i ++;
+    if (i === 3200) {
+      //break;
+    }
     let latitude = '';
     try {
       latitude = row.c[3].v;
@@ -99,8 +103,6 @@ export function JSONtoGeoJSON(jsonData) {
       const longitude = row.c[4].v;
 
       const scientificName = row.c[1].v;
-
-      const id = row.c[8].v;
 
       let dateObserved = '';
       let commonName = '';
@@ -137,11 +139,9 @@ export function JSONtoGeoJSON(jsonData) {
 
 
     let properties = {
-      "id": id,
       "commonName": commonName,
       "scientificName": scientificName,
       "location": location,
-      "coordinates": {longitude, latitude},
       "observedOn": dateObserved,
       "imageUrls": photoUrls,
       "attribution": attribution
@@ -156,6 +156,8 @@ export function JSONtoGeoJSON(jsonData) {
 
   }
 
+  console.log(geoJson);
+
   return geoJson;
 
 }
@@ -163,7 +165,7 @@ export function JSONtoGeoJSON(jsonData) {
 export function formatDate(date) {
 
   const inputDate = new Date(date);
-  //console.log(typeof inputDate)
+  console.log('hello?', typeof inputDate)
   if (!(inputDate instanceof Date) || isNaN(inputDate.valueOf())) {
     return '';
   }
@@ -247,24 +249,4 @@ function base64ArrayBuffer(arrayBuffer) {
   }
 
   return base64
-}
-
-export function wrapCsvValue (val, formatFn) {
-  let formatted = formatFn !== void 0
-    ? formatFn(val)
-    : val
-
-  formatted = formatted === void 0 || formatted === null
-    ? ''
-    : String(formatted)
-
-  formatted = formatted.split('"').join('""')
-  /**
-   * Excel accepts \n and \r in strings, but some other CSV parsers do not
-   * Uncomment the next two lines to escape new lines
-   */
-  // .split('\n').join('\\n')
-  // .split('\r').join('\\r')
-
-  return `"${formatted}"`
 }

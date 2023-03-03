@@ -4,34 +4,8 @@
     font-family: customfont;
     src: url(./fonts/Adventuro.ttf);
   }
-
+  
   // declare a class which applies it
   .my-font {
     font-family: 'customfont';
   }
-
-
-
-.enlarge-image {
-  float: left;
-  width: 75px;
-  -webkit-transition: all 0.3s ease-in-out;
-  -moz-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
-  &:hover {
-    transform: scale(1.5);
-    z-index: 1;
-    -webkit-transition: all 0.3s ease-in-out;
-    -moz-transition: all 0.3s ease-in-out;
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
-  }
-}
-.body--dark .apexcharts-menu {
-  background-color: #27293d!important;
-  border: 0;
-}
-
-.apexcharts-menu-item:hover {
-  color:#5CAB7D;
-}
