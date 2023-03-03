@@ -2,15 +2,17 @@
   <div class="map-container">
     <div id="map">
       <MglMap @load="onMapLoaded" @dblclick="doubleClickedMap"  :accessToken="token"
-              :center="markerCoordinates.length < 1 ? coordinates: markerCoordinates" :zoom="zoom"
+              :center="coordinates" :zoom="zoom"
               :mapStyle="mapTile">
 
         <MglNavigationControl position="top-right" />
         <MglGeolocateControl position="top-right" />
         <MglScaleControl position="bottom-right" />
         <MglFullscreenControl position="top-left" />
-        <MglMarker v-if="markerCoordinates.length > 0 && markerCoordinates[0] !== 0 && markerCoordinates[1] !== 0" draggable :coordinates="markerCoordinates" color="limegreen" >
-          <MglPopup v-if="props.markerMsg && props.markerMsg.length > 0">
+        <MglMarker v-if="markerCoordinates.length > 0 && markerCoordinates[0] !== 0 && markerCoordinates[1] !== 0" draggable
+                   :coordinates="markerCoordinates"
+                   color="limegreen" @dragend="onMarkerdragEnd">
+          <MglPopup v-if="props.markerMsg && props.markerMsg.length > 0" >
               <p>{{props.markerMsg}}</p>
           </MglPopup>
         </MglMarker>
@@ -75,9 +77,6 @@ onMounted(() => {
 
 
 
-console.log(props.geoJson, "hello from map")
-
-
 
 const token = "pk.eyJ1IjoicnN1bHRhbiIsImEiOiJjbGRjcTF1bDMwNHNiM25wNm1oZ2dzbWg2In0.yMbTf053wvYrnzJwUyqqYQ";
 
@@ -112,14 +111,19 @@ async function getCurrentPosition() {
 }
 
 function doubleClickedMap(event) {
-  console.log('clicked!', event.mapboxEvent.lngLat);
   const coords = event.mapboxEvent.lngLat;
   markerCoordinates.value = [coords.lng, coords.lat];
   emits('onClickedMarker', [coords.lng, coords.lat]);
 }
 
+function onMarkerdragEnd(event) {
+  const lat = event.mapboxEvent.target._lngLat.lat;
+  const lng = event.mapboxEvent.target._lngLat.lng;
+  markerCoordinates.value = [lng, lat];
+  emits('onClickedMarker', [lng, lat]);
+}
+
 function onLayerClick(e){
-  console.log('clicked layer!', e.map.loadImage);
   console.log(e.feature);
 
 }
