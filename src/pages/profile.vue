@@ -1,78 +1,173 @@
 <template>
-  <q-page class="q-pa-lg q-mx-auto q-my-xl" style="max-width: 1000px">
-    <div class="gt-sm">
-    <q-splitter
-      v-model="splitterModel"
-    >
+  <q-page class="q-pa-sm">
 
-      <template v-slot:before>
-        <q-tabs
-          v-model="tab"
-          vertical
-          class="text-grey"
-          active-color="positive"
-          indicator-color="positive"
-        >
-          <q-tab name="general"  label="General" />
-          <q-tab name="profile"  label="Edit Profile" />
-          <q-tab name="password"  label="Password" />
-        </q-tabs>
+    <div class="row q-col-gutter-sm justify-center">
 
-      </template>
+      <div class="col-lg-8 col-md-8 col-xs-12 col-sm-12">
+        
+        <q-card class="card-bg text-white">
+          <q-card-section class="text-h6 ">
+            <div class="text-h6">Edit Profile</div>
+            <div class="text-subtitle2">Complete your profile</div>
+          </q-card-section>
+          <q-card-section class="q-pa-sm">
+            <q-list class="row">
+              <q-item class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <q-item-section side>
+                  <q-avatar size="100px">
+                    <img src="../assets/blank_avatar.png">
+                  </q-avatar>
+                </q-item-section>
+                <q-item-section>
+                  <q-btn label="Add Photo" class="text-capitalize" rounded color="info"
+                         style="max-width: 120px"></q-btn>
+                </q-item-section>
+              </q-item>
 
-      <template v-slot:after>
-        <profile-panel :tab="tab"  />
-      </template>
+              <q-item class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <q-item-section>
+                  <q-input dark color="white" dense v-model="user_details.email" label="Email Address"/>
+                </q-item-section>
+              </q-item>
+              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <q-item-section>
+                  <q-input dark color="white" dense v-model="user_details.first_name" label="First Name"/>
+                </q-item-section>
+              </q-item>
+              <q-item class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <q-item-section>
+                  <q-input dark color="white" dense v-model="user_details.last_name" label="Last Name"/>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn class="text-capitalize bg-info text-white" @click="updateUserInfo()">Update User Info</q-btn>
+          </q-card-actions>
+        </q-card>
+      </div>
 
-    </q-splitter>
-    </div>
-    <div class="lt-md">
-    <q-tabs
-      v-model="tab"
-      dense
-      class="text-grey q-pa-none"
-      active-color="positive"
-      indicator-color="positive"
-      align="center"
-      narrow-indicator
-    >
-      <q-tab name="general"  label="General" />
-      <q-tab name="profile"  label="Edit Profile" />
-      <q-tab name="password"  label="Password" />
-    </q-tabs>
-    <q-separator />
-    <profile-panel :tab="tab"  />
+      <div class="col-lg-8 col-md-8 col-xs-12 col-sm-12">
+        <q-card class="card-bg text-white">
+          <q-card-section class="text-h6 q-pa-sm">
+            <div class="text-h6">Change Password</div>
+          </q-card-section>
+          <q-card-section class="q-pa-sm row">
+            <q-item class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+              <q-item-section>
+                Current Password
+              </q-item-section>
+            </q-item>
+            <q-item class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+              <q-item-section>
+                <q-input type="password" dark dense outlined color="white" round
+                         v-model="password_dict.current_password"
+                         label="Current Password"/>
+              </q-item-section>
+            </q-item>
+            <q-item class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+              <q-item-section>
+                New Password
+              </q-item-section>
+            </q-item>
+            <q-item class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+              <q-item-section>
+                <q-input type="password" dark dense outlined color="white" round v-model="password_dict.new_password"
+                         label="New Password"/>
+              </q-item-section>
+            </q-item>
+            <q-item class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+              <q-item-section>
+                Confirm New Password
+              </q-item-section>
+            </q-item>
+            <q-item class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+              <q-item-section>
+                <q-input type="password" dark dense outlined round color="white"
+                         v-model="password_dict.confirm_new_password"
+                         label="Confirm New Password"/>
+              </q-item-section>
+            </q-item>
+          </q-card-section>
+          <q-card-actions align="right">
+            <q-btn class="text-capitalize bg-info text-white" @click="changePassword()">Change Password</q-btn>
+          </q-card-actions>
+
+        </q-card>
+        <q-btn class="q-mt-sm text-capitalize bg-red text-white" style="width:100%" flat @click="deleteUserInfo()">Delete Account</q-btn>
+
+        <q-dialog v-model="confirmDelete" persistent>
+          <q-card class="q-ma-lg row">
+            <q-textarea class="q-ma-lg" style="font-size:large">
+              Are you sure you want to delete your account? We will keep your tick data, but any 
+              personal information will be deleted!
+            </q-textarea>
+            <q-btn class="q-ma-lg bg-primary text-white" @click="deleteUserInfo()">
+              Yes, delete my account
+            </q-btn>
+            <q-space/>
+            <q-btn class="q-ma-lg bg-red text-white" @click="confirmDelete = false">
+              Wait! take me back!
+            </q-btn>            
+
+          </q-card>
+        </q-dialog>
+      </div>
     </div>
   </q-page>
 </template>
 
 <script>
-const image = ref(null);
-import { defineComponent, ref } from 'vue';
-import ProfilePanel from "components/ProfilePanel.vue";
-export default defineComponent({
-  name: 'UserProfile',
-  components: {ProfilePanel},
-  setup() {
-    const image = ref(null);
-    const imageUrl = ref('');
-    return {
-      user_details: {},
-      password_dict: {},
-      image,
-      ProfilePanel,
-      imageUrl,
-      tab: ref('general'),
-      splitterModel: ref(20),
-      updateFile() {
-        imageUrl.value = URL.createObjectURL(image.value);
+import { ref } from 'vue'
+  export default{
+    setup () {
+      return {
+        user_details : ref({
+          email: ref(''),
+          first_name: ref(''),
+          last_name: ref(''),
+        }),
+        password_dict : ref({
+          current_password: ref(''),
+          new_password: ref(''),
+          confirm_new_password: ref(''),
+        }),
+        confirmDelete: ref(false),
+      }
+    },
+    methods:{
+      deleteUserInfo(){
+        //  theoretically there is an delete api call here using something that works on localhost
+
+        //  for now we just close it
+        this.confirmDelete = false
+      },  
+      updateUserInfo(){
+
+        const payload = '[' + JSON.stringify({
+          "email" : this.user_details.email,
+          "firstName" : this.user_details.first_name,
+          "lastName" : this.user_details.last_name
+        }) + ']'
+
+        console.log(payload)
       },
-    };
-  },
-});
+      changePassword(){
+
+        const payload = '[' + JSON.stringify({
+          "current password" : this.password_dict.current_password,
+          "new password" : this.password_dict.new_password,
+          "confirm new password" : this.password_dict.confirm_new_password,
+        }) + ']'
+
+        console.log(payload)
+      }
+    }
+  }
 </script>
 
-<style scoped lang="sass">
-.navLinks:hover
-  background-color: rgb(33, 186, 69, 0.4)
+<style scoped>
+.card-bg {
+  background-color: #5CAB7D;
+}
 </style>
