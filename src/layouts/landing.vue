@@ -56,8 +56,12 @@
             replace
             label="list"
             />
-          </q-list>
-        </q-menu>
+          <q-route-tab
+            to="/overview"
+            replace
+            label="overview"
+            />
+
       </q-btn-dropdown>
 
       </q-tabs>
