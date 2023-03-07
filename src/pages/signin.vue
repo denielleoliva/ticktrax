@@ -1,45 +1,52 @@
 <template>
     <div class="row" style="justify-content:center">
         <q-page padding style="font-family: customfont; margin:5px">
-            <h3>
+            <h3 class="q-ma-sm q-my-lg">
                 Sign Into Your Account
             </h3>
-            <q-banner v-if="(authFail === true)" rounded style="align-content:center; padding:12px;  font-size:large; background-color: pink">
-                Sign in Failed...
+            
+            <q-banner v-if="(authFail === true)" class="q-ma-sm" rounded style="font-size:large; background-color: pink">
+                Sign in failed...
             </q-banner>
+
             <!-- Enter email -->
-            <q-input filled label="Email" style="max-width: 500px; margin: 5px;"
-            v-model="credentials.email"  />
+            <q-input class="q-ma-sm" id = "emailBar" filled label="Email"  v-model="credentials.email" hide-bottom-space
+                :error-message="'Email is required'" :error="emailError"/>
             <!-- Enter Password -->
-            <q-input filled label="Password" style="max-width: 500px; margin: 5px;"
-                v-model="credentials.password" :type="isPwd ? 'password' : 'text'">
+            <q-input class="q-ma-sm" id = "passwordBar" filled label="Password"  v-model="credentials.password" hide-bottom-space
+                :type="isPwd ? 'Password' : 'text'" :error-message="'password is required'" :error="passwordError">
                 <!-- Password has see password text toggle -->
                 <template v-slot:append>
-                    <q-icon
-                        :name="isPwd ? 'visibility_off' : 'visibility'"
-                        class="cursor-pointer"
-                        @click="isPwd = !isPwd"
-                    />
+                    <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd"/>
                 </template>
             </q-input>
             <div class="row">
-                <q-btn id="signInButton" color="primary" style="margin-left:5px; margin-top:10px;"
-                    @click="signIn()">
+                <q-btn class="q-ml-sm" id="signInButton" color="primary" @click="signIn()">
                     Sign in
                 </q-btn>
             </div>
+            <q-inner-loading
+                :showing="loadingBar"
+                label="Signing you in..."
+                label-class="text-positive"
+                label-style="font-size: 1.1em"
+            /> 
         </q-page>
     </div>
   </template>
   
 <script>
+import { watch } from 'fs'
 import { ref } from 'vue'
 var token
 
 export default{
     data () 
-    {
+    {   
         return {
+            emailError: false,
+            passwordError: false,
+            loadingBar: false,
             leftDrawer: false,
             signedIn: false,
             authFail: null,
@@ -62,6 +69,7 @@ export default{
         // async because the api call has promise :thumbs-up:
         async signIn() 
         {
+            this.loadingBar = true
             //  url for signin
             const url = 'http://localhost:5095/auth/signin'
 
@@ -83,11 +91,20 @@ export default{
 
             //  if we got a proper response
             .then(data => {
+                this.loadingBar = false
                 this.$router.push('/profile/1')
             })
 
             //  if we got an error response
            .catch(error => {
+                //  turn off the loading screen
+                this.loadingBar = false
+                if(this.credentials.email.length === 0) this.emailError = true
+                if(this.credentials.password.length === 0)  this.passwordError = true
+
+                //  set flag to try (pops banner)
+                this.authFail = true
+
                 //  indicate an error occured
                 console.log("API POST FAILED", error)
 
@@ -102,10 +119,7 @@ export default{
                     //  remove animation class (to allow replay)
                     elem.classList.remove("giveShake")
                 }, 1000);
-
-                //  set flag to try (pops banner)
-                this.authFail = true
-            })
+           })
         }
     }
 }

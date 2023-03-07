@@ -182,12 +182,19 @@
         </q-card>
       </div>
     </q-tab-panel>
+    <q-tab-panel name="leave feedback">
+      <q-item-section>
+        <feedback/>
+      </q-item-section>
+    </q-tab-panel>
   </q-tab-panels>
 </template>
 
 <script>
 import {ref, watch} from "vue";
+import Feedback from 'src/components/feedback.vue';
 export default {
+  components: { Feedback },
   name: "ProfilePanel",
   props: {
     tab: String
@@ -204,6 +211,11 @@ export default {
       image,
       imageUrl,
       tab: ref('general'),
+      form: ref({
+          email: ref(''),
+          subject: ref(''),
+          message: ref(''),
+      }),
     }
   }
 }
