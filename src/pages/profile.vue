@@ -16,6 +16,7 @@
           <q-tab name="general"  label="General" />
           <q-tab name="profile"  label="Edit Profile" />
           <q-tab name="password"  label="Password" />
+          <q-tab name="leave feedback" label="Leave Feedback"/>
         </q-tabs>
 
       </template>
@@ -39,6 +40,7 @@
       <q-tab name="general"  label="General" />
       <q-tab name="profile"  label="Edit Profile" />
       <q-tab name="password"  label="Password" />
+      <q-tab name="leave feedback" label="Leave Feedback"/>
     </q-tabs>
     <q-separator />
     <profile-panel :tab="tab"  />
@@ -50,9 +52,10 @@
 const image = ref(null);
 import { defineComponent, ref } from 'vue';
 import ProfilePanel from "components/ProfilePanel.vue";
+import Feedback from 'src/components/feedback.vue';
 export default defineComponent({
   name: 'UserProfile',
-  components: {ProfilePanel},
+  components: {ProfilePanel, Feedback},
   setup() {
     const image = ref(null);
     const imageUrl = ref('');

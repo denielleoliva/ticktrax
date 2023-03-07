@@ -11,7 +11,6 @@ const routes = [
       { path: '/register', component: () => import('src/pages/register.vue')},
       { path: '/form', component: () => import('pages/formPage.vue')},
       { path: '/ticks', component: () => import('src/pages/ticks.vue')},
-      { path: '/feedback', component: () => import('src/pages/feedback.vue')},
       { path: '/2fa', component: () => import('src/pages/2fa.vue')},
       { path: '/list', component: () => import('src/pages/list')},
       { path: '/overview', component: () => import('src/pages/searchPage.vue')},
