@@ -13,20 +13,53 @@
           :useZoomBar="true"
           @close="index = null"/>
         <div class="country-navigation q-pb-md column">
-          <div class="text-h5 q-mb-xs">Tick Observations</div>
+          <div class="text-h5 q-mb-xs" v-if="!showLymeDiseaseMap">Tick Observations</div>
+          <div class="text-h5 q-mb-xs" v-else>Lyme Disease</div>
           <div id="overview-countrySelectors" class="shiny-html-output shiny-bound-output" aria-live="polite"><div>
             <q-btn no-caps flat color="primary" label="North America" @click="flyTo([-105.2551, 40.5260])" />
             <q-btn no-caps flat color="primary" label="South America" @click="flyTo([-55.4915, -9.7832])" />
             <q-btn no-caps flat color="primary" label="Europe" @click="flyTo([15.2551, 54.5260])" />
           </div>
           </div>
-          <FilterSearchBars @filteredResults="getFilteredResults" :filterSettings="filterSettings" :key="JSON.stringify(filterSettings)"  />
-          <stats-view :tick-count="tickCount" :isLoadingTickData="isLoadingTickData" :key="isLoadingTickData" />
+          <div class="row justify-start" style="width: 900px">
+          <q-slider
+            class="q-py-lg"
+            v-model="lymeDiseaseSelectedYear"
+            marker-labels
+            :min="2000"
+            :max="2019"
+            snap
+            label
+            v-show="showLymeDiseaseMap"
+          />
+          <q-btn color="primary" :icon="yearToYearIsPlaying ? 'pause': 'play_circle'" v-if="showLymeDiseaseMap" dense outline @click="playLymeDiseaseYearToYear" />
+          </div>
+          <FilterSearchBars @filteredResults="getFilteredResults"
+                            :isLoadingTickData="isLoadingTickData"
+                            :filterSettings="filterSettings"
+                            :key="JSON.stringify(filterSettings)"
+                            v-show="!showLymeDiseaseMap" />
+          <stats-view :tick-count="tickCount"
+                      :isLoadingTickData="isLoadingTickData"
+                      :key="isLoadingTickData"
+                      :subtitle="statsSubtitle"
+                      :loading-msg="statsLoadingMsg"
+          />
         </div>
         <div class="row justify-evenly">
           <!-- Map Display here -->
           <div class="map-holder">
             <div ref="mapView" id="map"></div>
+            <div class='map-overlay' id='legend' v-show="showLymeDiseaseMap">
+              <p class="text-weight-bold text-no-wrap">Cases per 100,000 People</p>
+              <div v-for="(layer, index) in legendLayers" :key="layer">
+                <span class="legend-key" :style="`background-color: ${legendColors[index]}`">
+                </span>
+                <span>
+                   {{layer}}
+                </span>
+              </div>
+            </div>
             <div id="popup" ref="htmlPopup"  style="max-width: 210px" >
               <div class="column" v-if="tickPopupInfo.scientificName">
                 <div class="q-mx-auto" v-if="tickPopupInfo.commonName">
@@ -86,6 +119,8 @@
                   <q-toggle
                     v-model="showHeatmap"
                     :label="showHeatmap? 'Hide heatmap': 'Show heatmap'"
+                    color="primary"
+                    :disable="isLoadingTickData"
                   />
                   <q-card-section >
                     <h3 class="text-h5">Current Coordinates</h3>
@@ -126,12 +161,10 @@
 
                 <q-tab-panel name="data">
                   <div class="text-h6">Data Explorer</div>
-<!--                  <q-toggle-->
-<!--                    v-model="showRecentTickReports"-->
-<!--                    @input="updateFilterSettings"-->
-<!--                    label="Get 200 recent tick reports"-->
-<!--                  />-->
-                  todo
+                  <q-toggle
+                    v-model="showLymeDiseaseMap"
+                    label="Lyme disease reported cases 2000-2019 (USA)"
+                  />
                 </q-tab-panel>
               </q-tab-panels>
             </q-card>
@@ -225,6 +258,9 @@ const items = ref([]);
 const index = ref(null);
 
 const tableData = ref([]);
+const lymeDiseaseTableData = ref([]);
+const statsSubtitle = ref('Ticks reported');
+const statsLoadingMsg = ref('Collecting ticks...');
 
 const isDarkMode = ref(false);
 
@@ -242,6 +278,10 @@ const isLoadingLocation = ref(false);
 const isLoadingTickData = ref(false);
 
 const showHeatmap = ref(false);
+const showLymeDiseaseMap = ref(false);
+const lymeDiseaseSelectedYear = ref(2019);
+const yearToYearIsPlaying = ref(false);
+
 const showRecentTickReports = ref(false);
 
 const filterParameterKey = ref('');
@@ -250,6 +290,22 @@ const mapView = ref(null);
 
 const tickReportsHistogram = ref(null);
 const lymeDiseaseByGender = lymeDiseaseByGenderChartInputs;
+
+
+const legendLayers = [
+  '0-1',
+  '1-10',
+  '10-25',
+  '25-100',
+  '100-2,500',
+];
+const legendColors = [
+  '#FFFFD4',
+  '#FED98E',
+  '#FE9929',
+  '#D95F0E',
+  '#993404',
+];
 
 
 const tickPopupInfo = ref({
@@ -273,9 +329,7 @@ watch(() => Dark.isActive, async val => {
   switchLayer();
   tickReportsHistogram.value = await getChartInputs();
 
-
-
-})
+});
 
 
 const sheetId = '1rJaYUmA0Ua26IS6sQsFIQhpTbCdSyxzT9s5W5xXLD7c';
@@ -302,7 +356,24 @@ watch(showHeatmap, (value) => {
   } else {
     onMapTypeClick('regular');
   }
-})
+});
+
+watch(showLymeDiseaseMap, async (value) => {
+  if (value) {
+    await showLymeDiseaseCaseMap();
+  } else {
+    resetLymeDiseaseCaseMap();
+    onMapTypeClick('regular');
+  }
+});
+
+watch(lymeDiseaseSelectedYear, (year, oldYear) => {
+  if (year === oldYear) {
+    return;
+  }
+  changeLymeDiseaseYearMap(year);
+
+});
 
 
 const center = ref([-111.549668, 39.014]);
@@ -372,6 +443,17 @@ onMounted(async () => {
 
 
 });
+
+function changeLymeDiseaseYearMap(year) {
+  resetLymeDiseaseCaseMap();
+  const countyMap = new USCountyMap(year.toString());
+  countyMap.addSource(map);
+  countyMap.addLayers(map);
+  //countyMap.subscribeEvents(map);
+  map.setLayoutProperty('counties','visibility', 'visible');
+
+  setLymeCases(year);
+}
 
 function initMap() {
 
@@ -514,6 +596,10 @@ function switchLayer() {
     if (showHeatmap.value) {
       newMap('heatmap');
     }
+    if (showLymeDiseaseMap.value) {
+      showLymeDiseaseCaseMap();
+      //changeLymeDiseaseYearMap(lymeDiseaseSelectedYear.value);
+    }
   });
   map.setStyle(mapTile.value);
 }
@@ -538,10 +624,9 @@ function createMap(mapType) {
       const heatmap = new HeatMapLayer();
       heatmap.addLayers(map);
 
-      // const countyMap = new USCountyMap();
-      // countyMap.addSource(map);
-      // countyMap.addLayers(map);
-      // countyMap.subscribeEvents(map);
+      const countyMap = new USCountyMap(lymeDiseaseSelectedYear.value.toString());
+      countyMap.subscribeEvents(map);
+
 
 
 
@@ -599,6 +684,84 @@ function newMap(mapType) {
     map.setLayoutProperty('heatmap-ticks', 'visibility', 'none');
   }
 
+}
+
+function resetLymeDiseaseCaseMap() {
+  map.removeLayer('counties');
+  map.removeSource('counties');
+
+  tickCount.value = geoJson.value.features.length;
+  statsSubtitle.value = 'Ticks reported';
+  statsLoadingMsg.value = 'Collecting ticks...';
+}
+
+function lymeDiseaseCaseMapPrep() {
+  map.setLayoutProperty('clusters', 'visibility', 'none');
+  map.setLayoutProperty('cluster-count','visibility', 'none');
+  map.setLayoutProperty('unclustered-point','visibility', 'none');
+
+  map.setLayoutProperty('heatmap-ticks', 'visibility', 'none');
+
+  return () => {
+    const countyMap = new USCountyMap(lymeDiseaseSelectedYear.value.toString());
+    countyMap.addSource(map);
+    countyMap.addLayers(map);
+    //countyMap.subscribeEvents(map);
+    map.setLayoutProperty('counties','visibility', 'visible');
+
+
+
+  }
+
+}
+
+function playLymeDiseaseYearToYear() {
+  if (!yearToYearIsPlaying.value) {
+    yearToYearIsPlaying.value = true;
+  } else {
+    yearToYearIsPlaying.value = false;
+    return;
+  }
+
+  const selectYear = (nextYear) => {
+    if (nextYear === 2020) {
+      yearToYearIsPlaying.value = false;
+      return;
+    }
+    lymeDiseaseSelectedYear.value = nextYear;
+
+
+    setTimeout(() => {
+      if (!yearToYearIsPlaying.value) {
+        return;
+      }
+      selectYear(nextYear + 1);
+    }, 1500);
+
+  }
+
+  if (lymeDiseaseSelectedYear.value === 2019) {
+    lymeDiseaseSelectedYear.value = 2000;
+  }
+
+  selectYear(lymeDiseaseSelectedYear.value);
+}
+
+
+function setLymeCases(year){
+  const caseCount = lymeDiseaseTableData.value.filter((item) => item.YEAR === year).reduce((acc, item) => acc + item.CASES, 0);
+  statsSubtitle.value = 'Cases reported';
+  tickCount.value = caseCount;
+}
+
+
+async function showLymeDiseaseCaseMap(year = 2019) {
+  lymeDiseaseSelectedYear.value = 2019;
+  let registerLymeMap = lymeDiseaseCaseMapPrep();
+  registerLymeMap();
+  const resp = await getLymeDiseaseByCountiesData();
+  lymeDiseaseTableData.value = JSON.parse(await resp.text());
+  setLymeCases(year);
 }
 
 function renderListings(e) {
@@ -859,6 +1022,30 @@ function onLocateClick(lngLat) {
   background: #1D1D1D
   border-color: red
 
+.q-toggle
+  &.disabled
+    background: white !important
+
+.map-overlay
+  position: absolute
+  bottom: 0
+  right: 0
+  background: rgba(255,255,255,0.8)
+  margin-right: 527px
+  font-family: Arial, sans-serif
+  overflow: auto
+  border-radius: 3px
+.body--dark .map-overlay
+  background: #1D1D1D
+#legend
+  padding: 10px
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1)
+  line-height: 18px
+  height: 150px
+  margin-bottom: 950px
+
+
+
 
 </style>
 <style lang="sass">
@@ -867,6 +1054,13 @@ function onLocateClick(lngLat) {
     background: #1D1D1D
   .mapboxgl-popup-close-button
     color: #FFFFFF
+
+.legend-key
+  display: inline-block
+  border-radius: 20%
+  width: 10px
+  height: 10px
+  margin-right: 5px
 
 
 </style>

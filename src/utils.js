@@ -78,7 +78,7 @@ export function dateAdapter(dateString) {
   const re = /(?<year>\d{4}):(?<month>\d{2}):(?<day>\d{2})\s(?<hour>\d{2}):(?<minute>\d{2}):(?<seconds>\d{2})/;
   const {year, month, day, hour, minute} = dateString.match(re).groups;
 
-  return year + '-' + month + '-' + day + ' '.repeat(10) + hour + ':' + minute;
+  return year + '-' + month + '-' + day + ' '.repeat(27) + hour + ':' + minute;
 }
 
 export function JSONtoGeoJSON(jsonData) {
@@ -266,5 +266,13 @@ export function wrapCsvValue (val, formatFn) {
   // .split('\n').join('\\n')
   // .split('\r').join('\\r')
 
-  return `"${formatted}"`
+  return `"${formatted}"`;
+}
+
+export function formatNumber(num) {
+  if (num === Math.floor(num)) {
+    return num.toString();
+  } else {
+    return num.toFixed(2);
+  }
 }
