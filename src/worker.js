@@ -9,3 +9,4 @@ export async function convertHeicToPNG(buffer) {
   return `data:image/png;base64,${base64img}`;
 
 }
+

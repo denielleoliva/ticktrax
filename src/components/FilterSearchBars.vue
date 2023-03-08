@@ -14,6 +14,7 @@
         hint="Filter by tick type"
         clear-icon="close"
         clearable
+        :disable="props.isLoadingTickData"
       >
         <template v-slot:no-option>
           <q-item>
@@ -26,7 +27,7 @@
 
       <q-input filled  hint="Filter by date"
                :input-style="{ width: '184px' }"
-               :value="dateRangeDisplay" clear-icon="close" clearable @clear="dateRange = ''">
+               :value="dateRangeDisplay" clear-icon="close" clearable @clear="dateRange = ''"  :disable="props.isLoadingTickData">
         <q-popup-proxy cover transition-show="scale" transition-hide="scale">
           <q-date v-model="dateRange" range minimal>
             <div class="row items-center justify-end">
@@ -73,7 +74,7 @@ const location = ref('');
 
 
 const emits = defineEmits(['filteredResults']);
-const props = defineProps(['filterSettings']);
+const props = defineProps(['filterSettings', 'isLoadingTickData']);
 
 const tickNames = props.filterSettings.useScientificName ? tickScientificNames: tickCommonNames;
 

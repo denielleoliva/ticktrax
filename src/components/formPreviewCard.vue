@@ -40,56 +40,72 @@
                      @onClickedMarker="onClickedMarker"
                      :geoJson="{}" />
         <div>
-          <div class="q-pl-lg" style="max-width: 300px">
+          <div class="q-pr-sm" style="width: 300px">
             <div class="q-pb-md desktop-only"><q-img v-if="metaData.pngImage != null" :src="metaData.pngImage" style="height: 140px; max-width: 300px" /></div>
 
             <p class="text-weight-medium">Observed:</p>
-<!--            {{date}}-->
-<!--            <q-icon name="edit" class="q-pb-sm"/>-->
-            <q-input filled v-model="date" class="q-pb-md">
-              <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                <q-date v-model="date" mask="YYYY-MM-DD          HH:mm" minimal >
+            <!--            {{date}}-->
+            <!--            <q-icon name="edit" class="q-pb-sm"/>-->
+            <q-input filled v-model="date" class="q-pb-md" @click="hi">
+              <q-popup-proxy cover transition-show="scale" transition-hide="scale" v-if="showDate">
+                <q-date v-model="date" :mask="`YYYY-MM-DD${' '.repeat(timeSpace)}HH:mm`" minimal >
                   <div class="row items-center justify-end">
                     <q-btn v-close-popup label="Close" color="grey" flat />
                     <q-btn label="Next" color="primary" flat >
-                      <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                        <q-time v-model="date" mask="YYYY-MM-DD          HH:mm" format24h minimal>
-                          <div class="row items-center justify-end">
-                            <q-btn v-close-popup label="Close" color="primary" flat />
-                          </div>
-                        </q-time>
-                      </q-popup-proxy>
                     </q-btn>
                   </div>
                 </q-date>
               </q-popup-proxy>
+              <q-popup-proxy cover transition-show="scale" transition-hide="scale" v-else>
+                <q-time v-model="date" :mask="`YYYY-MM-DD${' '.repeat(timeSpace)}HH:mm`" minimal>
+                  <div class="row items-center justify-end">
+                    <q-btn v-close-popup label="Close" color="primary" flat />
+                  </div>
+                </q-time>
+              </q-popup-proxy>
+
               <template v-slot:prepend>
                 <q-icon name="event" class="cursor-pointer" color="primary">
-
+                  <!--                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">-->
+                  <!--                    <q-date v-model="date" :mask="`YYYY-MM-DD${' '.repeat(timeSpace)}HH:mm`" minimal >-->
+                  <!--                      <div class="row items-center justify-end">-->
+                  <!--                        <q-btn v-close-popup label="Close" color="grey" flat />-->
+                  <!--                        <q-btn label="Next" color="primary" flat >-->
+                  <!--                        </q-btn>-->
+                  <!--                      </div>-->
+                  <!--                    </q-date>-->
+                  <!--                  </q-popup-proxy>-->
                 </q-icon>
               </template>
 
 
               <template v-slot:append>
                 <q-icon name="access_time" class="cursor-pointer time-icon" color="primary">
+                  <!--                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">-->
+                  <!--                    <q-time v-model="date" :mask="`YYYY-MM-DD${' '.repeat(timeSpace)}HH:mm`" format24h minimal>-->
+                  <!--                      <div class="row items-center justify-end">-->
+                  <!--                        <q-btn v-close-popup label="Close" color="primary" flat />-->
+                  <!--                      </div>-->
+                  <!--                    </q-time>-->
+                  <!--                  </q-popup-proxy>-->
                 </q-icon>
               </template>
             </q-input>
             <map-element class="col q-mr-md mobile-only" style="height: 15rem!important;" :user-input="coords" marker-msg="Tick observed here." :geoJson="{}"  />
             <div class="q-pt-lg mobile-only"><q-img v-if="metaData.pngImage != null" :src="metaData.pngImage" style="height: 140px; max-width: 300px" /></div>
-            <div class="q-pt-md q-gutter-xl row justify-between">
+            <div class="q-pt-xs q-gutter-xl row justify-between">
               <q-btn color="white" size="md" text-color="black" label="back" @click="goBack" />
               <q-btn color="positive" size="md" label="Submit" @click="onSubmit" />
             </div>
           </div>
-          </div>
+        </div>
       </q-card-section>
-<!--      <q-card-actions align="center" class="mobile-only row justify-around" >-->
-<!--        <div class="q-pb-md q-gutter-xl">-->
-<!--        <q-btn color="white" size="md" text-color="black" label="back" @click="goBack" />-->
-<!--        <q-btn color="positive" size="md" label="Submit" />-->
-<!--        </div>-->
-<!--      </q-card-actions>-->
+      <!--      <q-card-actions align="center" class="mobile-only row justify-around" >-->
+      <!--        <div class="q-pb-md q-gutter-xl">-->
+      <!--        <q-btn color="white" size="md" text-color="black" label="back" @click="goBack" />-->
+      <!--        <q-btn color="positive" size="md" label="Submit" />-->
+      <!--        </div>-->
+      <!--      </q-card-actions>-->
     </q-card>
 
 
@@ -105,9 +121,12 @@ const isDarkMode = ref(false);
 const coords = ref([]);
 const date = ref('');
 const alert = ref(false);
+const showDate = ref(false);
 
 const props = defineProps(['metaData']);
-const emit = defineEmits(['setPreviewCard'])
+const emit = defineEmits(['setPreviewCard']);
+
+const timeSpace = 27;
 
 //console.log(props.metaData, "metaData")
 coords.value = [props.metaData.coords.long, props.metaData.coords.lat];
@@ -115,6 +134,15 @@ date.value = props.metaData.dateTime ? dateAdapter(props.metaData.dateTime): '';
 
 if (date.value === '') {
   alert.value = true;
+}
+
+function hi(event){
+  console.log('focused', event.target.offsetWidth, event.clientX);
+  const inputBox = event.target;
+  const clickX = event.offsetX;
+  const clickY = event.offsetY;
+  console.log(clickX, event.target.offsetWidth/2);
+  showDate.value = clickX < event.target.offsetWidth / 2;
 }
 
 
@@ -144,20 +172,21 @@ function onSubmit() {
   formData.append('image', props.metaData.pngImage);
   formData.append('date', date.value);
   formData.append('coordinates', coords.value.join(','));
- // formData.append('tickType', tickType.value);
+  // formData.append('tickType', tickType.value);
   for (let pair of formData.entries()) {
     console.log(pair[0]+ ', ' + pair[1]);
   }
 
   console.log("Coords value:", coords.value);
+  console.log( props.metaData.pngImage.replace("data:image/png;base64,", ""), "HELLO")
 
   //Send to backend TBD
-  
+
   //photo
   //latitude
   //longitude
   //caption
-  //time  
+  //time
 
   const caption = 'we do not have captions right now'
 
@@ -170,25 +199,25 @@ function onSubmit() {
   const url = 'http://localhost:5095/submission/'
 
   fetch(url, {
-      //  this means we add to database
-      method: 'POST',
+    //  this means we add to database
+    method: 'POST',
 
-      //  this means we are adding of type json
-      headers: {
+    //  this means we are adding of type json
+    headers: {
       'Content-Type' : 'application/json',
-      },
+    },
 
-      //  this are the fields in json format (hopefully)
-      body: JSON.stringify({photo: formData.image, latitude: coords.value[0], longitude: coords.value[1], caption: caption, time: formattedDateTime})
+    //  this are the fields in json format (hopefully)
+    body: JSON.stringify({photo: formData.image, latitude: coords.value[0], longitude: coords.value[1], caption: caption, time: formattedDateTime})
   })
-  .then((response) => {
-    console.log('API POST SUCCESS', response.body)
-  })
+    .then((response) => {
+      console.log('API POST SUCCESS', response.body)
+    })
 
-  //  reported failed post
-  .catch((error) => {
+    //  reported failed post
+    .catch((error) => {
       console.error('API POST FAIL', error)
-  })
+    })
 }
 
 
@@ -240,7 +269,7 @@ function onSubmit() {
 
 .time-icon
   position: absolute
-  right: 68px
+  margin-left: -4em
 
 
 </style>

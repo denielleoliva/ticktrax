@@ -8,6 +8,7 @@
       :row-key="row => row.id"
       :rows-per-page-options="[3,5,10,15,20]"
       :loading="loading"
+      :filter="filter"
     >
       <template v-slot:header="props">
         <q-tr :props="props">
@@ -56,6 +57,13 @@
           @click="exportTable"
         />
       </template>
+      <template v-slot:top-left>
+        <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
+          <template v-slot:append>
+            <q-icon name="search" />
+          </template>
+        </q-input>
+      </template>
 
     </q-table>
   </div>
@@ -70,6 +78,7 @@ const props = defineProps(['dataTable', 'loadingState']);
 
 const rows = ref([]);
 const loading = ref(false);
+const filter = ref('');
 
 loading.value = props.loadingState;
 
@@ -137,7 +146,6 @@ function exportTable () {
   )
 
   if (status !== true) {
-    window.alert('hsdf')
     this.$q.notify({
       message: 'Browser denied file download...',
       color: 'negative',

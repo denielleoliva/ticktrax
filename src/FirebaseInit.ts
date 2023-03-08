@@ -23,7 +23,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app, "gs://ticktrax-3dc7a.appspot.com");
-const gsReference = ref(storage, 'gs://ticktrax-3dc7a.appspot.com/counties_ld.csv');
+const gsReference = ref(storage, 'gs://ticktrax-3dc7a.appspot.com/counties_ld.json');
 
 
 
