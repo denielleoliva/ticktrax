@@ -92,6 +92,8 @@ export default{
             //  if we got a proper response
             .then(data => {
                 this.loadingBar = false
+                console.log(data)
+                sessionStorage.setItem("token", data);
                 this.$router.push('/profile/1')
             })
 

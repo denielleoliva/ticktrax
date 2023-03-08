@@ -41,11 +41,8 @@
             replace
             label="overview"
             />
-            <q-route-tab
-            to="/signin"
-            replace
-            label="log out"
-          />
+          <q-btn class="row" align="center" flat @click=logOut() style="padding-inline:28px; padding-"> Sign Out </q-btn>
+
       </q-btn-dropdown>
 
       </q-tabs>
@@ -110,6 +107,15 @@ export default {
     return {
       leftDrawer: false,
       Dark,
+    }
+  },
+  methods: {
+    logOut(){
+      const token = sessionStorage.getItem("token")
+      console.log(token)
+      sessionStorage.clear()
+      const token1 = sessionStorage.getItem("token")
+      console.log(token)
     }
   }
 }
