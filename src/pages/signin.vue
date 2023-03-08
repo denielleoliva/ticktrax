@@ -14,7 +14,7 @@
                 :error-message="'Email is required'" :error="emailError"/>
             <!-- Enter Password -->
             <q-input class="q-ma-sm" id = "passwordBar" filled label="Password"  v-model="credentials.password" hide-bottom-space
-                :type="isPwd ? 'Password' : 'text'" :error-message="'password is required'" :error="passwordError">
+                :type="isPwd ? 'Password' : 'text'" :error-message="'Password is required'" :error="passwordError">
                 <!-- Password has see password text toggle -->
                 <template v-slot:append>
                     <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd"/>
@@ -36,7 +36,6 @@
   </template>
   
 <script>
-import { watch } from 'fs'
 import { ref } from 'vue'
 var token
 
@@ -91,7 +90,13 @@ export default{
 
             //  if we got a proper response
             .then(data => {
+                //  turn off the loading screen
                 this.loadingBar = false
+
+                //  save token in session storage
+                sessionStorage.setItem("token", data);
+
+                //  route to profile screen
                 this.$router.push('/profile/1')
             })
 
@@ -99,7 +104,11 @@ export default{
            .catch(error => {
                 //  turn off the loading screen
                 this.loadingBar = false
+
+                //  if the email is not entered, pop error
                 if(this.credentials.email.length === 0) this.emailError = true
+
+                //  if the password is not eneter, pop error
                 if(this.credentials.password.length === 0)  this.passwordError = true
 
                 //  set flag to try (pops banner)

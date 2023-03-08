@@ -3,13 +3,13 @@
 
     <!-- (Optional) The Header -->
     <q-header v-if="$q.platform.is.desktop" elevated class="row" style="background-color:#5CAB7D; color:white;">
-      <q-toolbar class="col-auto">
+      <q-toolbar class="col">
         <q-toolbar-title style="font-family:customfont">
           ticktrax
         </q-toolbar-title>
       </q-toolbar>
 
-      <q-tabs  style="background-color: #5CAB7D">
+      <q-tabs style="background-color: #5CAB7D; justify-content:end">
         <q-route-tab
           to="/"
           replace
@@ -20,7 +20,7 @@
           replace
           label="form"
         />
-        <q-btn-dropdown flat label="Account" >
+        <q-btn-dropdown class="q-pa-sm" flat label="Account" >
           <q-route-tab
             to="/signin"
             replace
@@ -41,26 +41,19 @@
             replace
             label="overview"
             />
-            <q-route-tab
-            to="/signin"
-            replace
-            label="log out"
-          />
+          <q-btn class="row q-pa-sm" align="center" flat @click=logOut() style="padding-inline:28px"> Sign Out </q-btn>
+          <q-btn class="row q-pa-sm" flat :icon="Dark.isActive ? 'light_mode' : 'dark_mode'" @click="() => Dark.toggle()"> 
+          Dark mode
+          </q-btn>
       </q-btn-dropdown>
-
-      </q-tabs>
-      <q-btn
-        class="absolute-right gt-xs"
-        flat
-        :icon="Dark.isActive ? 'light_mode' : 'dark_mode'"
-        @click="() => Dark.toggle()"
-      />
-      <q-btn
+      <!-- <q-btn
         class="relative-position lt-sm"
         flat
         :icon="Dark.isActive ? 'light_mode' : 'dark_mode'"
         @click="() => Dark.toggle()"
-      />
+      /> -->
+
+      </q-tabs>
     </q-header>
 
     <!-- <q-toolbar-title class="q-pa-sm" style="font-family:customfont; background-color:#5CAB7D">
@@ -97,6 +90,14 @@
       <router-view />
     </q-page-container>
 
+    <q-inner-loading
+        :showing="logOutBar"
+        label="Logging you out..."
+        label-class="text-positive"
+        label-style="font-size: 1.1em"
+        style="color:#5CAB7D; background-color:grey;"
+    /> 
+
   </q-layout>
 </template>
 
@@ -104,12 +105,28 @@
 import { Dark } from 'quasar';
 
 export default {
-  // name: 'LayoutName',
-
   data () {
     return {
+      logOutBar: false,
       leftDrawer: false,
       Dark,
+    }
+  },
+  methods: {
+    logOut(){
+      //  clear token
+      sessionStorage.clear()
+
+      //  push to home page
+      this.$router.push('/')
+
+      //  turn on load
+      this.logOutBar = true
+
+      //  wait 2 sec and turn off load
+      setTimeout(() => {
+        this.logOutBar = false
+      }, 2000);
     }
   }
 }

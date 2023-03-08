@@ -167,7 +167,11 @@ function onSubmit() {
   console.log(formattedDateTime)
 
 
-  const url = 'http://localhost:5095/submission/'
+  const url = 'http://localhost:5095/submission'
+
+  const token = sessionStorage.getItem("token")
+
+  console.log(coords.value[0], coords.value[1])
 
   fetch(url, {
       //  this means we add to database
@@ -175,11 +179,12 @@ function onSubmit() {
 
       //  this means we are adding of type json
       headers: {
-      'Content-Type' : 'application/json',
-      },
+        'Content-Type' : 'application/json',
+        'Authorization' : token
+            },
 
       //  this are the fields in json format (hopefully)
-      body: JSON.stringify({photo: formData.image, latitude: coords.value[0], longitude: coords.value[1], caption: caption, time: formattedDateTime})
+      body: JSON.stringify({photo: formData.image, latitude: coords.value[0], longitude: coords.value[1], caption: caption, time: formattedDateTime, })
   })
   .then((response) => {
     console.log('API POST SUCCESS', response.body)
