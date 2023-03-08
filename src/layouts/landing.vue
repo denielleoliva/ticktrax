@@ -29,12 +29,7 @@
           <q-route-tab
             to="/register"
             replace
-            label="sign up"
-          />
-          <q-route-tab
-            to="/ticks"
-            replace
-            label="ticks"
+            label="create account"
           />
           <q-route-tab
             to="/profile/1"
@@ -42,26 +37,15 @@
             label="Edit Profile"
           />
           <q-route-tab
-            to="/feedback"
-            replace
-            label="leave feedback"
-          />
-          <q-route-tab
-            to="/signin"
-            replace
-            label="log out"
-          />
-          <q-route-tab
-            to="/list"
-            replace
-            label="list"
-            />
-          <q-route-tab
             to="/overview"
             replace
             label="overview"
             />
-
+            <q-route-tab
+            to="/signin"
+            replace
+            label="log out"
+          />
       </q-btn-dropdown>
 
       </q-tabs>
