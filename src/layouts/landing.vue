@@ -9,11 +9,7 @@
         </q-toolbar-title>
       </q-toolbar>
 
-<<<<<<< Updated upstream
-      <q-tabs style="background-color:#5CAB7D;">
-=======
       <q-tabs style="background-color: #5CAB7D; justify-content:end">
->>>>>>> Stashed changes
         <q-route-tab
           to="/"
           replace
