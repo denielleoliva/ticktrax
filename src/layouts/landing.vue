@@ -51,8 +51,13 @@
             @click="logOut()"
             label="log out">
           </q-route-tab>
-          <q-route-tab @click="() => Dark.toggle()"
-            label="Dark Mode"  style="justify-content:left">
+          <q-route-tab class="row" @click="() => Dark.toggle()" style="justify-content:left">
+            <div class="row">
+                <div style="font-family:roboto; font-weight:500">
+                  DARK MODE
+                  <q-icon name="dark_mode" right style="font-size:x-large; align-self:center"/>
+                </div>
+            </div>
           </q-route-tab>
         </q-btn-dropdown>
       </q-tabs>
