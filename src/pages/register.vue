@@ -5,7 +5,7 @@
                 Create Account
             </h3>
             <q-banner v-if="(registerSuccess === false)" class="q-ma-sm" rounded style="font-size:large; background-color:pink">
-                Account Creation Failed... Please try again!
+                Account Creation Failed...
             </q-banner>
 
             <div class="row q-ma-sm">
@@ -14,15 +14,15 @@
                 <q-input filled label="Last Name" style="width:45%;" v-model="fields.lastName"/>
             </div>
 
-            <q-input class="q-ma-sm" filled label="Username" hide-bottom-space v-model="fields.username"
+            <q-input class="q-ma-sm" filled label="Username" hide-bottom-space v-model="fields.username" :error="usernameError" :error-message="usernameErrorMessage"
                 :rules="[ val => val.length > 0 || 'Username is required' ]"/>
 
  
-            <q-input class="q-ma-sm" filled label="Email" hide-bottom-space v-model="fields.email"
+            <q-input class="q-ma-sm" filled label="Email" hide-bottom-space v-model="fields.email"  :error="emailError" :error-message="emailErrorMessage"
                 :rules="[ (val, rules) => rules.email(val) || 'Please enter a valid email address' ]" />
 
 
-            <q-input class="q-ma-sm" filled label="Password" lazy-rules hide-bottom-space v-model="fields.password" 
+            <q-input class="q-ma-sm" filled label="Password" lazy-rules hide-bottom-space v-model="fields.password" :error="passwordError" :error-message="passwordErrorMessage"
                 :type="hidePassword ? 'password' : 'text'" :rules="[ passwordRules ]">
                 <!-- Password has see password text toggle -->
                 <template v-slot:append>
@@ -35,7 +35,7 @@
             </q-input>
 
 
-            <q-input class="q-ma-sm" filled label="Confirm Password" reactive-rules hide-bottom-space v-model="fields.confirmPassword" 
+            <q-input class="q-ma-sm" filled label="Confirm Password" reactive-rules hide-bottom-space v-model="fields.confirmPassword" :error="cPasswordError" :error-message="cPasswordErrorMessage"
                 :type="hideConfirmPassword ? 'password' : 'text'" :rules="[ cPasswordRules ] ">
                 <!-- Password has see password text toggle -->
                 <template v-slot:append>
@@ -51,9 +51,6 @@
             <q-btn id="loading" color="primary" style="align:center; margin-left:12px; margin-top:10px; background-color:#21ba45;"
                 @click="register()">
                 Sign up
-            </q-btn>
-            <q-btn class="" flat style="align:left; margin-top:10px" @click="$router.push('/signin')">
-                Already have an account? Log in here
             </q-btn>
             <q-inner-loading :showing="loadingBar" label="Creating your account..." label-class="text-positive" label-style="font-size: 1.1em"/> 
             <q-inner-loading :showing="routingBar" label="Routing to sign in..." label-class="text-positive" label-style="font-size: 1.1em"/> 
@@ -87,6 +84,16 @@ export default{
                 confirmPassword: ref('')
             }),
 
+            usernameError: false,
+            emailError: false,
+            passwordError: false,
+            cPasswordError: false,
+
+            usernameErrorMessage: '',
+            emailErrorMessage: '',
+            passwordErrorMessage: '',
+            cPasswordErrorMessage: '',
+
             // password: ref(''),
             hidePassword: ref(true),
             hideConfirmPassword: ref(true),
@@ -100,10 +107,20 @@ export default{
     },
     methods:{
             cPasswordRules(){
-                if(this.fields.confirmPassword.length === 0)    return 'Confirm Password is required'
-                if(this.fields.confirmPassword != this.fields.password) return 'Passwords do not match'
+                //  check if confirm password is empty
+                if(this.fields.confirmPassword.length === 0)
+                {
+                    this.cPasswordErrorMessage = 'Confirm Password is required'
+                    this.cPasswordError = true
+                }
+
+                //  check if confirm password is the same as regular password
+                if(this.fields.confirmPassword !== this.fields.password)
+                {
+                    this.cPasswordErrorMessage = 'Passwords do not match'
+                    this.cPasswordError = true
+                } 
             },
-           
             // post data to api
 
             //  email should be a valid email
@@ -160,7 +177,10 @@ export default{
                     console.log('API POST', data)
 
                     //  indicate route to sign in
-                    this.routingBar = true;
+                    setTimeout(() => {
+                        //  
+                        this.routingBar = true;
+                    }, 500);
 
                     //  route to sign in
                     this.$router.push('/signin')
@@ -170,6 +190,36 @@ export default{
                 .catch((error) => {
                     //  turn off loading bar
                     this.loadingBar = false
+
+                    //  if username not entered, pop error
+                    if(this.fields.username.length === 0) {
+                        this.usernameErrorMessage = 'Username field is required'
+                        this.usernameError = true
+                    }
+
+                    //  if username not entered, pop error
+                    if(this.fields.email.length === 0) {
+                        this.emailErrorMessage = 'Email field is required'
+                        this.emailError = true
+                    } 
+
+                    //  if username not entered, pop error
+                    if(this.fields.password.length === 0){
+                        this.passwordErrorMessage = 'Password field is required'
+                        this.passwordError = true
+                    }
+
+                    //  if username not entered, pop error
+                    if(this.fields.confirmPassword.length === 0){
+                        this.cPasswordErrorMessage = 'Confirm password field is required'
+                        this.cPasswordError = true
+                    }
+
+                    //  check the password rules again
+                    this.passwordRules()
+
+                    //  check the confirm password rules again
+                    this.cPasswordRules()
 
                     //  report error 
                     console.error('API POST FAIL', error)

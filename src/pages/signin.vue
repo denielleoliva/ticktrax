@@ -14,7 +14,7 @@
                 :error-message="'Email is required'" :error="emailError"/>
             <!-- Enter Password -->
             <q-input class="q-ma-sm" id = "passwordBar" filled label="Password"  v-model="credentials.password" hide-bottom-space
-                :type="isPwd ? 'Password' : 'text'" :error-message="'password is required'" :error="passwordError">
+                :type="isPwd ? 'Password' : 'text'" :error-message="'Password is required'" :error="passwordError">
                 <!-- Password has see password text toggle -->
                 <template v-slot:append>
                     <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd"/>
