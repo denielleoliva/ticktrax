@@ -166,7 +166,6 @@ export default{
                     body: JSON.stringify({username: this.fields.username, email: this.fields.email, password: this.fields.password})
                 })
                 //  unwrap the response
-                .then((response) => response.json)
 
                 //  reporting successful post
                 .then((data) => {
