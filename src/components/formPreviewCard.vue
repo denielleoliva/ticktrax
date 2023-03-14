@@ -108,12 +108,29 @@
       <!--      </q-card-actions>-->
     </q-card>
 
-
+    <q-inner-loading :showing="showLoading" label="Submitted! routing to home..." label-class="text-positive" label-style="font-size: 1.1em"/> 
+        <q-dialog v-model="showThanks">
+            <q-card class="row" align="center" style="width:50%; height:50%; align-self:center;" >
+              <div class="row" style="align-self:center">
+                Thank You! Your photo has been submitted. Would you like to submit more ticks?
+              </div>
+              <div class="row" style="justify-content:center">
+                <q-btn color="primary" size="md" text-color="white" label="submit again" @click="goBack"/>
+                <q-space/>
+                <q-btn color="#F5F5DC" size="md" text-color="black" label="return to home"@click="$router.push('/')"/>
+              </div>
+            </q-card>
+        </q-dialog>
+        <q-dialog v-model="showFail">
+            <q-card class="row" style="width:50%; height:50%; justify-content:center; align-content:center">
+                Submission failed... please try again
+            </q-card>
+        </q-dialog>
   </div>
 </template>
 
 <script setup>
-import {ref, watch, defineProps, defineEmits} from "vue";
+import {ref, watch, defineProps, defineEmits, router} from "vue";
 import {Dark} from "quasar";
 import MapElement from "components/MapElement.vue";
 import {dateAdapter} from "src/utils";
@@ -122,6 +139,9 @@ const coords = ref([]);
 const date = ref('');
 const alert = ref(false);
 const showDate = ref(false);
+const showLoading = ref(false);
+const showThanks = ref(false);
+const showFail = ref(false);
 
 const props = defineProps(['metaData']);
 const emit = defineEmits(['setPreviewCard']);
@@ -163,7 +183,7 @@ function onClickedMarker(lngLat) {
   coords.value = lngLat;
 }
 
-function onSubmit() {
+async function onSubmit() {
   if (date.value === '' || coords.value.length > 2 || (coords.value[0] === 0 && coords.value[1] === 0)) {
     alert.value = true;
     return;
@@ -200,37 +220,51 @@ function onSubmit() {
 
   const auth = `Bearer ${token}`
 
-  fetch(url, {
+  showLoading.value = true
+
+  await fetch(url, {
     //  this means we add to database
     method: 'POST',
 
     //  this means we are adding of type json
     headers: {
       'Content-Type' : 'application/json',
-<<<<<<< HEAD
       'Authorization' : auth
       },
 
       //  this are the fields in json format (hopefully)
-      body: JSON.stringify({photo: props.metaData.pngImage.replace("data:image/png;base64,", ""), filename: 'tickPic1' , fileType: 'png' , latitude: 0, longitude: 0, time: '2023-01-01T00:00:00'})
+      body: JSON.stringify({photo: props.metaData.pngImage.replace("data:image/png;base64,", ""), filename: 'tickPic2' , fileType: 'png' , latitude: 0, longitude: 0, time: '2023-01-01T00:00:00'})
   })
+  //  unwrap the response
   .then((response) => {
-    console.log('API POST SUCCESS', response.body)
-=======
-    },
+    if(response.status === 200){
+      //  stops loading 
+      showLoading.value = false
 
-    //  this are the fields in json format (hopefully)
-    body: JSON.stringify({photo: formData.image, latitude: coords.value[0], longitude: coords.value[1], caption: caption, time: formattedDateTime})
->>>>>>> a2ed5551c1c2f2ac9a4ba38313e065a2da819767
+      //  indicate post success
+      console.log("API POST SUCCESS")
+
+      showLoading.value = true
+
+      setTimeout(() => {
+        showLoading.value = false
+        //send back to home
+      }, 1500);
+      return
+    }
+    showLoading.value = false
   })
-    .then((response) => {
-      console.log('API POST SUCCESS', response.body)
-    })
 
-    //  reported failed post
-    .catch((error) => {
-      console.error('API POST FAIL', error)
-    })
+  .catch((error) => {
+    //  stops loading
+    showLoading.value = false
+
+    console.log("API POST FAIL")
+
+    showFail.value = true
+    
+    return
+  })
 }
 
 

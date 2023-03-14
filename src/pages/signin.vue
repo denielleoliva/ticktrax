@@ -6,7 +6,7 @@
             </h3>
             
             <q-banner v-if="(authFail === true)" class="q-ma-sm" rounded style="font-size:large; background-color: pink">
-                Sign in failed...
+                Sign in failed... Please try again!
             </q-banner>
 
             <!-- Enter email -->
