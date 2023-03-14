@@ -9,7 +9,7 @@
         </q-toolbar-title>
       </q-toolbar>
 
-      <q-tabs style="background-color: #5CAB7D; justify-content:end">
+      <q-tabs style="background-color:#5CAB7D;">
         <q-route-tab
           to="/"
           replace
@@ -22,37 +22,39 @@
         />
         <q-btn-dropdown class="q-pa-sm" flat label="Account" >
           <q-route-tab
+            class="q-px-sm"
+            style="justify-content:left"
             to="/signin"
             replace
             label="sign in"
           />
           <q-route-tab
+            style="justify-content:left"
             to="/register"
             replace
             label="create account"
           />
           <q-route-tab
+            style="justify-content:left"
             to="/profile/1"
             replace
             label="Edit Profile"
           />
           <q-route-tab
+            style="justify-content:left"
             to="/overview"
             replace
             label="overview"
             />
-          <q-btn class="row q-pa-sm" align="center" flat @click=logOut() style="padding-inline:28px"> Sign Out </q-btn>
-          <q-btn class="row q-pa-sm" flat :icon="Dark.isActive ? 'light_mode' : 'dark_mode'" @click="() => Dark.toggle()"> 
-          Dark mode
-          </q-btn>
-      </q-btn-dropdown>
-      <!-- <q-btn
-        class="relative-position lt-sm"
-        flat
-        :icon="Dark.isActive ? 'light_mode' : 'dark_mode'"
-        @click="() => Dark.toggle()"
-      /> -->
-
+          <q-route-tab
+            style="justify-content:left"
+            @click="logOut()"
+            label="log out">
+          </q-route-tab>
+          <q-route-tab @click="() => Dark.toggle()"
+            label="Dark Mode"  style="justify-content:left">
+          </q-route-tab>
+        </q-btn-dropdown>
       </q-tabs>
     </q-header>
 
