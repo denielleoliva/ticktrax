@@ -1,6 +1,6 @@
 <template>
     <div class="col-lg-7 col-md-7 col-xs-12 col-sm-12 q-pb-sm" >
-        <q-card class="q-pa-lg">
+        <q-card class="q-pa-lg" style="max-width: 1000px; min-width: 725px">
             <div class="text-h6">Feedback</div>
             <div class="text-subtitle2 text-weight-light">Help us improve TickTrax!</div>
             <q-form>
