@@ -5,7 +5,7 @@
                 Create Account
             </h3>
             <q-banner v-if="(registerSuccess === false)" class="q-ma-sm" rounded style="font-size:large; background-color:pink">
-                Account Creation Failed...
+                Account Creation Failed... Please try again!
             </q-banner>
 
             <div class="row q-ma-sm">
@@ -51,6 +51,9 @@
             <q-btn id="loading" color="primary" style="align:center; margin-left:12px; margin-top:10px; background-color:#21ba45;"
                 @click="register()">
                 Sign up
+            </q-btn>
+            <q-btn class="" flat style="align:left; margin-top:10px" @click="$router.push('/signin')">
+                Already have an account? Log in here
             </q-btn>
             <q-inner-loading :showing="loadingBar" label="Creating your account..." label-class="text-positive" label-style="font-size: 1.1em"/> 
             <q-inner-loading :showing="routingBar" label="Routing to sign in..." label-class="text-positive" label-style="font-size: 1.1em"/> 

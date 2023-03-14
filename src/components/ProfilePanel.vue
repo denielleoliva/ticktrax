@@ -45,6 +45,7 @@
             </q-list>
           </q-card-section>
           <q-card-actions align="right" class="q-pa-md">
+            <q-btn v-if="$q.platform.is.mobile" align="left" class="bg-positive text-white" @click="logOut()"> log out </q-btn>
             <q-btn class="text-capitalize bg-positive text-white"
             >Save Changes</q-btn
             >
@@ -216,6 +217,15 @@ export default {
           subject: ref(''),
           message: ref(''),
       }),
+    }
+  },
+  methods:{
+        logOut(){
+      //  clear token
+      sessionStorage.clear()
+
+      //  push to home page
+      this.$router.push('/')
     }
   }
 }

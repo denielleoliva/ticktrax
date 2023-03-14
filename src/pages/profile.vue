@@ -41,6 +41,7 @@
       <q-tab name="profile"  label="Edit Profile" />
       <q-tab name="password"  label="Password" />
       <q-tab name="leave feedback" label="Leave Feedback"/>
+
     </q-tabs>
     <q-separator />
     <profile-panel :tab="tab"  />
