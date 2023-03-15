@@ -4,6 +4,9 @@
 import {initializeApp} from "firebase/app";
 import {getBlob, getStorage, ref} from "firebase/storage";
 import {getMessaging, getToken} from "firebase/messaging";
+import { getFirestore } from "firebase/firestore";
+import { getAnalytics } from "firebase/analytics";
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -24,8 +27,10 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app, "gs://ticktrax-3dc7a.appspot.com");
 const gsReference = ref(storage, 'gs://ticktrax-3dc7a.appspot.com/counties_ld.json');
+const users = ref(storage, 'gs://ticktrax-3dc7a.appspot.com/users.json');
 
-
+export const FirebaseDB = getFirestore(app);
+export const analytics = getAnalytics(app);
 
 
 export async function requestPermission() {
@@ -51,6 +56,10 @@ export async function requestPermission() {
 
 export async function getLymeDiseaseByCountiesData() {
   return getBlob(gsReference);
+}
+
+export async function getUsers() {
+  return getBlob(users);
 }
 
 
