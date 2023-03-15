@@ -36,12 +36,11 @@
 
 
             <q-input class="q-ma-sm" filled label="Confirm Password" reactive-rules hide-bottom-space v-model="fields.confirmPassword" :error="cPasswordError" :error-message="cPasswordErrorMessage"
-                :type="hideConfirmPassword ? 'password' : 'text'" :rules="[ cPasswordRules ] ">
+                :type="hideConfirmPassword ? 'password' : 'text'" :rules="[ (val) => val === fields.password || 'Passwords do not match' ] ">
                 <!-- Password has see password text toggle -->
                 <template v-slot:append>
                     <q-icon
                         :name="hideConfirmPassword ? 'visibility_off' : 'visibility'"
-                        class="cursor-pointer"
                         @click="hideConfirmPassword = !hideConfirmPassword"
                     />
                 </template>
@@ -76,12 +75,12 @@ export default{
 
         return {
             fields: ref({
-                firstName: ref(''),
-                lastName: ref(''),
-                email: ref(''),
-                password: ref(''),
-                username: ref(''),
-                confirmPassword: ref('')
+                firstName: '',
+                lastName: '',
+                email: '',
+                password: '',
+                username: '',
+                confirmPassword: ''
             }),
 
             usernameError: false,
@@ -107,15 +106,20 @@ export default{
     },
     methods:{
             cPasswordRules(){
+                if(this.fields.confirmPassword.length > 0 && this.fields.confirmPassword === this.fields.password){
+                    this.cPasswordError = false
+                    return
+                }
+
                 //  check if confirm password is empty
-                if(this.fields.confirmPassword.length === 0)
+                else if(this.fields.confirmPassword.length === 0)
                 {
                     this.cPasswordErrorMessage = 'Confirm Password is required'
                     this.cPasswordError = true
                 }
 
                 //  check if confirm password is the same as regular password
-                if(this.fields.confirmPassword !== this.fields.password)
+                else if(this.fields.confirmPassword !== this.fields.password)
                 {
                     this.cPasswordErrorMessage = 'Passwords do not match'
                     this.cPasswordError = true
@@ -138,9 +142,13 @@ export default{
                 const hasNumber = this.fields.password.match(numbers) !== null
                 const hasSpecialChar = this.fields.password.match(specialCharacters) !== null
                 const hasLowerCase = this.fields.password.match(lowerCaseLetters) !== null
+                const isEmpty = this.fields.password.length === 0
 
-                //  return whether the password is valid or the error message
-                return hasUpperCase && hasNumber && hasSpecialChar && hasLowerCase || 'Password must include: 1 uppercase, 1 number, 1 special character'
+                const hasProblem = !(hasUpperCase && hasNumber && hasSpecialChar && hasLowerCase)
+
+                if(isEmpty) return 'Password is required'
+                else if (!(hasUpperCase && hasNumber && hasSpecialChar && hasLowerCase)) return 'Password must include: 1 uppercase, 1 number, 1 special character'
+                else return
             },
 
             async register()
@@ -165,66 +173,58 @@ export default{
                     //  this are the fields in json format (hopefully)
                     body: JSON.stringify({username: this.fields.username, email: this.fields.email, password: this.fields.password})
                 })
-                //  unwrap the response
-
                 //  reporting successful post
                 .then((data) => {
-                    //  turn off the loading bar
-                    this.loadingBar = false
-                    
-                    //  report successful post
-                    console.log('API POST', data)
+                    if(data.headers.status === 200){
+                        //  turn off the loading bar
+                        this.loadingBar = false
+                        
+                        //  report successful post
+                        console.log('API POST', data)
 
-                    //  indicate route to sign in
-                    setTimeout(() => {
-                        //  
-                        this.routingBar = true;
-                    }, 500);
+                        //  indicate route to sign in
+                        setTimeout(() => {
+                            //  
+                            this.routingBar = true;
+                        }, 500);
 
-                    //  route to sign in
-                    this.$router.push('/signin')
-                })
-
-                //  reported failed post
-                .catch((error) => {
-                    //  turn off loading bar
-                    this.loadingBar = false
-
-                    //  if username not entered, pop error
-                    if(this.fields.username.length === 0) {
-                        this.usernameErrorMessage = 'Username field is required'
-                        this.usernameError = true
+                        //  route to sign in
+                        this.$router.push('/signin')
                     }
+                    else{
+                        //  turn off loading bar
+                        this.loadingBar = false
 
-                    //  if username not entered, pop error
-                    if(this.fields.email.length === 0) {
-                        this.emailErrorMessage = 'Email field is required'
-                        this.emailError = true
-                    } 
+                        //  if username not entered, pop error
+                        if(this.fields.username.length === 0) {
+                            this.usernameErrorMessage = 'Username field is required'
+                            this.usernameError = true
+                        }
 
-                    //  if username not entered, pop error
-                    if(this.fields.password.length === 0){
-                        this.passwordErrorMessage = 'Password field is required'
-                        this.passwordError = true
+                        //  if username not entered, pop error
+                        if(this.fields.email.length === 0) {
+                            this.emailErrorMessage = 'Email field is required'
+                            this.emailError = true
+                        } 
+
+                        //  if username not entered, pop error
+                        if(this.fields.password.length === 0){
+                            this.passwordErrorMessage = 'Password field is required'
+                            this.passwordError = true
+                        }
+
+                        //  check the password rules again
+                        this.passwordRules()
+
+                        //  check the confirm password rules again
+                        this.cPasswordRules()
+
+                        //  report error 
+                        console.error('API POST FAIL', error)
+
+                        //  pop fail banner
+                        this.registerSuccess = false;
                     }
-
-                    //  if username not entered, pop error
-                    if(this.fields.confirmPassword.length === 0){
-                        this.cPasswordErrorMessage = 'Confirm password field is required'
-                        this.cPasswordError = true
-                    }
-
-                    //  check the password rules again
-                    this.passwordRules()
-
-                    //  check the confirm password rules again
-                    this.cPasswordRules()
-
-                    //  report error 
-                    console.error('API POST FAIL', error)
-
-                    //  pop fail banner
-                    this.registerSuccess = false;
                 })
             }
         }
