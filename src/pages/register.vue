@@ -193,10 +193,41 @@ export default{
                         //  report successful post
                         console.log('API POST', data)
 
-                        //  route to sign in
-                        this.$router.push('/signin')
-
                         this.accountCreated = true
+                    }
+                    else{
+                        //  turn off loading bar
+                        this.loadingBar = false
+
+                        //  if username not entered, pop error
+                        if(this.fields.username.length === 0) {
+                            this.usernameErrorMessage = 'Username field is required'
+                            this.usernameError = true
+                        }
+
+                        //  if username not entered, pop error
+                        if(this.fields.email.length === 0) {
+                            this.emailErrorMessage = 'Email field is required'
+                            this.emailError = true
+                        } 
+
+                        //  if username not entered, pop error
+                        if(this.fields.password.length === 0){
+                            this.passwordErrorMessage = 'Password field is required'
+                            this.passwordError = true
+                        }
+
+                        //  check the password rules again
+                        this.passwordRules()
+
+                        //  check the confirm password rules again
+                        this.cPasswordRules()
+
+                        //  report error 
+                        console.error('API POST FAIL', error)
+
+                        //  pop fail banner
+                        this.registerSuccess = false;
                     }
                 })
                 .catch(error => {
