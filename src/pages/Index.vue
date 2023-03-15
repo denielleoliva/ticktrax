@@ -8,11 +8,11 @@
             Welcome to ticktrax <br></br>
             Research through Collaboration
             </div>
-        </div>  
+        </div>
       </q-img>
 
       <h1 v-if="$q.platform.is.mobile" style="font-family:customfont; font-size:xx-large;">
-        Welcome to ticktrax 
+        Welcome to ticktrax
         <q-img src="../assets/ticktrax.png" width="50px"/>
       </h1>
       <h1 v-if="$q.platform.is.desktop" v-ekse style="font-family:customfont; font-size:xx-large;">
@@ -25,8 +25,8 @@
 
       <div v-if="$q.platform.is.desktop" class="row justify-center items-center" style="background-color:##DEF2C8; font-family:'Tahoma',sans-serif">
         <div  class="col-4 q-pa-md" style="font-size:large">
-          Ticks are the main carrier of Lyme Disease. To observe the activity of these insects, TickTrax was created to allow anyone to add to 
-            a large database of tick images and locations. Through a Citizen Science approach, we hope to better understand the movement and spread 
+          Ticks are the main carrier of Lyme Disease. To observe the activity of these insects, TickTrax was created to allow anyone to add to
+            a large database of tick images and locations. Through a Citizen Science approach, we hope to better understand the movement and spread
             of lyme disease.
         </div>
         <div class="col-4">
@@ -46,7 +46,7 @@
           <q-btn v-if="$q.platform.is.mobile" class="bg-primary text-white" @click="$router.push('/register')"> Sign Up </q-btn>
         </div>
 
-        <div class="col-4 q-pa-md"> 
+        <div class="col-4 q-pa-md">
           <div style="font-family:customfont; font-size:xx-large">Post</div>
           <q-img src="../assets/post_icon (2).jpg" width="30%"/>
           <figcaption style="font-family:'Tahoma', sans-serif">add to our database by posting an image of a tick</figcaption>
@@ -69,7 +69,7 @@
           <q-btn v-if="$q.platform.is.mobile" class="bg-primary text-white" @click="$router.push('/register')"> Sign Up </q-btn>
         </div>
 
-        <div class="col-4 q-pa-md"> 
+        <div class="col-4 q-pa-md">
           <div style="font-family:customfont; font-size:xx-large">Post</div>
           <q-img src="../assets/post_icon (2).jpg" width="30%"/>
           <figcaption style="font-family:'Tahoma', sans-serif">add to our database by posting an image of a tick</figcaption>
@@ -87,7 +87,7 @@
 
     </div>
 
-    
+
 
     <!-- <div class="fadeIn" >
       <q-btn color="primary">
@@ -96,7 +96,7 @@
       <q-btn color="primary" >
         sign up
       </q-btn>
-    </div> -->   
+    </div> -->
       <h1 class="q-my-lg " align="center" style="font-family:customfont; font-size:xx-large;">
         Fun facts about ticks
       </h1>
@@ -120,7 +120,7 @@ export default {
 .translateUp{
   position: relative;
   animation-name: translate;
-  animation-duration: 1s;
+  animation-duration: 0.6s;
   animation-direction: reverse;
 }
 
