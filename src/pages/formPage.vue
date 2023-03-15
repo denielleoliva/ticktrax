@@ -1,5 +1,8 @@
 <template>
   <q-layout>
+    <q-dialog v-model="signedIn" class="q-pa-lg q-ma-lg" align="center">
+      You aren't signed in... 
+    </q-dialog>
 
     <q-page
       :class="$q.dark.isActive ? null : 'bg-green-1'"
@@ -13,12 +16,13 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { Dark } from 'quasar';
 
 import UploadCard from "components/uploadCard.vue";
 import FormPreviewCard from "components/formPreviewCard.vue";
 import Cookies from 'js-cookie';
+import { mount } from '@vue/test-utils';
 
 
 
@@ -27,6 +31,7 @@ const isDarkMode = ref(false);
 const metaData = ref({});
 const coords = ref([]);
 const showPreviewCard = ref(false);
+let signedIn = null
 
 Cookies.set('foo', 'bar')
 
@@ -35,6 +40,7 @@ watch(() => Dark.isActive, val => {
   //console.log(Cookies.get('foo'))
 })
 
+mount(() => signedIn = sessionStorage.getItem("token"))
 
 function setPreviewCard(state) {
   showPreviewCard.value = state

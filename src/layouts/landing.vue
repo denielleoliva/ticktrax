@@ -21,7 +21,7 @@
           label="form"
         />
         <q-btn-dropdown class="q-pa-sm" flat label="Account" >
-          <q-route-tab
+          <q-route-tab v-if="!signedIn"
             class="q-px-sm"
             style="justify-content:left"
             to="/signin"
@@ -34,19 +34,19 @@
             replace
             label="create account"
           />
-          <q-route-tab
+          <q-route-tab v-if="signedIn"
             style="justify-content:left"
             to="/profile/1"
             replace
             label="Edit Profile"
           />
-          <q-route-tab
+          <q-route-tab v-if="signedIn"
             style="justify-content:left"
             to="/overview"
             replace
             label="overview"
             />
-          <q-route-tab
+          <q-route-tab v-if="signedIn"
             style="justify-content:left"
             @click="logOut()"
             label="log out">
@@ -118,6 +118,10 @@ export default {
       leftDrawer: false,
       Dark,
     }
+  },
+  mounted() {
+    const signedIn = sessionStorage.getItem("token")
+    console.log(signedIn)
   },
   methods: {
     logOut(){
