@@ -12,6 +12,35 @@ export async function getTickObservationsHistogramStats() {
 }
 
 
+export async function getRecentTickData() {
+  const today = new Date();
+  const yesterday = new Date(today);
+
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  return inatjs
+    .observations
+    .search({
+      taxon_id: 51672,
+      quantity_grade: 'research',
+      month: yesterday.getMonth() + 1,
+      day: yesterday.getDate(),
+      year: yesterday.getFullYear()
+    });
+
+}
+
+export async function getTickTypeTrends() {
+  return inatjs
+    .taxa
+    .search({
+      taxon_id: 51672,
+      order_by: 'observations_count'
+    });
+}
+
+
+
 
 let chartInputs = null;
 

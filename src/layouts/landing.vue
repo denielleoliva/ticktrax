@@ -3,13 +3,13 @@
 
     <!-- (Optional) The Header -->
     <q-header v-if="$q.platform.is.desktop" elevated class="row" style="background-color:#5CAB7D; color:white;">
-      <q-toolbar class="col">
+      <q-toolbar class="col-auto">
         <q-toolbar-title style="font-family:customfont">
           ticktrax
         </q-toolbar-title>
       </q-toolbar>
 
-      <q-tabs style="background-color:#5CAB7D;">
+      <q-tabs  style="background-color: #5CAB7D">
         <q-route-tab
           to="/"
           replace
@@ -29,7 +29,6 @@
             label="sign in"
           />
           <q-route-tab
-            style="justify-content:left"
             to="/register"
             replace
             label="create account"
@@ -61,6 +60,18 @@
           </q-route-tab>
         </q-btn-dropdown>
       </q-tabs>
+      <q-btn
+        class="absolute-right gt-xs"
+        flat
+        :icon="Dark.isActive ? 'light_mode' : 'dark_mode'"
+        @click="() => Dark.toggle()"
+      />
+      <q-btn
+        class="relative-position lt-sm"
+        flat
+        :icon="Dark.isActive ? 'light_mode' : 'dark_mode'"
+        @click="() => Dark.toggle()"
+      />
     </q-header>
 
     <!-- <q-toolbar-title class="q-pa-sm" style="font-family:customfont; background-color:#5CAB7D">
@@ -97,14 +108,6 @@
       <router-view />
     </q-page-container>
 
-    <q-inner-loading
-        :showing="logOutBar"
-        label="Logging you out..."
-        label-class=""
-        label-style=""
-        style="background-color:beige"
-    /> 
-
   </q-layout>
 </template>
 
@@ -112,9 +115,10 @@
 import { Dark } from 'quasar';
 
 export default {
+  // name: 'LayoutName',
+
   data () {
     return {
-      logOutBar: false,
       leftDrawer: false,
       Dark,
     }
@@ -125,19 +129,11 @@ export default {
   },
   methods: {
     logOut(){
-      //  clear token
+      const token = sessionStorage.getItem("token")
+      console.log(token)
       sessionStorage.clear()
-
-      //  push to home page
-      this.$router.push('/')
-
-      //  turn on load
-      this.logOutBar = true
-
-      //  wait 2 sec and turn off load
-      setTimeout(() => {
-        this.logOutBar = false
-      }, 2000);
+      const token1 = sessionStorage.getItem("token")
+      console.log(token)
     }
   }
 }

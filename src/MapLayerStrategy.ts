@@ -376,7 +376,7 @@ export class USCountyMap implements Layer {
           //console.log("FEATURES:", feature.properties?.RATE);
           popup.setLngLat(e.lngLat)
             .setHTML(`<strong class="text-weight-bold">${feature.properties?.NAMELSAD}</strong>
-                      <div class="q-pt-sm"><div class="text-caption">${formatNumber(feature.properties?.RATE)} cases per 100,000 people</div><div class="text-caption q-p">${feature.properties?.CASES} cases total</div></div>`)
+                      <div class="q-pt-sm"><div class="text-caption">${formatNumber(feature.properties?.RATE)} cases per 100,000 people</div><div class="text-caption q-p">${feature.properties?.CASES === 1 ? `${feature.properties?.CASES} case`: `${feature.properties?.CASES} cases`} total</div></div>`)
             .addTo(map);
         }, 100);
         setTimeoutConst();
