@@ -4,13 +4,21 @@
             <h3 class="q-ma-sm q-my-lg">
                 Create Account
             </h3>
-            <q-dialog v-if="(registerSuccess === false)" class="q-ma-sm" rounded style="font-size:large; background-color:pink">
-                Account Creation Failed...
+            <q-banner v-if="registerSuccess === false" class="q-ma-sm" rounded style="font-size:large; background-color:pink">
+                Account Creation Failed... Please try again!
+            </q-banner>
+            <q-dialog v-model="accountCreated" class="q-ma-sm" rounded style="font-size:large; background-color:pink">
+                <div class="q-pa-sm" align="center">
+                    <div class="q-pa-lg">Account created!</div>
+                    <q-btn class="bg-primary q-mx-md" @click="$router.push('/signin')">
+                        Sign in!
+                    </q-btn>
+                    <q-btn class="q-mx-md" @click="$router.push('/')">
+                        Go back home
+                    </q-btn>
+                </div>
             </q-dialog>
 
-            <q-dialog v-if="(registerSuccess === true)" class="q-ma-sm" rounded style="font-size:large; background-color:pink">
-                Account Creation Success!
-            </q-dialog>
 
             <div class="row q-ma-sm">
                 <q-input filled label="First Name" style="width: 45%;" autofocus v-model="fields.firstName"/>
@@ -100,12 +108,8 @@ export default{
             // password: ref(''),
             hidePassword: ref(true),
             hideConfirmPassword: ref(true),
-            leftDrawer: false,
-            signedIn: false,
-            registerSuccess:{
-                type: Boolean,
-                default: null,
-            }
+            registerSuccess: null,
+            accountCreated: false,
         }
     },
     methods:{
@@ -178,7 +182,7 @@ export default{
                     body: JSON.stringify({username: this.fields.username, email: this.fields.email, password: this.fields.password})
                 })
                 //  reporting successful post
-                .catch((data) => {
+                .then((data) => {
                     if(data.headers.status === 200){
                         //  pop dialog for success
                         this.registerSuccess = true
@@ -191,6 +195,8 @@ export default{
 
                         //  route to sign in
                         this.$router.push('/signin')
+
+                        this.accountCreated = true
                     }
                 })
                 .catch(error => {
