@@ -7,15 +7,13 @@
             <q-banner v-if="registerSuccess === false" class="q-ma-sm" rounded style="font-size:large; background-color:pink">
                 Account Creation Failed... Please try again!
             </q-banner>
-            <q-dialog v-model="accountCreated" class="q-ma-sm" rounded style="font-size:large; background-color:pink">
-                <div class="q-pa-sm" align="center">
+            <q-dialog v-model="accountCreated" class="" rounded style="font-size:large; background-color:pink">
+                <div class="q-pa-lg bg-white" align="center">
                     <div class="q-pa-lg">Account created!</div>
-                    <q-btn class="bg-primary q-mx-md" @click="$router.push('/signin')">
-                        Sign in!
+                    <q-btn class="bg-primary q-mx-md text-white" @click="$router.push('/signin')">
+                        Continue to sign in!
                     </q-btn>
-                    <q-btn class="q-mx-md" @click="$router.push('/')">
-                        Go back home
-                    </q-btn>
+                    <q-btn class="bg-grey text-white q-mx-md" @click="$router.push('/')"> Go back home </q-btn>
                 </div>
             </q-dialog>
 
@@ -183,7 +181,10 @@ export default{
                 })
                 //  reporting successful post
                 .then((data) => {
-                    if(data.headers.status === 200){
+                        console.log(data.status)
+                    if(data.status === 200){
+                        console.log(data.status)
+
                         //  pop dialog for success
                         this.registerSuccess = true
 
@@ -195,7 +196,7 @@ export default{
 
                         this.accountCreated = true
                     }
-                    else{
+                    else if(data.status === 400){
                         //  turn off loading bar
                         this.loadingBar = false
 
@@ -224,47 +225,45 @@ export default{
                         this.cPasswordRules()
 
                         //  report error 
-                        console.error('API POST FAIL', error)
+                        console.error('API POST FAIL')
 
                         //  pop fail banner
                         this.registerSuccess = false;
                     }
                 })
                 .catch(error => {
-                    {
-                        //  turn off loading bar
-                        this.loadingBar = false
+                    //  turn off loading bar
+                    this.loadingBar = false
 
-                        //  if username not entered, pop error
-                        if(this.fields.username.length === 0) {
-                            this.usernameErrorMessage = 'Username field is required'
-                            this.usernameError = true
-                        }
-
-                        //  if username not entered, pop error
-                        if(this.fields.email.length === 0) {
-                            this.emailErrorMessage = 'Email field is required'
-                            this.emailError = true
-                        } 
-
-                        //  if username not entered, pop error
-                        if(this.fields.password.length === 0){
-                            this.passwordErrorMessage = 'Password field is required'
-                            this.passwordError = true
-                        }
-
-                        //  check the password rules again
-                        this.passwordRules()
-
-                        //  check the confirm password rules again
-                        this.cPasswordRules()
-
-                        //  report error 
-                        console.error('API POST FAIL', error)
-
-                        //  pop fail banner
-                        this.registerSuccess = false;
+                    //  if username not entered, pop error
+                    if(this.fields.username.length === 0) {
+                        this.usernameErrorMessage = 'Username field is required'
+                        this.usernameError = true
                     }
+
+                    //  if username not entered, pop error
+                    if(this.fields.email.length === 0) {
+                        this.emailErrorMessage = 'Email field is required'
+                        this.emailError = true
+                    } 
+
+                    //  if username not entered, pop error
+                    if(this.fields.password.length === 0){
+                        this.passwordErrorMessage = 'Password field is required'
+                        this.passwordError = true
+                    }
+
+                    //  check the password rules again
+                    this.passwordRules()
+
+                    //  check the confirm password rules again
+                    this.cPasswordRules()
+
+                    //  report error 
+                    console.error('API POST FAIL', error)
+
+                    //  pop fail banner
+                    this.registerSuccess = false;
                 })
             }
         }

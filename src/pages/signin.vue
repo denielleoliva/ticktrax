@@ -9,6 +9,16 @@
                 Sign in failed... Please try again!
             </q-banner>
 
+            <q-dialog v-model="signedIn" class="" rounded style="font-size:large; background-color:pink">
+                <div class="q-pa-lg bg-white" align="center">
+                    <div class="q-pa-lg">You're signed in!</div>
+                    <q-btn class="bg-primary q-mx-md text-white" @click="$router.push('/form')">
+                        Submit a photo
+                    </q-btn>
+                    <q-btn class="bg-grey text-white q-mx-md" @click="$router.push('/')"> Go back home </q-btn>
+                </div>
+            </q-dialog>
+
             <!-- Enter email -->
             <q-input class="q-ma-sm" id = "emailBar" filled label="Email"  v-model="credentials.email" hide-bottom-space
                 :error-message="'Email is required'" :error="emailError"/>
@@ -94,7 +104,7 @@ export default{
                 this.loadingBar = false
                 console.log(data)
                 sessionStorage.setItem("token", data);
-                this.$router.push('/profile/1')
+                this.signedIn = true
             })
 
             //  if we got an error response
