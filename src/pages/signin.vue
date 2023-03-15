@@ -1,14 +1,17 @@
 <template>
     <div class="row" style="justify-content:center">
         <q-page padding style="font-family: customfont; margin:5px">
+            <!-- header -->
             <h3 class="q-ma-sm q-my-lg">
                 Sign Into Your Account
             </h3>
             
+            <!-- fail dialog -->
             <q-banner v-if="(authFail === true)" class="q-ma-sm" rounded style="font-size:large; background-color: pink">
                 Sign in failed... Please try again!
             </q-banner>
 
+            <!-- success dialog -->
             <q-dialog v-model="signedIn" class="" rounded style="font-size:large; background-color:pink">
                 <div class="q-pa-lg bg-white" align="center">
                     <div class="q-pa-lg">You're signed in!</div>
@@ -30,25 +33,26 @@
                     <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd"/>
                 </template>
             </q-input>
+            <!-- Sign in button -->
             <div class="row">
                 <q-btn class="q-ml-sm" id="signInButton" color="primary" @click="signIn()">
                     Sign in
                 </q-btn>
             </div>
+            <!-- loading bar stuff -->
             <q-inner-loading
                 :showing="loadingBar"
                 label="Signing you in..."
                 label-class="text-positive"
                 label-style="font-size: 1.1em"
+                style="height:100%; width:100%;"
             /> 
         </q-page>
     </div>
   </template>
   
 <script>
-import { watch } from 'fs'
 import { ref } from 'vue'
-var token
 
 export default{
     data () 
@@ -101,9 +105,13 @@ export default{
 
             //  if we got a proper response
             .then(data => {
+                //  turn off the loading bar
                 this.loadingBar = false
-                console.log(data)
+
+                //  save the response (token) in session storage
                 sessionStorage.setItem("token", data);
+
+                //  turn on the signedIn flag (pops dialog)
                 this.signedIn = true
             })
 
@@ -111,6 +119,8 @@ export default{
            .catch(error => {
                 //  turn off the loading screen
                 this.loadingBar = false
+                
+                //  checks the email/password for validation
                 if(this.credentials.email.length === 0) this.emailError = true
                 if(this.credentials.password.length === 0)  this.passwordError = true
 
