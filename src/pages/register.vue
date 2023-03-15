@@ -4,9 +4,13 @@
             <h3 class="q-ma-sm q-my-lg">
                 Create Account
             </h3>
-            <q-banner v-if="(registerSuccess === false)" class="q-ma-sm" rounded style="font-size:large; background-color:pink">
+            <q-dialog v-if="(registerSuccess === false)" class="q-ma-sm" rounded style="font-size:large; background-color:pink">
                 Account Creation Failed...
-            </q-banner>
+            </q-dialog>
+
+            <q-dialog v-if="(registerSuccess === true)" class="q-ma-sm" rounded style="font-size:large; background-color:pink">
+                Account Creation Success!
+            </q-dialog>
 
             <div class="row q-ma-sm">
                 <q-input filled label="First Name" style="width: 45%;" autofocus v-model="fields.firstName"/>
@@ -174,24 +178,23 @@ export default{
                     body: JSON.stringify({username: this.fields.username, email: this.fields.email, password: this.fields.password})
                 })
                 //  reporting successful post
-                .then((data) => {
+                .catch((data) => {
                     if(data.headers.status === 200){
+                        //  pop dialog for success
+                        this.registerSuccess = true
+
                         //  turn off the loading bar
                         this.loadingBar = false
                         
                         //  report successful post
                         console.log('API POST', data)
 
-                        //  indicate route to sign in
-                        setTimeout(() => {
-                            //  
-                            this.routingBar = true;
-                        }, 500);
-
                         //  route to sign in
                         this.$router.push('/signin')
                     }
-                    else{
+                })
+                .catch(error => {
+                    {
                         //  turn off loading bar
                         this.loadingBar = false
 
