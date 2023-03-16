@@ -48,7 +48,7 @@
         </div>
         <div class="row justify-evenly">
           <!-- Map Display here -->
-          <div class="map-holder">
+          <div class="map-holder wrapper">
             <div ref="mapView" id="map"></div>
             <div class='map-overlay' id='legend' v-show="showLymeDiseaseMap">
               <p class="text-weight-bold text-no-wrap">Cases per 100,000 People</p>
@@ -219,10 +219,10 @@
           <q-separator class="col q-mt-xl q-mr-sm" />
         </div>
         <div class="q-px-lg q-gutter-md row items-start justify-between">
-          <chart-viz  :key="'lymeCases' + isDarkMode" type="line" :options="lymeCasesOptions" :series="lymeCasesSeries" />
-          <chart-viz :key="'lymeCasesByGender' + isDarkMode" :type="lymeDiseaseByGender.type" :options="lymeDiseaseByGender.options" :series="lymeDiseaseByGender.series" />
+          <chart-viz  :key="'lymeCases' + isDarkMode" type="line" :options="lymeCasesOptions" :series="lymeCasesSeries" style="min-width:400px" />
+          <chart-viz :key="'lymeCasesByGender' + isDarkMode" :type="lymeDiseaseByGender.type" :options="lymeDiseaseByGender.options" :series="lymeDiseaseByGender.series" style="min-width:400px" />
 
-          <chart-viz  :key="'tickHistogram' + isDarkMode" v-if="tickReportsHistogram" :type="tickReportsHistogram.type" :options="tickReportsHistogram.options" :series="tickReportsHistogram.series" />
+          <chart-viz  :key="'tickHistogram' + isDarkMode" v-if="tickReportsHistogram" :type="tickReportsHistogram.type" :options="tickReportsHistogram.options" :series="tickReportsHistogram.series" style="min-width:400px" />
         </div>
       </div>
 
@@ -385,8 +385,13 @@ watch(geoJson, (value)=> {
 function init() {
   return new Promise((resolve, reject) => {
     isLoadingTickData.value = true;
-    fetch(url)
-      .then(res => res.text())
+    const cacheName = 'cache-tickData';
+    fetch(url, {
+      headers: {
+        'Cache-Control': 'max-age=3600'
+      }
+    })
+      .then(res => res.clone().text())
       .then(rep => {
         //Remove additional text and extract only JSON:
         const jsonData = JSON.parse(rep.substring(47).slice(0, -2));
@@ -399,7 +404,7 @@ function init() {
         isLoadingTickData.value = false;
         resolve(table);
       });
-  })
+  });
 
 }
 
@@ -1031,7 +1036,7 @@ function onLocateClick(lngLat) {
   bottom: 0
   right: 0
   background: rgba(255,255,255,0.8)
-  margin-right: 527px
+  margin-right: 12px
   font-family: Arial, sans-serif
   overflow: auto
   border-radius: 3px
@@ -1042,10 +1047,19 @@ function onLocateClick(lngLat) {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1)
   line-height: 18px
   height: 150px
-  margin-bottom: 950px
+  bottom: 90px
 
 
 
+.legend-key
+  display: inline-block
+  border-radius: 20%
+  width: 10px
+  height: 10px
+  margin-right: 5px
+
+.wrapper
+  position: relative
 
 </style>
 <style lang="sass">
@@ -1055,12 +1069,6 @@ function onLocateClick(lngLat) {
   .mapboxgl-popup-close-button
     color: #FFFFFF
 
-.legend-key
-  display: inline-block
-  border-radius: 20%
-  width: 10px
-  height: 10px
-  margin-right: 5px
 
 
 </style>

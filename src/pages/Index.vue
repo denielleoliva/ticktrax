@@ -15,7 +15,7 @@
         Welcome to ticktrax 
         <q-img src="../assets/ticktrax.png" width="50px"/>
       </h1>
-      <h1 v-if="$q.platform.is.desktop" v-ekse style="font-family:customfont; font-size:xx-large;">
+      <h1 v-if="$q.platform.is.desktop" style="font-family:customfont; font-size:xx-large;">
         <q-img src="../assets/ticktrax.png" width="50px"/>
       </h1>
 
