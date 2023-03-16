@@ -1,9 +1,13 @@
 <template>
-  <div class="map-container">
-    <div id="map">
-      <MglMap @load="onMapLoaded" @dblclick="doubleClickedMap"  :accessToken="token"
-              :center="coordinates" :zoom="zoom"
-              :mapStyle="mapTile">
+  <div class="map-container" :class="props.showRedBorder ? 'redBoarder': ''">
+    <div id="map" >
+      <MglMap @load="onMapLoaded"
+              @[placeMarker]="doubleClickedMap"
+              :accessToken="token"
+              :center="coordinates"
+              :zoom="zoom"
+              :mapStyle="mapTile"
+              >
 
         <MglNavigationControl position="top-right" />
         <MglGeolocateControl position="top-right" />
@@ -33,7 +37,7 @@
 
 <script setup>
 import { Dark } from 'quasar'
-import {ref, watch, onMounted} from 'vue'
+import {ref, watch, onMounted, computed} from 'vue'
 import Mapbox from "mapbox-gl";
 import { Geolocation } from '@capacitor/geolocation'
 import { MglMap,MglAttributionControl,
@@ -44,13 +48,17 @@ import { MglMap,MglAttributionControl,
   MglGeolocateControl,
   MglFullscreenControl,
   MglScaleControl } from "vue-mapbox";
+import { Platform } from 'quasar'
+
 
 
 const mapTile = ref('mapbox://styles/mapbox/streets-v11');
 
-const props = defineProps({userInput: Array, markerMsg: String, geoJson: Object, markerImage: String});
+const props = defineProps({userInput: Array, markerMsg: String, geoJson: Object, markerImage: String, showRedBorder: Boolean});
 
 const emits = defineEmits(['onClickedMarker']);
+
+const placeMarker = computed(() => Platform.is.mobile ? 'mousedown': 'dblclick');
 
 const geoJsonLayer = {
   id: "ticks",
@@ -74,7 +82,6 @@ watch(() => Dark.isActive, val => {
 onMounted(() => {
   mapTile.value = Dark.isActive ? 'mapbox://styles/mapbox/dark-v10':'mapbox://styles/mapbox/streets-v11';
 })
-
 
 
 
@@ -145,7 +152,7 @@ function unSetPointerCursor(e){
 .map-container {
   position: relative;
   width: 100%;
-  height: 19rem;
+  height: 19.5rem;
 }
 #map {
   position: absolute;
@@ -154,5 +161,11 @@ function unSetPointerCursor(e){
   width: 100%;
   border-radius: 0.25rem;
   border: 1px solid #ccc;
+}
+
+.redBoarder {
+  border-style: solid;
+  border-color: red;
+  border-radius: 5px;
 }
 </style>

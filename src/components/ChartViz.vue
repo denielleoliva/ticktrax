@@ -1,5 +1,5 @@
 <template>
-  <q-card class="my-card" style="width: 400px">
+  <q-card class="my-card">
     <q-card-section>
       <VueApexCharts  :type="type" :options="options" :series="series"></VueApexCharts>
     </q-card-section>
