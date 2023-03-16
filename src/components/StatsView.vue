@@ -9,12 +9,12 @@
           <q-item-label class="text-h6 text-green-6 text-bold">
             <q-spinner-dots class="text-h4" style="margin-bottom: -10px" color="primary"/>
           </q-item-label>
-            <q-item-label caption class="text-right">Collecting ticks...</q-item-label>
+            <q-item-label caption class="text-right">{{ props.loadingMsg }}</q-item-label>
           </div>
           <div v-else>
           <q-item-label class="text-h6 text-green-6 text-bold">{{ counter.toLocaleString() }}</q-item-label>
 
-          <q-item-label caption>Ticks reported</q-item-label>
+          <q-item-label caption>{{ props.subtitle }}</q-item-label>
           </div>
         </q-item-section>
       </q-item>
@@ -46,8 +46,8 @@
 import { Dark } from 'quasar';
 import {defineProps, onMounted, nextTick, watch, ref} from 'vue';
 
-const props = defineProps(['tickCount', 'isLoadingTickData']);
-const counter = ref(0);
+const props = defineProps(['tickCount', 'isLoadingTickData', 'subtitle', 'loadingMsg']);
+const counter = ref(props.tickCount);
 const isLoading = ref(props.isLoadingTickData);
 const iconLink = ref('pest.png')
 onMounted(function () {

@@ -144,3 +144,28 @@ export const tickScientificNames = [
 ];
 
 
+export const yearlyLymeDiseaseByCountyTilesetIds: {[year: string]: {url: string, "source-layer": string} }= {
+  "2000": {"url": "mapbox://rsultan.87mce39g", "source-layer": "lymeDiseaseByUSCounty2000-2noola"},
+  "2001": {"url": "mapbox://rsultan.87da5wz7", "source-layer": "lymeDiseaseByUSCounty2001-26ffxj"},
+  "2002": {"url": "mapbox://rsultan.34r86yl7", "source-layer": "lymeDiseaseByUSCounty2002-4mp4o6"},
+  "2003": {"url": "mapbox://rsultan.bsjdehjw", "source-layer": "lymeDiseaseByUSCounty2003-54l2ta"},
+  "2004": {"url": "mapbox://rsultan.0xukrp5s", "source-layer": "lymeDiseaseByUSCounty2004-adbx4d"},
+  "2005": {"url": "mapbox://rsultan.7z1dfnd1", "source-layer": "lymeDiseaseByUSCounty2005-3ygahm"},
+  "2006": {"url": "mapbox://rsultan.60124944", "source-layer": "lymeDiseaseByUSCounty2006-6v4abv"},
+  "2007": {"url": "mapbox://rsultan.18il9cvt", "source-layer": "lymeDiseaseByUSCounty2007-d9vt3e"},
+  "2008": {"url": "mapbox://rsultan.10i7jnkp", "source-layer": "lymeDiseaseByUSCounty2008-0lb1q8"},
+  "2009": {"url": "mapbox://rsultan.6dwzpj1l", "source-layer": "lymeDiseaseByUSCounty2009-9iovq7"},
+  "2010": {"url": "mapbox://rsultan.80ohdj00", "source-layer": "lymeDiseaseByUSCounty2010-9q71z8"},
+  "2011": {"url": "mapbox://rsultan.2kgc2o75", "source-layer": "lymeDiseaseByUSCounty2011-4hwt5q"},
+  "2012": {"url": "mapbox://rsultan.9pnuy3rq", "source-layer": "lymeDiseaseByUSCounty2012-cd8cog"},
+  "2013": {"url": "mapbox://rsultan.cihe7ks2", "source-layer": "lymeDiseaseByUSCounty2013-0yae86"},
+  "2014": {"url": "mapbox://rsultan.au26pjq8", "source-layer": "lymeDiseaseByUSCounty2014-8mitri"},
+  "2015": {"url": "mapbox://rsultan.774i0mf0", "source-layer": "lymeDiseaseByUSCounty2015-9ljyzs"},
+  "2016": {"url": "mapbox://rsultan.4s7cz2nq", "source-layer": "lymeDiseaseByUSCounty2016-ctys5r"},
+  "2017": {"url": "mapbox://rsultan.dhcenvrl", "source-layer": "lymeDiseaseByUSCounty2017-803ny6"},
+  "2018": {"url": "mapbox://rsultan.dsxl6dxq",  "source-layer": "lymeDiseaseByUSCounty2018-45ec41"},
+  "2019": {"url": "mapbox://rsultan.bxsn6ya7",  "source-layer": "lymeDiseaseByUSCounty2019-cjpxa0"}
+};
+
+
+
