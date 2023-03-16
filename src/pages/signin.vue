@@ -53,7 +53,6 @@
   
 <script>
 import { ref } from 'vue'
-var token
 
 export default{
     data () 

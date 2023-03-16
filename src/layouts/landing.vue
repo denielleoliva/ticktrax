@@ -22,7 +22,7 @@
         />
         <q-btn-dropdown class="q-pa-sm" flat label="Account" >
           <q-route-tab
-            class="q-px-sm"
+            class="q-px-md"
             style="justify-content:left"
             to="/signin"
             replace

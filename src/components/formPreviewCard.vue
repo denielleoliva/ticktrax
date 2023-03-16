@@ -37,16 +37,21 @@
                      :user-input="coords"
                      marker-msg="Tick observed here."
                      :marker-image="metaData.pngImage"
+                     :show-red-border="showRedBorderMap"
                      @onClickedMarker="onClickedMarker"
                      :geoJson="{}" />
         <div>
-          <div class="q-pr-sm" style="width: 300px">
-            <div class="q-pb-md desktop-only"><q-img v-if="metaData.pngImage != null" :src="metaData.pngImage" style="height: 140px; max-width: 300px" /></div>
+          <div class="q-px-sm" style="width: 300px">
+            <div class="q-pb-md desktop-only">
+              <q-img v-if="metaData.pngImage != null"
+                     :src="metaData.pngImage"
+                     style="height: 140px; max-width: 300px" />
+            </div>
 
-            <p class="text-weight-medium">Observed:</p>
+            <div class="text-weight-medium q-pb-sm">Observed:</div>
             <!--            {{date}}-->
             <!--            <q-icon name="edit" class="q-pb-sm"/>-->
-            <q-input filled v-model="date" class="q-pb-md" @click="hi">
+            <q-input filled v-model="date" class="q-pb-md" @click="showDateElement" :rules="[val => !!val || 'Field is required']" :error="showRedDateInput">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale" v-if="showDate">
                 <q-date v-model="date" :mask="`YYYY-MM-DD${' '.repeat(timeSpace)}HH:mm`" minimal >
                   <div class="row items-center justify-end">
@@ -92,8 +97,8 @@
               </template>
             </q-input>
             <map-element class="col q-mr-md mobile-only" style="height: 15rem!important;" :user-input="coords" marker-msg="Tick observed here." :geoJson="{}"  />
-            <div class="q-pt-lg mobile-only"><q-img v-if="metaData.pngImage != null" :src="metaData.pngImage" style="height: 140px; max-width: 300px" /></div>
-            <div class="q-pt-xs q-gutter-xl row justify-between">
+            <div class="q-pt-lg q-pb-md mobile-only"><q-img v-if="metaData.pngImage != null" :src="metaData.pngImage" style="height: 140px; max-width: 300px" /></div>
+            <div class="q-pt-md q-gutter-xl row justify-between">
               <q-btn color="white" size="md" text-color="black" label="back" @click="goBack" />
               <q-btn color="positive" size="md" label="Submit" @click="onSubmit" />
             </div>
@@ -108,29 +113,12 @@
       <!--      </q-card-actions>-->
     </q-card>
 
-    <q-inner-loading :showing="showLoading" label="Submitted! routing to home..." label-class="text-positive" label-style="font-size: 1.1em"/> 
-        <q-dialog v-model="showThanks">
-            <q-card class="row" align="center" style="width:50%; height:50%; align-self:center;" >
-              <div class="row" style="align-self:center">
-                Thank You! Your photo has been submitted. Would you like to submit more ticks?
-              </div>
-              <div class="row" style="justify-content:center">
-                <q-btn color="primary" size="md" text-color="white" label="submit again" @click="goBack"/>
-                <q-space/>
-                <q-btn color="#F5F5DC" size="md" text-color="black" label="return to home"@click="$router.push('/')"/>
-              </div>
-            </q-card>
-        </q-dialog>
-        <q-dialog v-model="showFail">
-            <q-card class="row" style="width:50%; height:50%; justify-content:center; align-content:center">
-                Submission failed... please try again
-            </q-card>
-        </q-dialog>
+
   </div>
 </template>
 
 <script setup>
-import {ref, watch, defineProps, defineEmits, router} from "vue";
+import {ref, watch, defineProps, defineEmits} from "vue";
 import {Dark} from "quasar";
 import MapElement from "components/MapElement.vue";
 import {dateAdapter} from "src/utils";
@@ -139,9 +127,9 @@ const coords = ref([]);
 const date = ref('');
 const alert = ref(false);
 const showDate = ref(false);
-const showLoading = ref(false);
-const showThanks = ref(false);
-const showFail = ref(false);
+
+const showRedBorderMap = ref(false);
+const showRedDateInput = ref(false);
 
 const props = defineProps(['metaData']);
 const emit = defineEmits(['setPreviewCard']);
@@ -156,13 +144,14 @@ if (date.value === '') {
   alert.value = true;
 }
 
-function hi(event){
+function showDateElement(event){
   console.log('focused', event.target.offsetWidth, event.clientX);
-  const inputBox = event.target;
+  //const inputBox = event.target;
   const clickX = event.offsetX;
-  const clickY = event.offsetY;
+  //const clickY = event.offsetY;
   console.log(clickX, event.target.offsetWidth/2);
   showDate.value = clickX < event.target.offsetWidth / 2;
+  showRedDateInput.value = false;
 }
 
 
@@ -172,19 +161,35 @@ watch(() => Dark.isActive, val => {
 });
 
 watch(date, (val)=> {
-  console.log(val, "DAYTE")
-})
+  console.log(val, "DATE")
+});
+
 
 function goBack() {
   emit('setPreviewCard', false)
 }
 
 function onClickedMarker(lngLat) {
+  showRedBorderMap.value = false;
   coords.value = lngLat;
 }
 
-async function onSubmit() {
+// function expandImage() {
+//   console.log('clicked')
+//   items.value = [{ src: props.metaData.pngImage}];
+//   index.value = 0;
+// }
+
+function onSubmit() {
   if (date.value === '' || coords.value.length > 2 || (coords.value[0] === 0 && coords.value[1] === 0)) {
+    if (coords.value.length > 2 || (coords.value[0] === 0 && coords.value[1] === 0)) {
+      showRedBorderMap.value = true;
+    }
+
+    if (date.value === '') {
+      showRedDateInput.value = true;
+    }
+
     alert.value = true;
     return;
   }
@@ -213,58 +218,31 @@ async function onSubmit() {
   const formattedDateTime = new Date(date.value)
 
   console.log(date.value)
+  console.log(formattedDateTime)
 
-  const url = 'http://localhost:5095/submission'
 
-  const token = sessionStorage.getItem("token")
+  const url = 'http://localhost:5095/submission/'
 
-  const auth = `Bearer ${token}`
-
-  showLoading.value = true
-
-  await fetch(url, {
+  fetch(url, {
     //  this means we add to database
     method: 'POST',
 
     //  this means we are adding of type json
     headers: {
       'Content-Type' : 'application/json',
-      'Authorization' : auth
-      },
+    },
 
-      //  this are the fields in json format (hopefully)
-      body: JSON.stringify({photo: props.metaData.pngImage.replace("data:image/png;base64,", ""), filename: 'tickPic2' , fileType: 'png' , latitude: 0, longitude: 0, time: '2023-01-01T00:00:00'})
+    //  these are the fields in json format (hopefully)
+    body: JSON.stringify({photo: formData.image, latitude: coords.value[0], longitude: coords.value[1], caption: caption, time: formattedDateTime})
   })
-  //  unwrap the response
-  .then((response) => {
-    if(response.status === 200){
-      //  stops loading 
-      showLoading.value = false
+    .then((response) => {
+      console.log('API POST SUCCESS', response.body)
+    })
 
-      //  indicate post success
-      console.log("API POST SUCCESS")
-
-      showLoading.value = true
-
-      setTimeout(() => {
-        showLoading.value = false
-        //send back to home
-      }, 1500);
-      return
-    }
-    showLoading.value = false
-  })
-
-  .catch((error) => {
-    //  stops loading
-    showLoading.value = false
-
-    console.log("API POST FAIL")
-
-    showFail.value = true
-    
-    return
-  })
+    //  reported failed post
+    .catch((error) => {
+      console.error('API POST FAIL', error)
+    })
 }
 
 
