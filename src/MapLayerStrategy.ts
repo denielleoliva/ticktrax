@@ -2,6 +2,8 @@ import mapboxgl from "mapbox-gl";
 import {Layer} from "./Layer"
 import * as cluster from "cluster";
 import { debounce } from 'quasar'
+import {yearlyLymeDiseaseByCountyTilesetIds} from "src/vars";
+import {formatNumber} from "src/utils";
 
 
 export class HeatMapLayer implements Layer {
@@ -255,32 +257,88 @@ export class ClusterMapLayer implements Layer {
 }
 
 export class USCountyMap implements Layer {
+  private year: string;
+
+  constructor(year: string) {
+    this.year = year;
+  }
+
   addSource(map: mapboxgl.Map, geoJSON: any) {
     // Add a vector source for admin-1 boundaries
     map.addSource('counties', {
       "type": "vector",
-      "url": "mapbox://rsultan.9d4qlmns",
+      "url": yearlyLymeDiseaseByCountyTilesetIds[this.year].url,
     });
 
   }
 
   removeSource(map: mapboxgl.Map) {
+    map.removeSource('counties');
   }
 
   addLayers(map: mapboxgl.Map) {
-    map.addLayer({
+    // map.addLayer({
+    //   "id": "counties",
+    //   "type": "fill",
+    //   "source": "counties",
+    //   "source-layer": "county-1x6gy7",
+    //   "paint": {
+    //     "fill-outline-color": "hsl(123, 2%, 45%)",
+    //     "fill-color": "rgba(0,0,0,0.1)"
+    //   },
+    //   'layout': {
+    //     'visibility': 'none',
+    //   }
+    // });
+
+    const layers = map.getStyle().layers;
+// Find the index of the first symbol layer in the map style.
+    let firstSymbolId;
+    for (const layer of layers) {
+      if (layer.type === 'symbol') {
+        firstSymbolId = layer.id;
+        break;
+      }
+    }
+
+    map.addLayer(     {
       "id": "counties",
       "type": "fill",
       "source": "counties",
-      "source-layer": "county-1x6gy7",
+      "source-layer": yearlyLymeDiseaseByCountyTilesetIds[this.year]["source-layer"],
+      "layout": {},
       "paint": {
-        "fill-outline-color": "hsl(123, 2%, 45%)",
-        "fill-color": "rgba(0,0,0,0.1)"
-      },
-      'layout': {
-        'visibility': 'none',
+        "fill-color": [
+          "step",
+          ["get", "CASES"],
+          "hsl(40, 88%, 85%)",
+          1,
+          "hsl(40, 98%, 78%)",
+          10,
+          "hsl(32, 99%, 58%)",
+          25,
+          "hsl(24, 88%, 45%)",
+          100,
+          "hsl(19, 95%, 31%)"
+        ],
+        //"fill-opacity": 0.6,
+        'fill-opacity': [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          0.5,
+          1
+        ],
+        "fill-outline-color": [
+          'case',
+          ['boolean', ['feature-state', 'hover'], false],
+          "hsl(0, 100%, 0%)",
+          "hsl(123, 2%, 45%)",
+        ]
       }
-    });
+    },firstSymbolId);
+
+
+
 
 
 
@@ -294,9 +352,11 @@ export class USCountyMap implements Layer {
 
   subscribeEvents(map: mapboxgl.Map) {
 
-    let popup = new mapboxgl.Popup();
+    let popup = new mapboxgl.Popup({anchor: "left"});
 
-    map.on('mousemove',function(e) {
+    let hoveredStateId: string | number | undefined = undefined;
+
+    map.on('mousemove', (e) => {
       // Clean up any other popups
       popup.remove();
 
@@ -304,23 +364,47 @@ export class USCountyMap implements Layer {
         layers: ['counties']
       });
 
-      if (features.length) {
+      if (!(features && features.length > 0)) {
+        return;
+
+      }
+
         // Single out the first found feature on mouseove.
         let feature = features[0];
 
         let setTimeoutConst = debounce(function() {
-          console.log("FEATURES:", e);
+          //console.log("FEATURES:", feature.properties?.RATE);
           popup.setLngLat(e.lngLat)
-            .setText(feature.properties?.NAMELSAD)
+            .setHTML(`<strong class="text-weight-bold">${feature.properties?.NAMELSAD}</strong>
+                      <div class="q-pt-sm"><div class="text-caption">${formatNumber(feature.properties?.RATE)} cases per 100,000 people</div><div class="text-caption q-p">${feature.properties?.CASES} cases total</div></div>`)
             .addTo(map);
-        }, 200);
+        }, 100);
         setTimeoutConst();
-      }
+
+
+
 
       // Change the cursor style as a UI indicator.
       map.getCanvas().style.cursor = features.length ? 'pointer' : '';
 
+
+        if (hoveredStateId) {
+          map.setFeatureState(
+            { source: 'counties', sourceLayer: yearlyLymeDiseaseByCountyTilesetIds[this.year]["source-layer"], id: hoveredStateId },
+            { hover: false }
+          );
+        }
+        hoveredStateId = features[0].id;
+
+        map.setFeatureState(
+          { source: 'counties', sourceLayer: yearlyLymeDiseaseByCountyTilesetIds[this.year]["source-layer"], id: hoveredStateId },
+          { hover: true }
+        );
+
     }); // 'mousemove'
+
+
+
 
   }
 

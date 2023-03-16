@@ -45,6 +45,7 @@
             </q-list>
           </q-card-section>
           <q-card-actions align="right" class="q-pa-md">
+            <q-btn v-if="$q.platform.is.mobile" align="left" class="bg-positive text-white" @click="logOut()"> log out </q-btn>
             <q-btn class="text-capitalize bg-positive text-white"
             >Save Changes</q-btn
             >
@@ -182,12 +183,19 @@
         </q-card>
       </div>
     </q-tab-panel>
+    <q-tab-panel name="leave feedback">
+      <q-item-section>
+        <feedback/>
+      </q-item-section>
+    </q-tab-panel>
   </q-tab-panels>
 </template>
 
 <script>
 import {ref, watch} from "vue";
+import Feedback from 'src/components/feedback.vue';
 export default {
+  components: { Feedback },
   name: "ProfilePanel",
   props: {
     tab: String
@@ -204,6 +212,20 @@ export default {
       image,
       imageUrl,
       tab: ref('general'),
+      form: ref({
+          email: ref(''),
+          subject: ref(''),
+          message: ref(''),
+      }),
+    }
+  },
+  methods:{
+        logOut(){
+      //  clear token
+      sessionStorage.clear()
+
+      //  push to home page
+      this.$router.push('/')
     }
   }
 }
