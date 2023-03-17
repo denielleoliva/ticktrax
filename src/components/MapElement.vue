@@ -37,7 +37,7 @@
 
 <script setup>
 import { Dark } from 'quasar'
-import {ref, watch, onMounted, computed} from 'vue'
+import {ref, watch, onMounted, computed, defineEmits, defineProps} from 'vue'
 import Mapbox from "mapbox-gl";
 import { Geolocation } from '@capacitor/geolocation'
 import { MglMap,MglAttributionControl,
@@ -120,6 +120,7 @@ async function getCurrentPosition() {
 function doubleClickedMap(event) {
   const coords = event.mapboxEvent.lngLat;
   markerCoordinates.value = [coords.lng, coords.lat];
+  console.log([coords.lng, coords.lat], "clicked in mobile")
   emits('onClickedMarker', [coords.lng, coords.lat]);
 }
 

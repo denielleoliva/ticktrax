@@ -32,7 +32,7 @@
       </q-card>
     </q-dialog>
     <q-card>
-      <q-card-section class="row q-pa-lg">
+      <q-card-section class="row q-pa-lg justify-center">
         <map-element class="col q-mr-md desktop-only"
                      :user-input="coords"
                      marker-msg="Tick observed here."
@@ -51,7 +51,7 @@
             <div class="text-weight-medium q-pb-sm">Observed:</div>
             <!--            {{date}}-->
             <!--            <q-icon name="edit" class="q-pb-sm"/>-->
-            <q-input filled v-model="date" class="q-pb-md" @click="showDateElement" :rules="[val => !!val || 'Field is required']" :error="showRedDateInput">
+            <q-input filled v-model="date" :placeholder="'Date' + ' '.repeat(timeSpace + 10) +'Time'" class="q-pb-lg" @click="showDateElement" :rules="[val => !!val || 'Field is required']" :error="showRedDateInput">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale" v-if="showDate">
                 <q-date v-model="date" :mask="`YYYY-MM-DD${' '.repeat(timeSpace)}HH:mm`" minimal >
                   <div class="row items-center justify-end">
@@ -96,7 +96,13 @@
                 </q-icon>
               </template>
             </q-input>
-            <map-element class="col q-mr-md mobile-only" style="height: 15rem!important;" :user-input="coords" marker-msg="Tick observed here." :geoJson="{}"  />
+            <map-element class="col q-mr-md mobile-only"
+                         style="height: 15rem!important;"
+                         :user-input="coords"
+                         marker-msg="Tick observed here."
+                         :show-red-border="showRedBorderMap"
+                         @onClickedMarker="onClickedMarker"
+                         :geoJson="{}"  />
             <div class="q-pt-lg q-pb-md mobile-only"><q-img v-if="metaData.pngImage != null" :src="metaData.pngImage" style="height: 140px; max-width: 300px" /></div>
             <div class="q-pt-md q-gutter-xl row justify-between">
               <q-btn color="white" size="md" text-color="black" label="back" @click="goBack" />
