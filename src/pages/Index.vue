@@ -19,7 +19,7 @@
         <q-img src="../assets/ticktrax.png" width="50px"/>
       </h1>
 
-      <h1 v-if="$q.platform.is.desktop" class="q-my-lg" style="font-family:customfont; font-size:xx-large; color:black">
+      <h1 v-if="$q.platform.is.desktop" class="q-my-lg" style="font-family:customfont; font-size:xx-large; color:Dark.color">
         Our Purpose
       </h1>
 
@@ -124,11 +124,15 @@
 
 <script>
 import TickList from 'components/TickList.vue'
+import { Dark } from 'quasar'
 
 export default {
   name: 'PageIndex',
   components: {
     TickList
+  },
+  data () {
+    Dark
   }
 }
 </script>
