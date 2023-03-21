@@ -42,9 +42,9 @@
           />
           <q-route-tab
             style="justify-content:left"
-            to="/overview"
+            to="/admin"
             replace
-            label="overview"
+            label="admin"
             />
           <q-route-tab
             style="justify-content:left"
