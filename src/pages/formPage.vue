@@ -9,11 +9,12 @@
        <upload-card v-else @handleUploadData="handleUploadData"  />
       </div>
     </q-page>
+
   </q-layout>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { Dark } from 'quasar';
 
 import UploadCard from "components/uploadCard.vue";
@@ -28,12 +29,16 @@ const metaData = ref({});
 const coords = ref([]);
 const showPreviewCard = ref(false);
 
+
+
 Cookies.set('foo', 'bar')
 
 watch(() => Dark.isActive, val => {
   isDarkMode.value = val;
   //console.log(Cookies.get('foo'))
-})
+});
+
+
 
 
 function setPreviewCard(state) {
