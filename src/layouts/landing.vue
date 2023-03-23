@@ -22,6 +22,7 @@
         />
         <q-btn-dropdown class="q-pa-sm" flat label="Account" >
           <q-route-tab
+            v-if="!isSignedIn()"
             class="q-px-md"
             style="justify-content:left"
             to="/signin"
@@ -29,24 +30,28 @@
             label="sign in"
           />
           <q-route-tab
+            v-if="!isSignedIn()"
             style="justify-content:left"
             to="/register"
             replace
             label="create account"
           />
           <q-route-tab
+            v-if="isSignedIn()"
             style="justify-content:left"
             to="/profile/1"
             replace
             label="Edit Profile"
           />
           <q-route-tab
+            v-if="isSignedIn()"
             style="justify-content:left"
             to="/overview"
             replace
             label="overview"
             />
           <q-route-tab
+            v-if="isSignedIn()"
             style="justify-content:left"
             @click="logOut()"
             label="log out">
@@ -120,6 +125,10 @@ export default {
     }
   },
   methods: {
+    isSignedIn(){
+      if(sessionStorage.getItem("token") !== null) return true
+      else if(sessionStorage.getItem("token") === null)  return false
+    },
     logOut(){
       //  clear token
       sessionStorage.clear()
