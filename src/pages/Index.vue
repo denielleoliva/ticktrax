@@ -19,7 +19,7 @@
         <q-img src="../assets/ticktrax.png" width="50px"/>
       </h1>
 
-      <h1 v-if="$q.platform.is.desktop" class="q-my-lg" style="font-family:customfont; font-size:xx-large; color:black">
+      <h1 v-if="$q.platform.is.desktop" class="q-my-lg" style="font-family:customfont; font-size:xx-large;">
         Our Purpose
       </h1>
 
