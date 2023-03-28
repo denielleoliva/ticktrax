@@ -20,47 +20,57 @@
           replace
           label="form"
         />
-        <q-btn-dropdown class="q-pa-sm" flat label="Account" >
-          <q-route-tab
-            v-if="!isSignedIn()"
-            class="q-px-md"
-            style="justify-content:left"
-            to="/signin"
-            replace
-            label="sign in"
-          />
-          <q-route-tab
-            v-if="!isSignedIn()"
-            style="justify-content:left"
-            to="/register"
-            replace
-            label="create account"
-          />
+        <!-- if signed in -->
+        <q-btn-dropdown v-if="isSignedIn()" class="q-pa-sm" flat :label=greeting()>
           <q-route-tab
             v-if="isSignedIn()"
-            style="justify-content:left"
+            style="justify-content:center"
             to="/profile/1"
             replace
             label="Edit Profile"
           />
           <q-route-tab
             v-if="isSignedIn()"
-            style="justify-content:left"
+            style="justify-content:center"
             to="/admin"
             replace
             label="admin"
             />
           <q-route-tab
             v-if="isSignedIn()"
-            style="justify-content:left"
+            style="justify-content:center"
             @click="logOut()"
             label="log out">
           </q-route-tab>
-          <q-route-tab class="row" @click="() => Dark.toggle()" style="justify-content:left">
+          <q-route-tab class="row" @click="() => Dark.toggle()" style="justify-content:center">
             <div class="row">
                 <div style="font-family:roboto; font-weight:500">
                   DARK MODE
-                  <q-icon name="dark_mode" right style="font-size:x-large; align-self:center"/>
+                  <q-icon name="dark_mode" style="font-size:x-large; align-self:center"/>
+                </div>
+            </div>
+          </q-route-tab>
+        </q-btn-dropdown>
+        <!-- if not signed in -->
+        <q-btn-dropdown v-if="!isSignedIn()" class="q-pa-sm" flat label="Sign In" >
+          <q-route-tab
+            class="q-px-md"
+            style="justify-content:center"
+            to="/signin"
+            replace
+            label="sign in"
+          />
+          <q-route-tab
+            style="justify-content:center"
+            to="/register"
+            replace
+            label="create account"
+          />
+          <q-route-tab class="row" @click="() => Dark.toggle()" style="justify-content:center">
+            <div class="row">
+                <div style="font-family:roboto; font-weight:500">
+                  DARK MODE
+                  <q-icon name="dark_mode" style="font-size:x-large; align-self:center"/>
                 </div>
             </div>
           </q-route-tab>
@@ -128,6 +138,16 @@ export default {
     isSignedIn(){
       if(sessionStorage.getItem("token") !== null) return true
       else if(sessionStorage.getItem("token") === null)  return false
+    },
+    greeting(){
+      //  grab the username from session storage
+      const username = sessionStorage.getItem("username")
+
+      //  if the username is not null, set greeting to welcome back username
+      if(username) return 'welcome ' + username + '!'
+
+      //  otherwise just return account
+      else  return 'account' 
     },
     logOut(){
       //  clear token
