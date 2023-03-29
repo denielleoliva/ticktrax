@@ -62,7 +62,7 @@
                 Sign up
             </q-btn>
             <q-btn flat class="q-ml-md" @click="$router.push('/signin')">
-                Already have an account? Log In!
+                Already have an account? Sign In!
             </q-btn>
             <q-inner-loading :showing="loadingBar" label="Creating your account..." label-class="text-positive" label-style="font-size: 1.1em"/> 
             <q-inner-loading :showing="routingBar" label="Routing to sign in..." label-class="text-positive" label-style="font-size: 1.1em"/> 
