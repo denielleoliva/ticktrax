@@ -9,7 +9,7 @@
             </q-banner>
             <q-dialog v-model="accountCreated" class="" rounded style="font-size:large; background-color:pink">
                 <div class="q-pa-lg bg-white" align="center">
-                    <div class="q-pa-lg">Account created!</div>
+                    <div class="q-pa-lg" style="font-family:customfont; font-size:x-large">Account created!</div>
                     <q-btn class="bg-primary q-mx-md text-white" @click="$router.push('/signin')">
                         Continue to sign in!
                     </q-btn>
