@@ -3,7 +3,7 @@
         <q-page padding style="font-family: customfont; margin:5px">
             <!-- header -->
             <h3 class="q-ma-sm q-my-lg" align="center">
-                Log Into Your Account
+                Sign into your Account!
             </h3>
             
             <!-- fail dialog -->
@@ -36,7 +36,7 @@
             <!-- Sign in button -->
             <div class="row">
                 <q-btn class="q-ml-sm" id="signInButton" color="primary" @click="signIn()">
-                    Log in
+                    Sign in
                 </q-btn>
                 <q-btn class="q-ml-sm" flat style="align-self:center;" @click="$router.push('/register')">
                     Don't have an account? Make one here!
@@ -46,7 +46,7 @@
             <!-- loading bar stuff -->
             <q-inner-loading
                 :showing="loadingBar"
-                label="Signing you in..."
+                label="Logging you in..."
                 label-class="text-positive"
                 label-style="font-size: 1.1em"
                 style="height:100%; width:100%;"
