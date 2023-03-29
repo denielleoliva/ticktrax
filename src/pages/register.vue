@@ -2,7 +2,7 @@
     <div class="row" style="justify-content:center">
         <q-page padding style="font-family: customfont; margin:5px; width:500px">
             <h3 class="q-ma-sm q-my-lg" align="center">
-                Create Your Account
+                Create Your Account!
             </h3>
             <q-banner v-if="registerSuccess === false" class="q-ma-sm" rounded style="font-size:large; background-color:pink">
                 Account Creation Failed... Please try again!
