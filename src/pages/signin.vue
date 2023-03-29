@@ -12,9 +12,9 @@
             </q-banner>
 
             <!-- success dialog -->
-            <q-dialog v-model="signedIn" class="" persistent rounded style="font-size:large; background-color:pink">
+            <q-dialog v-model="signedIn" class="" persistent rounded style="font-size:large; background-color:pink;">
                 <div class="q-pa-lg bg-white" align="center">
-                    <div class="q-pa-lg">You're signed in!</div>
+                    <div class="q-pa-lg" style="font-family:customfont; font-size:x-large">You're signed in!</div>
                     <q-btn class="bg-primary q-mx-md text-white" @click="$router.push('/form')">
                         Submit a photo
                     </q-btn>
