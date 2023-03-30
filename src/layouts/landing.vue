@@ -52,7 +52,7 @@
           </q-route-tab>
         </q-btn-dropdown>
         <!-- if not signed in -->
-        <q-btn-dropdown v-if="!isSignedIn()" class="q-pa-sm" flat label="Sign In" >
+        <q-btn-dropdown v-if="!isSignedIn()" class="q-pa-sm" flat label="Account" >
           <q-route-tab
             class="q-px-md"
             style="justify-content:center"
@@ -64,7 +64,7 @@
             style="justify-content:center"
             to="/register"
             replace
-            label="create account"
+            label="Create Account"
           />
           <q-route-tab class="row" @click="() => Dark.toggle()" style="justify-content:center">
             <div class="row">
