@@ -98,7 +98,7 @@
             <path fill-rule="evenodd" d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z"/>
           </svg>
           <figcaption style="font-family:'Tahoma', sans-serif">see how many and what ticks are in your area </figcaption>
-          <q-btn v-if="$q.platform.is.mobile" class="bg-primary text-white" disabled @click="$router.push('/form')"> heatmap </q-btn>
+          <q-btn v-if="$q.platform.is.mobile" class="bg-primary text-white" @click="$router.push('/heatmap')"> heatmap </q-btn>
         </div>
       </div>
     </div>
