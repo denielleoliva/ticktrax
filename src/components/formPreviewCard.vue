@@ -111,16 +111,16 @@
     <q-dialog v-model="showModal" class="" persistent rounded style="font-size:large; background-color:pink">
         <div class="q-pa-lg bg-white" align="center">
             <div class="q-pa-lg" style="font-family:customfont; font-size:x-large">Photo Submitted!</div>
-            <q-btn class="bg-primary q-mx-md text-white" @click="$router.push('/admin')">
+            <q-btn class="bg-primary text-white q-mx-md" @click="goBack()"> Submit another photo </q-btn>
+            <q-btn class="bg-grey q-mx-md text-white" @click="$router.push('/admin')">
                 Check out the heatmap
             </q-btn>
-            <q-btn class="bg-grey text-white q-mx-md" @click="$router.push('/')"> Go back home </q-btn>
         </div>
     </q-dialog>
     <q-dialog v-model="showFail" class="" persistent rounded style="font-size:large; background-color:pink">
       <div class="q-pa-lg bg-white" align="center">
           <div class="q-pa-lg" style="font-family:customfont; font-size:x-large">Photo Submission Failed... Please Try Again!</div>
-          <q-btn class="bg-primary q-mx-md text-white" @click="onSubmit()">
+          <q-btn class="bg-primary q-mx-md text-white" @click="showFail = false">
               Try Again
           </q-btn>
           <q-btn class="bg-grey text-white q-mx-md" @click="$router.push('/')"> Go back home </q-btn>
@@ -184,43 +184,72 @@ function onClickedMarker(lngLat) {
 }
 
 async function onSubmit() {
+  //  set coords to 0 for now
+  let latitude = 0 
+  let longitude = 0
+
+  //  check if we need locational or datetime data
   if (date.value === '' || coords.value.length > 2 || (coords.value[0] === 0 && coords.value[1] === 0)) {
     alert.value = true;
     return;
   }
+  
+  //  create formdata object to hold body of post call
   const formData = new FormData();
   formData.append('image', props.metaData.pngImage);
   formData.append('date', date.value);
   formData.append('coordinates', coords.value.join(','));
-  // formData.append('tickType', tickType.value);
+
+  //  grab the coordinates
   for (let pair of formData.entries()) {
-    console.log(pair[0]+ ', ' + pair[1]);
+    //  save coords respectively
+    longitude = pair[1].substring(0, pair[1].search(','))
+    latitude = pair[1].substring(pair[1].search(',') + 1)
   }
 
-  console.log("Coords value:", coords.value);
-  console.log( props.metaData.pngImage.replace("data:image/png;base64,", ""), "HELLO")
+  //  grab the date part of the date time value
+  const datePart = date.value.substring(0, date.value.search(' '))
 
-  //Send to backend TBD
+  //  grab the time part of the date time value
+  const timePart = date.value.substring(date.value.lastIndexOf(' ') + 1)
 
-  //photo
-  //latitude
-  //longitude
-  //caption
-  //time
+  //  combine both parts
+  //  note: T is for server acceptance and :00 is needed because we don't take a second's time
+  const dateTime = datePart + "T" + timePart + ":00"
 
-  const caption = 'we do not have captions right now'
+  //  set filetype to empty string for now
+  let fileType = ''
 
-  const formattedDateTime = new Date(date.value)
+  //  if the image photodata indicates its a png
+  if(props.metaData.pngImage.search('image/png') > 0)   fileType = 'png'
 
-  console.log(date.value)
+  //  if the image photodata indicates its a jpeg
+  if(props.metaData.pngImage.search('image/jpeg') > 0)   fileType = 'jpeg'
 
+  //  grab url
   const url = 'http://localhost:5095/submission'
 
+  //  grab token for auth
   const token = sessionStorage.getItem("token")
 
+  //  setup auth header
   const auth = `Bearer ${token}`
 
   showModal.value = true
+
+  //  get rid of the metadata headers on the picture
+  const photoData = props.metaData.pngImage.replace("data:image/png;base64,", "")
+
+  //  we still need to grab the file name (right now its a random string)
+  const fileName = Math.random().toString(36).slice(2, 7);
+
+  //  to check for database compatibility
+  console.log("photo:", photoData)
+  console.log("filename: ", fileName)
+  console.log("fileType: ", fileType)
+  console.log("latitude: ", longitude)
+  console.log("longitude: ", latitude)
+  console.log("time: ", dateTime)
 
   await fetch(url, {
     //  this means we add to database
@@ -233,7 +262,7 @@ async function onSubmit() {
       },
 
       //  this are the fields in json format (hopefully)
-      body: JSON.stringify({photo: props.metaData.pngImage.replace("data:image/png;base64,", ""), filename: 'tickPic2' , fileType: 'png' , latitude: 0, longitude: 0, time: '2023-01-01T00:00:00'})
+      body: JSON.stringify({photo: photoData, filename: fileName , fileType: fileType , latitude: latitude, longitude: longitude, time: dateTime})
   })
   //  unwrap the response
   .then((response) => {
@@ -243,7 +272,6 @@ async function onSubmit() {
 
       //  indicate post success
       console.log("API POST SUCCESS")
-
       showModal.value = true
 
       return
