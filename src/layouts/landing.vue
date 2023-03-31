@@ -90,11 +90,8 @@
         >
           <q-icon name="home" size="2em"/>
         </q-route-tab>
-        <q-route-tab
-          to="/form"
-          replace
-        >
-          <q-icon name="add_circle" size="3em"/>
+        <q-route-tab to="/heatmap" replace >
+          <q-icon name="map" size="3em"/>
         </q-route-tab>
         <q-route-tab
           to="/profile/1"
@@ -108,7 +105,6 @@
     <q-page-container>
       <!-- This is where pages get injected -->
 
-
       <router-view />
     </q-page-container>
 
@@ -120,6 +116,9 @@
         style="background-color:beige"
     /> 
 
+    <q-page-sticky :offset="[18, 18]">
+      <q-btn fab icon="add_circle" color="primary" @click="$router.push('/form')"/>
+    </q-page-sticky>
   </q-layout>
 </template>
 
