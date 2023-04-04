@@ -143,8 +143,17 @@ export default {
   },
   methods: {
     isSignedIn(){
-      if(sessionStorage.getItem("token") !== null) return true
-      else if(sessionStorage.getItem("token") === null)  return false
+      if(this.$q.platform.is.mobile){
+        if(sessionStorage.getItem("token") !== null) return true
+        else if(sessionStorage.getItem("token") === null)  this.$router.push('/newuser')
+      }
+      else
+      {
+        if(sessionStorage.getItem("token") !== null) return true
+        else if(sessionStorage.getItem("token") === null)  this.$router.push('/newuser')
+      }
+
+
     },
     greeting(){
       //  grab the username from session storage
