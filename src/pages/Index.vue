@@ -117,7 +117,7 @@
       </h1>
       <tick-list class="fadeIn"/>
     </div>
-    <div v-if="!signedIn()">
+    <div v-if="!signedIn() && $q.platform.is.mobile">
       <div class="row fixed-center" style="width:80%">
             <q-btn class="bg-primary text-white q-ma-md" style="width:100%" @click="$router.push('/signin')">
                 log in
