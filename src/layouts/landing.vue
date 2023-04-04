@@ -138,8 +138,9 @@ export default {
       if(!isSignedIn())
       {
         $router.push('/newUser')
+        return false
       }
-      return false
+      else return true
     },
     isSignedIn(){
       if(sessionStorage.getItem("token") !== null) return true
