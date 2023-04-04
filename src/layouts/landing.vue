@@ -134,14 +134,6 @@ export default {
     }
   },
   methods: {
-    checkToken() {
-      if(!isSignedIn())
-      {
-        $router.push('/newUser')
-        return false
-      }
-      else return true
-    },
     isSignedIn(){
       if(sessionStorage.getItem("token") !== null) return true
       else if(sessionStorage.getItem("token") === null)  return false
@@ -161,8 +153,7 @@ export default {
       sessionStorage.clear()
 
       //  push to home page for desktop / welcome for mobile
-      if(this.$q.platform.is.mobile) this.$router.push('/newuser')
-      else  this.$router.push('/')
+      this.$router.push('/')
 
       //  turn on load
       this.logOutBar = true

@@ -15,7 +15,6 @@ const routes = [
       { path: '/list', component: () => import('src/pages/list')},
       { path: '/admin', component: () => import('src/pages/searchPage.vue')},
       { path: '/heatmap', component: () => import('src/pages/heatmap')},
-      { path: '/newUser', component: () => import('src/pages/newUser')}
       // { path: '/dashboard', component: () => import('src/pages/dashboard.vue')}
     ]
   },
