@@ -160,8 +160,9 @@ export default {
       //  clear token
       sessionStorage.clear()
 
-      //  push to home page
-      this.$router.push('/')
+      //  push to home page for desktop / welcome for mobile
+      if(this.$q.platform.is.mobile) this.$router.push('/newuser')
+      else  this.$router.push('/')
 
       //  turn on load
       this.logOutBar = true
