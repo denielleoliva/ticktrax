@@ -82,7 +82,7 @@
       ticktrax
     </q-toolbar-title> -->
 
-    <q-footer v-if="$q.platform.is.mobile && isSignedIn()" elevated style="background-color:#5CAB7D; color:white;">
+    <q-footer v-if="$q.platform.is.mobile && isSignedIn() && checkToken()" elevated style="background-color:#5CAB7D; color:white;">
       <q-tabs class="row" style="background-color: #5CAB7D;">
         <q-route-tab
           to="/"
@@ -133,27 +133,17 @@ export default {
       Dark,
     }
   },
-  mounted() {
-    function checkToken() {
+  methods: {
+    checkToken() {
       if(!isSignedIn())
       {
         $router.push('/newUser')
       }
-    }
-  },
-  methods: {
+      return false
+    },
     isSignedIn(){
-      if(this.$q.platform.is.mobile){
-        if(sessionStorage.getItem("token") !== null) return true
-        else if(sessionStorage.getItem("token") === null)  this.$router.push('/newuser')
-      }
-      else
-      {
-        if(sessionStorage.getItem("token") !== null) return true
-        else if(sessionStorage.getItem("token") === null)  this.$router.push('/newuser')
-      }
-
-
+      if(sessionStorage.getItem("token") !== null) return true
+      else if(sessionStorage.getItem("token") === null)  return false
     },
     greeting(){
       //  grab the username from session storage
