@@ -14,7 +14,7 @@ const routes = [
       { path: '/2fa', component: () => import('src/pages/2fa.vue')},
       { path: '/list', component: () => import('src/pages/list')},
       { path: '/admin', component: () => import('src/pages/searchPage.vue')},
-      { path: '/heatmap', component: () => import('src/pages/heatmap')},
+      { path: '/maps', component: () => import('src/pages/maps')},
       // { path: '/dashboard', component: () => import('src/pages/dashboard.vue')}
     ]
   },

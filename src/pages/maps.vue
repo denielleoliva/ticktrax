@@ -1,14 +1,33 @@
-<template >
-    <q-page :class="$q.dark.isActive ? null : 'bg-green-1'">
+<template>
+    <q-layout>
+        <q-page v-if="$q.platform.is.mobile" :class="$q.dark.isActive ? null : 'bg-green-1'">
         <div>
-            <div align="center" style="font-family:customfont; font-size:xx-large">Tick Heatmap</div>
+            <div class="row" align="">
+                <q-tabs
+                    v-model="tab"
+                    dense
+                    style="width:100%; font-size:x-large"
+                >
+                    <q-tab name="mails" label="bubble map" @click="showHeatmap = false"/>
+                    <q-tab name="alarms" label="heat map" @click="showHeatmap = true"/>
+                </q-tabs>
+                <!-- <div class="col-6" style="font-family:customfont; font-size:xx-large">
+                    {{ showHeatmap ? 'Heat Map' : 'Bubble Map'}} 
+                </div>
+                <q-toggle class=" col-6 bg-green-1" align="right"
+                    v-model="showHeatmap"
+                    :label="showHeatmap ? 'Heat Map' : 'Bubble Map'"
+                    :disable="isLoadingTickData"
+                /> -->
+            </div>
+
             <cool-light-box :items="items" :index="index" :useZoomBar="true" @close="index = null"/>
             <!-- Map Display here -->
             <div ref="mapView" id="map"></div>
         </div>
         <q-page-container>
-            <div align="center" style="font-family:customfont">Zoom in and select a tick to see pictures of it here:</div>
-            <!-- <div v-else-if="items !== null"> {{ tickPopupInfo.commonName }}s</div> -->
+            <div v-if="" align="center" style="font-family:customfont">Zoom into bubble map and select a tick to see pictures of it here:</div>
+
             <div>
                 <q-img v-for="(image, i) in tickPopupInfo.imageUrls"
                 class="enlarge-image" :key="`tick-${i}`" 
@@ -17,31 +36,138 @@
             </div>
         </q-page-container>
     </q-page>
-</template>
+        <q-page v-if="$q.platform.is.desktop"  class="q-pa-sm" :class="$q.dark.isActive ? null : 'bg-green-1'" padding>
+        <!--      <FilterByLocation class="my-table"/>-->
+        <!--      <map-element :key="tickMapKey" :userInput="[]" :geoJson="geoJson" />-->
+        <div class="main">
+          <cool-light-box
+            :items="items"
+            :index="index"
+            :useZoomBar="true"
+            @close="index = null"/>
+          <div class="country-navigation q-pb-md column">
+            <div class="text-h5 q-mb-xs" v-if="!showLymeDiseaseMap">Tick Observations</div>
+            <div class="text-h5 q-mb-xs" v-else>Lyme Disease</div>
+            <div id="overview-countrySelectors" class="shiny-html-output shiny-bound-output" aria-live="polite"><div>
+              <q-btn no-caps flat color="primary" label="North America" @click="flyTo([-105.2551, 40.5260])" />
+              <q-btn no-caps flat color="primary" label="South America" @click="flyTo([-55.4915, -9.7832])" />
+              <q-btn no-caps flat color="primary" label="Europe" @click="flyTo([15.2551, 54.5260])" />
+            </div>
+            </div>
+            <div class="row justify-start" style="width: 900px">
+            <q-slider
+              class="q-py-lg"
+              v-model="lymeDiseaseSelectedYear"
+              marker-labels
+              :min="2000"
+              :max="2019"
+              snap
+              label
+              v-show="showLymeDiseaseMap"
+            />
+            <q-btn color="primary" :icon="yearToYearIsPlaying ? 'pause': 'play_circle'" v-if="showLymeDiseaseMap" dense outline @click="playLymeDiseaseYearToYear" />
+            </div>
+            <FilterSearchBars @filteredResults="getFilteredResults"
+                              :isLoadingTickData="isLoadingTickData"
+                              :filterSettings="filterSettings"
+                              :key="JSON.stringify(filterSettings)"
+                              v-show="!showLymeDiseaseMap" />
+            <stats-view :tick-count="tickCount"
+                        :isLoadingTickData="isLoadingTickData"
+                        :key="isLoadingTickData"
+                        :subtitle="statsSubtitle"
+                        :loading-msg="statsLoadingMsg"
+            />
+          </div>
+          <div class="row justify-evenly">
+            <!-- Map Display here -->
+            <div class="map-holder wrapper">
+              <div ref="mapView" id="map"></div>
+              <div class='map-overlay' id='legend' v-show="showLymeDiseaseMap">
+                <p class="text-weight-bold text-no-wrap">Cases per 100,000 People</p>
+                <div v-for="(layer, index) in legendLayers" :key="layer">
+                  <span class="legend-key" :style="`background-color: ${legendColors[index]}`">
+                  </span>
+                  <span>
+                     {{layer}}
+                  </span>
+                </div>
+              </div>
+              <div id="popup" ref="htmlPopup"  style="max-width: 210px" >
+                <div class="column" v-if="tickPopupInfo.scientificName">
+                  <div class="q-mx-auto" v-if="tickPopupInfo.commonName">
+                    <span class="text-subtitle1">{{tickPopupInfo.commonName}}</span>
+                  </div>
+                  <p class="q-mx-auto">
+                    <span class="text-weight-light">({{tickPopupInfo.scientificName}})</span>
+                  </p>
+                  <q-separator />
+                  <span class="text-weight-medium col-4 col-md-6 q-pt-sm">Observed:</span>
+                  <span class="text-weight-small col-4 col-md-6 q-pb-sm" :title="tickPopupInfo.dateTime">{{tickPopupInfo.observedOn}}</span>
+                  <div class="q-gutter-sm row items-start justify-center">
+  
+                  <q-img v-for="(image, i) in tickPopupInfo.imageUrls"
+                         class="enlarge-image"
+                         :key="`tick-${i}`"
+                         @click="index = i"
+                         :src="image"
+                         :alt="tickPopupInfo.commonName" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Coordinates Display here -->
+            <q-card class="my-card" style="width: 400px">
+              <q-card-section class="bg-primary text-white q-pa-xs">
+              </q-card-section>
+              <q-card-section>
+                <div class="text-h5 text-center">Control Panel</div>
+              </q-card-section>
+              <q-separator inset />
+              <q-card>
+                <q-toggle 
+                    v-model="showHeatmap"
+                    :label="showHeatmap? 'Hide heatmap': 'Show heatmap'"
+                    color="primary"
+                    :disable="isLoadingTickData"
+                />
+                <q-toggle 
+                    v-model="showLymeDiseaseMap"
+                    label="Lyme disease reported cases 2000-2019 (USA)"
+                />
+              </q-card>
+            </q-card>
+          </div>
+        </div>
+      </q-page>
+    </q-layout>
+  </template>
   
   
   <script setup>
-import { Dark, Notify } from 'quasar';
-import {ref, watch, onMounted, reactive, toRefs} from "vue";
-import mapboxgl from "mapbox-gl";
-import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
-
-import {formatDate, JSONtoGeoJSON} from "src/utils";
-import axios from "axios";
-import {Geolocation} from "@capacitor/geolocation";
-import CoolLightBox from 'vue-cool-lightbox';
-import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css';
-import {ClusterMapLayer, CountryMapBounaries, HeatMapLayer, USCountyMap} from "src/MapLayerStrategy";
-import TabularView from "components/TabularView.vue";
-import FilterSearchBars from "components/FilterSearchBars.vue";
-import StatsView from "components/StatsView.vue";
-import ChartViz from "components/ChartViz.vue";
-import {lymeCasesOptions, lymeCasesSeries} from "src/lymeDiseasesVars";
-import {getChartInputs} from "src/tickReportingTrendsVars";
-import {lymeDiseaseByGenderChartInputs} from "src/lymeDiseaseByGenderVars";
-import {getLymeDiseaseByCountiesData, requestPermission} from "src/FirebaseInit";
+  import { Dark, Notify } from 'quasar';
+  import {ref, watch, onMounted, reactive, toRefs} from "vue";
+  import mapboxgl from "mapbox-gl";
+  import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
   
-    
+  import {formatDate, JSONtoGeoJSON} from "src/utils";
+  import axios from "axios";
+  import {Geolocation} from "@capacitor/geolocation";
+  import CoolLightBox from 'vue-cool-lightbox';
+  import 'vue-cool-lightbox/dist/vue-cool-lightbox.min.css';
+  import {ClusterMapLayer, CountryMapBounaries, HeatMapLayer, USCountyMap} from "src/MapLayerStrategy";
+  import TabularView from "components/TabularView.vue";
+  import FilterSearchBars from "components/FilterSearchBars.vue";
+  import StatsView from "components/StatsView.vue";
+  import ChartViz from "components/ChartViz.vue";
+  import {lymeCasesOptions, lymeCasesSeries} from "src/lymeDiseasesVars";
+  import {getChartInputs} from "src/tickReportingTrendsVars";
+  import {lymeDiseaseByGenderChartInputs} from "src/lymeDiseaseByGenderVars";
+  import {getLymeDiseaseByCountiesData, requestPermission} from "src/FirebaseInit";
+  
+  
+  const tab = ref('map');
+  
   const items = ref([]);
   const index = ref(null);
   
@@ -59,7 +185,9 @@ import {getLymeDiseaseByCountiesData, requestPermission} from "src/FirebaseInit"
   const searchLoading = ref(false);
   
   const location = ref('');
-    
+  
+  const filterSettings = reactive({useScientificName: false, useFilterBySeason: false});
+  
   const isLoadingLocation = ref(false);
   const isLoadingTickData = ref(false);
   
@@ -68,12 +196,31 @@ import {getLymeDiseaseByCountiesData, requestPermission} from "src/FirebaseInit"
   const lymeDiseaseSelectedYear = ref(2019);
   const yearToYearIsPlaying = ref(false);
   
+  const showRecentTickReports = ref(false);
   
   const filterParameterKey = ref('');
   
   const mapView = ref(null);
   
   const tickReportsHistogram = ref(null);
+  const lymeDiseaseByGender = lymeDiseaseByGenderChartInputs;
+  
+  
+  const legendLayers = [
+    '0-1',
+    '1-10',
+    '10-25',
+    '25-100',
+    '100-2,500',
+  ];
+  const legendColors = [
+    '#FFFFD4',
+    '#FED98E',
+    '#FE9929',
+    '#D95F0E',
+    '#993404',
+  ];
+  
   
   const tickPopupInfo = ref({
     commonName: '',
@@ -104,6 +251,7 @@ import {getLymeDiseaseByCountiesData, requestPermission} from "src/FirebaseInit"
   const sheetName = 'Sheet2';
   const query = encodeURIComponent('Select *');
   const url = `${base}&sheet=${sheetName}&tq=${query}`
+  const data = [];
   document.addEventListener('DOMContentLoaded', init);
   
   
@@ -214,22 +362,6 @@ import {getLymeDiseaseByCountiesData, requestPermission} from "src/FirebaseInit"
   
   
   });
-
-  function onImageClick(row) {
-
-const commonName = row.commonName;
-const imageUrls = row.imageUrls.split(',');
-const attribution = row.attribution;
-items.value = imageUrls.map(url => {
-  return {
-    src: url.replace("square", "medium"),
-    title: commonName,
-    description: attribution
-
-  }});
-
-index.value = 0;
-}
   
   function changeLymeDiseaseYearMap(year) {
     resetLymeDiseaseCaseMap();
@@ -290,7 +422,77 @@ index.value = 0;
       console.log("error init map", e);
     }
   
-  } 
+  }
+  
+  function getFilteredResults(payload) {
+    //const features = map.queryRenderedFeatures({ layers: ['unclustered-point'] });
+  
+    //console.log(geoJson.value.features, "features");
+  
+    filterParameterKey.value = JSON.stringify(payload);
+  
+    let filteredResults = geoJson.value.features;
+  
+    if (payload.selectedTicks.tickTypes && payload.selectedTicks.tickTypes.length > 0) {
+      const keyName = payload.selectedTicks.keyName;
+      if (keyName === "commonName") {
+        filteredResults = filteredResults.filter(function (el) {
+          return payload.selectedTicks.tickTypes.some((tickType) => tickType === el.properties[payload.selectedTicks.keyName])
+          //return el.properties[payload.selectedTicks.keyName] === payload.selectedTicks.tickTypes;
+        });
+      } else {
+        filteredResults = filteredResults.filter(function (el) {
+          return payload.selectedTicks.tickTypes.some((tickType) => el.properties[payload.selectedTicks.keyName].includes(tickType))
+          //return el.properties[payload.selectedTicks.keyName].includes(payload.selectedTicks.tickTypes);
+        });
+      }
+    }
+  
+    if (typeof payload.dateRange === "object" &&
+      payload.dateRange !== null &&
+      !Array.isArray(payload.dateRange) &&
+      payload.dateRange.from !== '' &&
+      payload.dateRange.to !== '') {
+      filteredResults = filteredResults.filter(function (el) {
+        let date = new Date(el.properties.observedOn);
+        date.setHours(0,0,0,0);
+        return date >= new Date(payload.dateRange.from) && date <= new Date(payload.dateRange.to);
+      });
+    } else if (payload.dateRange !== "") {
+      filteredResults = filteredResults.filter(function (el) {
+        let date = new Date(el.properties.observedOn);
+        date.setHours(0,0,0,0);
+        return date.getTime() === new Date(payload.dateRange).getTime();
+  
+      });
+  
+    }
+  
+  
+  
+  
+    tickCount.value = filteredResults.length;
+    tableData.value = filteredResults;
+    map.getSource('ticks').setData({id: 'ticks', type: 'FeatureCollection', features: filteredResults});
+  
+  
+  
+  
+  }
+  
+  function setLayerSource (layerId, source, sourceLayer) {
+    const oldLayers = map.getStyle().layers;
+    const layerIndex = oldLayers.findIndex(l => l.id === layerId);
+    const layerDef = oldLayers[layerIndex];
+    const before = oldLayers[layerIndex + 1] && oldLayers[layerIndex + 1].id;
+    layerDef.source = source;
+    if (sourceLayer) {
+      layerDef['source-layer'] = sourceLayer;
+    }
+    map.removeLayer(layerId);
+    map.addLayer(layerDef, before);
+  }
+  
   
   function switchLayer() {
     // switchLayer fn will be called once on layer switched
@@ -469,7 +671,8 @@ index.value = 0;
     const caseCount = lymeDiseaseTableData.value.filter((item) => item.YEAR === year).reduce((acc, item) => acc + item.CASES, 0);
     statsSubtitle.value = 'Cases reported';
     tickCount.value = caseCount;
-  } 
+  }
+  
   
   async function showLymeDiseaseCaseMap(year = 2019) {
     lymeDiseaseSelectedYear.value = 2019;
@@ -532,6 +735,37 @@ index.value = 0;
       .addTo(map);
   }
   
+  
+  
+  
+  async function getLocation() {
+    isLoadingLocation.value = true;
+    const coordinates = await getCurrentPosition();
+    let features = map.queryRenderedFeatures(
+      map.project(coordinates),
+      { layers: ['clusters'], radius: 100000, limit: 10 }
+    );
+    console.log(features, "Results?")
+    features.forEach(function(feature) {
+      console.log(feature.properties);
+    });
+    center.value
+    try {
+      searchLoading.vaulue = true;
+      const response = await axios.get(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${coordinates[0]},${coordinates[1]}.json?access_token=pk.eyJ1IjoicnN1bHRhbiIsImEiOiJjbGRjcTF1bDMwNHNiM25wNm1oZ2dzbWg2In0.yMbTf053wvYrnzJwUyqqYQ`
+      );
+  
+      searchLoading.value = false;
+      location.value = response.data.features[0].place_name;
+    } catch (err) {
+      searchLoading.value = false;
+      console.log(err);
+      isLoadingLocation.value = false;
+    }
+    isLoadingLocation.value = false;
+  }
+  
   async function getCurrentPosition() {
     const newPosition  = await Geolocation.getCurrentPosition();
     const coords = newPosition.coords;
@@ -554,6 +788,23 @@ index.value = 0;
   
   }
   
+  
+  function onImageClick(row) {
+  
+    const commonName = row.commonName;
+    const imageUrls = row.imageUrls.split(',');
+    const attribution = row.attribution;
+    items.value = imageUrls.map(url => {
+      return {
+        src: url.replace("square", "medium"),
+        title: commonName,
+        description: attribution
+  
+      }});
+  
+    index.value = 0;
+  }
+  
   function onLocateClick(lngLat) {
     mapView.value.scrollIntoView({ behavior: 'smooth' });
     flyTo(lngLat, 11);
@@ -563,9 +814,9 @@ index.value = 0;
       .addTo(map);
   }
   
-</script>
+  </script>
   
-<style lang="sass" scoped>
+  <style lang="sass" scoped>
   .main
     padding: 45px 50px
   .flex
@@ -725,10 +976,13 @@ index.value = 0;
     position: relative
   
   </style>
-<style lang="sass">
-.body--dark
-.mapboxgl-popup-content
-    background: #1D1D1D
-.mapboxgl-popup-close-button
-    color: #FFFFFF
-<style>
+  <style lang="sass">
+  .body--dark
+    .mapboxgl-popup-content
+      background: #1D1D1D
+    .mapboxgl-popup-close-button
+      color: #FFFFFF
+  
+  
+  
+  </style>

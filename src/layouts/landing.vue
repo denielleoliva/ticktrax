@@ -20,6 +20,11 @@
           replace
           label="form"
         />
+        <q-route-tab
+          to="/maps"
+          replace
+          label="maps"
+          />
         <!-- if signed in -->
         <q-btn-dropdown v-if="isSignedIn()" class="q-pa-sm" flat :label=greeting()>
           <q-route-tab
