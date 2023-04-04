@@ -82,7 +82,7 @@
       ticktrax
     </q-toolbar-title> -->
 
-    <q-footer v-if="$q.platform.is.mobile" elevated style="background-color:#5CAB7D; color:white;">
+    <q-footer v-if="$q.platform.is.mobile && isSignedIn()" elevated style="background-color:#5CAB7D; color:white;">
       <q-tabs class="row" style="background-color: #5CAB7D;">
         <q-route-tab
           to="/"
@@ -116,7 +116,7 @@
         style="background-color:beige"
     /> 
 
-    <q-page-sticky :offset="[18, 18]">
+    <q-page-sticky  v-if="isSignedIn() && $q.platform.is.mobile" :offset="[18, 18]">
       <q-btn fab icon="add_circle" color="primary" @click="$router.push('/form')"/>
     </q-page-sticky>
   </q-layout>
@@ -131,6 +131,14 @@ export default {
       logOutBar: false,
       leftDrawer: false,
       Dark,
+    }
+  },
+  mounted() {
+    function checkToken() {
+      if(!isSignedIn())
+      {
+        $router.push('/newUser')
+      }
     }
   },
   methods: {
