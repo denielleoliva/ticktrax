@@ -1,0 +1,85 @@
+@import './base/variables';
+@import './base/mixins';
+
+@import './components/type_badges';
+//@import './components/dropdown';
+
+
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: $text;
+  font-family: 'pokemon-body', serif;
+  font-size: 2rem;
+  @include text-shadow($text-shadow);
+
+  @include breakpoint(min-width, 'laptop') {
+    font-size: 2.4rem;
+  }
+
+  @include breakpoint(min-width, 'tablet') {
+    font-size: 2.2rem;
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: normal;
+}
+
+h1 {
+  color: #fff;
+  position: relative;
+  font-size: 1.6rem;
+  padding: 0.5rem 0;
+  @include text-shadow($text);
+
+  @include breakpoint(min-width, 'laptop') {
+    font-size: 2rem;
+  }
+}
+
+h3 {
+  color: #fff;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 0 1rem;
+  font-size: 1.6rem;
+  text-shadow: -3px 0 $ui-title-bg, 0 3px $ui-title-bg, 3px 0 $ui-title-bg,
+  0 -3px $ui-title-bg;
+  width: 50%;
+  text-transform: uppercase;
+
+  &.wide {
+    width: 100%;
+  }
+
+  @include breakpoint(min-width, 'tablet') {
+    font-size: 2rem;
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 25%;
+    left: 10%;
+    width: 80%;
+    height: 13.5px;
+    background-color: $ui-title-bg;
+    z-index: -1;
+    border-radius: 5rem;
+
+    @include breakpoint(min-width, 'tablet') {
+      width: 100%;
+      left: 0;
+    }
+  }
+}

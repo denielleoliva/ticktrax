@@ -5,11 +5,20 @@
     src: url(./fonts/Adventuro.ttf);
   }
 
+@font-face {
+  font-family: pokemon-body;
+  src: url(../assets/fonts/Pokemon-FRLG.ttf);
+}
+
   // declare a class which applies it
   .my-font {
     font-family: 'customfont';
   }
 
+
+pokemon-body {
+  font-family: 'pokemon-body';
+}
 
 
 .enlarge-image {

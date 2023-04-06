@@ -944,7 +944,7 @@
   resolved "https://registry.npmjs.org/@babel/regjsgen/-/regjsgen-0.8.0.tgz"
   integrity sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==
 
-"@babel/runtime@^7.8.4", "@babel/runtime@^7.9.0":
+"@babel/runtime@^7.21.0", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.0":
   version "7.21.0"
   resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.21.0.tgz"
   integrity sha512-xwII0//EObnq89Ji5AKYQaRYiW/nZ3llSv29d49IuxPhKbtJoLP+9QUUZ4nVragQVtaVGeZrpB+ZtG/Pdy/POw==
@@ -5484,6 +5484,13 @@ emittery@^0.7.1:
   resolved "https://registry.npmjs.org/emittery/-/emittery-0.7.2.tgz"
   integrity sha512-A8OG5SR/ij3SsJdWDJdkkSYUjQdCUx6APQXem0SaEePBSRg4eymGYwBkKo1Y6DU+af/Jn2dBQqDBvjnr9Vi8nQ==
 
+emoji-mart-vue@^2.6.6:
+  version "2.6.6"
+  resolved "https://registry.npmjs.org/emoji-mart-vue/-/emoji-mart-vue-2.6.6.tgz"
+  integrity sha512-844CI/Sa99G6goiZN6u+zT5XxB4wUhpYYTK8s3FrU2fl9y0ckbqe0uw7EuY0R53hb4bo9uJHVOPywE+C4vu4fg==
+  dependencies:
+    postcss-loader "^3.0.0"
+
 emoji-regex@^7.0.1:
   version "7.0.3"
   resolved "https://registry.npmjs.org/emoji-regex/-/emoji-regex-7.0.3.tgz"
@@ -6080,6 +6087,14 @@ fast-levenshtein@^2.0.6, fast-levenshtein@~2.0.6:
   version "2.0.6"
   resolved "https://registry.npmjs.org/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz"
   integrity sha512-DCXu6Ifhqcks7TZKY3Hxp3y6qphY5SJZmrWMDrKcERSOXWQdMhU9Ig/PYrzyw/ul9jOIyh0N4M0tbC5hodg8dw==
+
+fast-unique-numbers@^7.0.2:
+  version "7.0.2"
+  resolved "https://registry.npmjs.org/fast-unique-numbers/-/fast-unique-numbers-7.0.2.tgz"
+  integrity sha512-xnqpsnu889bHbq5cbDMwCJ2BPf6kjFPMu+RHfqKvisRxeEbTOVxY5aW/ZNsZ/r8OlwatxmjdFEVQog2xAhLkvg==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+    tslib "^2.5.0"
 
 fastq@^1.6.0:
   version "1.15.0"
@@ -8268,6 +8283,11 @@ js-beautify@^1.6.12, js-beautify@^1.6.14:
     glob "^8.0.3"
     nopt "^6.0.0"
 
+js-confetti@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.npmjs.org/js-confetti/-/js-confetti-0.11.0.tgz"
+  integrity sha512-Hc7I3VI4r4H0nq5q/oQK+JJwGoYRYVHK72fGk8E9Ay1dbh+aiZ9yl0yFp1K4oYeq7YFDQAndYChwqLPA3QWQuA==
+
 js-cookie@^3.0.1:
   version "3.0.1"
   resolved "https://registry.npmjs.org/js-cookie/-/js-cookie-3.0.1.tgz"
@@ -10176,7 +10196,7 @@ postcss-load-config@^2.0.0:
     cosmiconfig "^5.0.0"
     import-cwd "^2.0.0"
 
-postcss-loader@3.0.0:
+postcss-loader@^3.0.0, postcss-loader@3.0.0:
   version "3.0.0"
   resolved "https://registry.npmjs.org/postcss-loader/-/postcss-loader-3.0.0.tgz"
   integrity sha512-cLWoDEY5OwHcAjDnkyRQzAXfs2jrKjXpO/HQFcc5b5u/r7aa471wdmChmwfnv7x2u840iat/wi0lQ5nbRgSkUA==
@@ -12654,7 +12674,7 @@ tslib@^1.9.0:
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.14.1.tgz"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.4.0:
+tslib@^2.0.1, tslib@^2.0.3, tslib@^2.1.0, tslib@^2.4.0, tslib@^2.5.0:
   version "2.5.0"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.5.0.tgz"
   integrity sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==
@@ -13454,6 +13474,34 @@ worker-farm@^1.7.0:
   integrity sha512-rvw3QTZc8lAxyVrqcSGVm5yP/IJ2UcB3U0graE3LCFoZ0Yn2x4EoVSqJKdB/T5M+FLcRPjz4TDacRf3OCfNUzw==
   dependencies:
     errno "~0.1.7"
+
+worker-timers-broker@^6.0.83:
+  version "6.0.83"
+  resolved "https://registry.npmjs.org/worker-timers-broker/-/worker-timers-broker-6.0.83.tgz"
+  integrity sha512-dzOEpJHCcUTGXpKY7mKNWZ2TcZz76mSH2V1dasfaoPlxLaW0tbubdunRF7Vi/Ueqrci60m4SaEfFbH82ZdsHMg==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+    fast-unique-numbers "^7.0.2"
+    tslib "^2.5.0"
+    worker-timers-worker "^7.0.49"
+
+worker-timers-worker@^7.0.49:
+  version "7.0.49"
+  resolved "https://registry.npmjs.org/worker-timers-worker/-/worker-timers-worker-7.0.49.tgz"
+  integrity sha512-pKx9/HYUu83z2CbbL7/HcYxgT+5Qtrty5VZcOU4FmVEqp9Y8eHuy3F3KHrxwOd/1kR02/ftSBWPGZUkls659vQ==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+    tslib "^2.5.0"
+
+worker-timers@^7.0.63:
+  version "7.0.63"
+  resolved "https://registry.npmjs.org/worker-timers/-/worker-timers-7.0.63.tgz"
+  integrity sha512-YHBp6kDZpDMtVnadzXDyKdEv+W/6vSLp8hwaJJkF/0GQqCE3ywGAb0CXVVWFeHP+9jkxBk6sp2D6UbBqQO27PA==
+  dependencies:
+    "@babel/runtime" "^7.21.0"
+    tslib "^2.5.0"
+    worker-timers-broker "^6.0.83"
+    worker-timers-worker "^7.0.49"
 
 workerize-loader@^2.0.2:
   version "2.0.2"

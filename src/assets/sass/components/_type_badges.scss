@@ -1,0 +1,96 @@
+
+.types {
+  display: inline-block;
+  position: relative;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.types span {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  min-height: 30px;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  padding: 0 0.5rem;
+  border-radius: 0.2rem;
+  color: #fff;
+
+  @include text-shadow($text);
+
+  &.normal {
+    background: $type-normal;
+  }
+  &.fighting {
+    background: $type-fight;
+  }
+  &.flying {
+    background: linear-gradient(
+        180deg,
+        $type-flying-top 50%,
+        $type-flying-bot 50%
+    );
+  }
+  &.poison {
+    background: linear-gradient(
+        180deg,
+        $type-poison-top 50%,
+        $type-poison-bot 50%
+    );
+  }
+  &.ground {
+    background: linear-gradient(
+        180deg,
+        $type-ground-top 50%,
+        $type-ground-bot 50%
+    );
+  }
+  &.rock {
+    background: $type-rock;
+  }
+  &.bug {
+    background: $type-bug;
+  }
+  &.ghost {
+    background: $type-ghost;
+  }
+  &.steel {
+    background: linear-gradient(
+        180deg,
+        $type-steel-top 50%,
+        $type-steel-bot 50%
+    );
+  }
+  &.fire {
+    background: $type-fire;
+  }
+  &.water {
+    background: $type-water;
+  }
+  &.grass {
+    background: $type-grass;
+  }
+  &.electric {
+    background: $type-electric;
+  }
+  &.psychic {
+    background: $type-psychic;
+  }
+  &.ice {
+    background: $type-ice;
+  }
+  &.dragon {
+    background: linear-gradient(
+        180deg,
+        $type-dragon-top 50%,
+        $type-dragon-bot 50%
+    );
+  }
+  &.dark {
+    background: $type-dark;
+  }
+  &.fairy {
+    background: $type-fairy;
+  }
+}

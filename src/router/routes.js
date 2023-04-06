@@ -15,7 +15,9 @@ const routes = [
       { path: '/list', component: () => import('src/pages/list')},
       { path: '/overview', component: () => import('src/pages/searchPage.vue')},
       {path: '/dashboard', component: () => import('src/pages/dashboard.vue')},
-      {path: '/heatmap', component: () => import('src/pages/mobileHeatmap.vue')}
+      {path: '/heatmap', component: () => import('src/pages/mobileHeatmap.vue')},
+      {path: '/tickgame', component: () => import('src/pages/idTickGame.vue')},
+
     ]
   },
 
