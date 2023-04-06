@@ -1,15 +1,15 @@
 <template>
     <div class="row" style="justify-content:center">
         <q-page padding style="font-family: customfont; margin:5px; width:500px">
-            <h3 class="q-ma-sm q-my-lg">
-                Create Account
+            <h3 class="q-ma-sm q-my-lg" align="center">
+                Create Your Account!
             </h3>
             <q-banner v-if="registerSuccess === false" class="q-ma-sm" rounded style="font-size:large; background-color:pink">
                 Account Creation Failed... Please try again!
             </q-banner>
             <q-dialog v-model="accountCreated" class="" rounded style="font-size:large; background-color:pink">
                 <div class="q-pa-lg bg-white" align="center">
-                    <div class="q-pa-lg">Account created!</div>
+                    <div class="q-pa-lg" style="font-family:customfont; font-size:x-large">Account created!</div>
                     <q-btn class="bg-primary q-mx-md text-white" @click="$router.push('/signin')">
                         Continue to sign in!
                     </q-btn>
@@ -57,9 +57,12 @@
             </q-input>
 
 
-            <q-btn id="loading" color="primary" style="align:center; margin-left:12px; margin-top:10px; background-color:#21ba45;"
+            <q-btn class="q-ml-sm" id="loading" color="primary" style="align:center; background-color:#21ba45;"
                 @click="register()">
                 Sign up
+            </q-btn>
+            <q-btn flat class="q-ml-md" @click="$router.push('/signin')">
+                Already have an account? Sign In!
             </q-btn>
             <q-inner-loading :showing="loadingBar" label="Creating your account..." label-class="text-positive" label-style="font-size: 1.1em"/> 
             <q-inner-loading :showing="routingBar" label="Routing to sign in..." label-class="text-positive" label-style="font-size: 1.1em"/> 

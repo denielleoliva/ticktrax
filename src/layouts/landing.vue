@@ -3,13 +3,13 @@
 
     <!-- (Optional) The Header -->
     <q-header v-if="$q.platform.is.desktop" elevated class="row" style="background-color:#5CAB7D; color:white;">
-      <q-toolbar class="col-auto">
+      <q-toolbar class="col">
         <q-toolbar-title style="font-family:customfont">
           ticktrax
         </q-toolbar-title>
       </q-toolbar>
 
-      <q-tabs  style="background-color: #5CAB7D">
+      <q-tabs style="background-color:#5CAB7D;">
         <q-route-tab
           to="/"
           replace
@@ -20,65 +20,74 @@
           replace
           label="form"
         />
-        <q-btn-dropdown class="q-pa-sm" flat label="Account" >
-          <q-route-tab v-if="!signedIn"
-            class="q-px-sm"
-            style="justify-content:left"
+        <q-route-tab
+          to="/maps"
+          replace
+          label="maps"
+          />
+        <!-- if signed in -->
+        <q-btn-dropdown v-if="isSignedIn()" class="q-pa-sm" flat :label=greeting()>
+          <q-route-tab
+            v-if="isSignedIn()"
+            style="justify-content:center"
+            to="/profile/1"
+            replace
+            label="Edit Profile"
+          />
+          <q-route-tab
+            v-if="isSignedIn()"
+            style="justify-content:center"
+            to="/admin"
+            replace
+            label="admin"
+            />
+          <q-route-tab
+            v-if="isSignedIn()"
+            style="justify-content:center"
+            @click="logOut()"
+            label="log out">
+          </q-route-tab>
+          <q-route-tab class="row" @click="() => Dark.toggle()" style="justify-content:center">
+            <div class="row">
+                <div style="font-family:roboto; font-weight:500">
+                  DARK MODE
+                  <q-icon name="dark_mode" style="font-size:x-large; align-self:center"/>
+                </div>
+            </div>
+          </q-route-tab>
+        </q-btn-dropdown>
+        <!-- if not signed in -->
+        <q-btn-dropdown v-if="!isSignedIn()" class="q-pa-sm" flat label="Account" >
+          <q-route-tab
+            class="q-px-md"
+            style="justify-content:center"
             to="/signin"
             replace
             label="sign in"
           />
           <q-route-tab
+            style="justify-content:center"
             to="/register"
             replace
-            label="create account"
+            label="Create Account"
           />
-          <q-route-tab v-if="signedIn"
-            style="justify-content:left"
-            to="/profile/1"
-            replace
-            label="Edit Profile"
-          />
-          <q-route-tab v-if="signedIn"
-            style="justify-content:left"
-            to="/overview"
-            replace
-            label="overview"
-            />
-          <q-route-tab v-if="signedIn"
-            style="justify-content:left"
-            @click="logOut()"
-            label="log out">
-          </q-route-tab>
-          <q-route-tab class="row" @click="() => Dark.toggle()" style="justify-content:left">
+          <q-route-tab class="row" @click="() => Dark.toggle()" style="justify-content:center">
             <div class="row">
                 <div style="font-family:roboto; font-weight:500">
                   DARK MODE
-                  <q-icon name="dark_mode" right style="font-size:x-large; align-self:center"/>
+                  <q-icon name="dark_mode" style="font-size:x-large; align-self:center"/>
                 </div>
             </div>
           </q-route-tab>
         </q-btn-dropdown>
       </q-tabs>
-      <q-btn
-        class="absolute-right gt-xs"
-        flat
-        :icon="Dark.isActive ? 'light_mode' : 'dark_mode'"
-        @click="() => Dark.toggle()"
-      />
-      <q-btn
-        class="relative-position lt-sm"
-        flat
-        :icon="Dark.isActive ? 'light_mode' : 'dark_mode'"
-        @click="() => Dark.toggle()"
-      />
     </q-header>
 
     <!-- <q-toolbar-title class="q-pa-sm" style="font-family:customfont; background-color:#5CAB7D">
       ticktrax
     </q-toolbar-title> -->
 
-    <q-footer v-if="$q.platform.is.mobile" elevated style="background-color:#5CAB7D; color:white;">
+    <q-footer v-if="$q.platform.is.mobile && isSignedIn()" elevated style="background-color:#5CAB7D; color:white;">
       <q-tabs class="row" style="background-color: #5CAB7D;">
         <q-route-tab
           to="/"
@@ -86,11 +95,8 @@
         >
           <q-icon name="home" size="2em"/>
         </q-route-tab>
-        <q-route-tab
-          to="/form"
-          replace
-        >
-          <q-icon name="add_circle" size="3em"/>
+        <q-route-tab to="/heatmap" replace >
+          <q-icon name="map" size="3em"/>
         </q-route-tab>
         <q-route-tab
           to="/profile/1"
@@ -104,10 +110,20 @@
     <q-page-container>
       <!-- This is where pages get injected -->
 
-
       <router-view />
     </q-page-container>
 
+    <q-inner-loading
+        :showing="logOutBar"
+        label="Logging you out..."
+        label-class=""
+        label-style=""
+        style="background-color:beige"
+    /> 
+
+    <q-page-sticky v-if="$q.platform.is.mobile && isSignedIn()" :offset="[18, 18]">
+      <q-btn fab icon="add_circle" color="primary" @click="$router.push('/form')"/>
+    </q-page-sticky>
   </q-layout>
 </template>
 
@@ -115,25 +131,42 @@
 import { Dark } from 'quasar';
 
 export default {
-  // name: 'LayoutName',
-
   data () {
     return {
+      logOutBar: false,
       leftDrawer: false,
       Dark,
     }
   },
-  mounted() {
-    const signedIn = sessionStorage.getItem("token")
-    console.log(signedIn)
-  },
   methods: {
+    isSignedIn(){
+      if(sessionStorage.getItem("token") !== null) return true
+      else if(sessionStorage.getItem("token") === null)  return false
+    },
+    greeting(){
+      //  grab the username from session storage
+      const username = sessionStorage.getItem("username")
+
+      //  if the username is not null, set greeting to welcome back username
+      if(username) return 'welcome ' + username + '!'
+
+      //  otherwise just return account
+      else  return 'account' 
+    },
     logOut(){
-      const token = sessionStorage.getItem("token")
-      console.log(token)
+      //  clear token
       sessionStorage.clear()
-      const token1 = sessionStorage.getItem("token")
-      console.log(token)
+
+      //  push to home page for desktop / welcome for mobile
+      this.$router.push('/')
+
+      //  turn on load
+      this.logOutBar = true
+
+      //  wait 2 sec and turn off load
+      setTimeout(() => {
+        this.logOutBar = false
+      }, 2000);
     }
   }
 }

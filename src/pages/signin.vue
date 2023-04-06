@@ -2,8 +2,8 @@
     <div class="row" style="justify-content:center">
         <q-page padding style="font-family: customfont; margin:5px">
             <!-- header -->
-            <h3 class="q-ma-sm q-my-lg">
-                Sign Into Your Account
+            <h3 class="q-ma-sm q-my-lg" align="center">
+                Sign into your Account!
             </h3>
             
             <!-- fail dialog -->
@@ -12,9 +12,9 @@
             </q-banner>
 
             <!-- success dialog -->
-            <q-dialog v-model="signedIn" class="" rounded style="font-size:large; background-color:pink">
+            <q-dialog v-model="signedIn" class="" persistent rounded style="font-size:large; background-color:pink;">
                 <div class="q-pa-lg bg-white" align="center">
-                    <div class="q-pa-lg">You're signed in!</div>
+                    <div class="q-pa-lg" style="font-family:customfont; font-size:x-large">You're signed in!</div>
                     <q-btn class="bg-primary q-mx-md text-white" @click="$router.push('/form')">
                         Submit a photo
                     </q-btn>
@@ -38,11 +38,15 @@
                 <q-btn class="q-ml-sm" id="signInButton" color="primary" @click="signIn()">
                     Sign in
                 </q-btn>
+                <q-btn class="q-ml-sm" flat style="align-self:center;" @click="$router.push('/register')">
+                    Don't have an account? Make one here!
+                </q-btn>
             </div>
+ 
             <!-- loading bar stuff -->
             <q-inner-loading
                 :showing="loadingBar"
-                label="Signing you in..."
+                label="Logging you in..."
                 label-class="text-positive"
                 label-style="font-size: 1.1em"
                 style="height:100%; width:100%;"
@@ -110,6 +114,27 @@ export default{
 
                 //  save the response (token) in session storage
                 sessionStorage.setItem("token", data);
+
+                //  save the entered email in session storage (to reference user data)
+                sessionStorage.setItem("email", this.credentials.email)
+
+                const url = 'http://localhost:5095/email/' + this.credentials.email
+
+                //  api call
+                fetch(url, {
+                    //  this means we add to database
+                    method: 'GET',
+
+                    //  this means we are adding of type json
+                    headers: {
+                    'Content-Type' : 'application/json',
+                    },
+
+                })
+                .then(response => response.json())
+                .then(data => {
+                    sessionStorage.setItem("username", data.userName)
+                })
 
                 //  turn on the signedIn flag (pops dialog)
                 this.signedIn = true

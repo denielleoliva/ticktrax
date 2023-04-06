@@ -22,7 +22,6 @@ import { Dark } from 'quasar';
 import UploadCard from "components/uploadCard.vue";
 import FormPreviewCard from "components/formPreviewCard.vue";
 import Cookies from 'js-cookie';
-import { mount } from '@vue/test-utils';
 
 
 
@@ -39,8 +38,6 @@ watch(() => Dark.isActive, val => {
   isDarkMode.value = val;
   //console.log(Cookies.get('foo'))
 })
-
-mount(() => signedIn = sessionStorage.getItem("token"))
 
 function setPreviewCard(state) {
   showPreviewCard.value = state
