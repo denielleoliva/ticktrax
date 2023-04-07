@@ -1,0 +1,64 @@
+// Typography
+$font: 'pokemon-body';
+
+// Responsive
+$breakpoints: (
+  'mobile': (
+    'min-width': 320px,
+    'max-width': 480px,
+  ),
+  'tablet': (
+    'min-width': 481px,
+    'max-width': 768px,
+  ),
+  'laptop': (
+    'min-width': 769px,
+    'max-width': 1024px,
+  ),
+  'desktop': (
+    'min-width': 1025px,
+  ),
+);
+
+// Colors
+$text: #494947;
+$text-light: #f1f1f1;
+$text-shadow: #d0d0c8;
+// UI
+$app-bg: #63687b;
+// Top Bar
+$topbar-beige: #e6db9d;
+$topbar-blue-light: #0079c4;
+$topbar-blue-dark: #004a95;
+$topbar-select: #6bc1ce;
+// Pokemon Screen
+$ui-purple: #ceabef;
+$ui-purple-border: #b78dd5;
+// Info UI
+$ui-title-bg: #7a8194;
+$ui-info-data: #fef3ef;
+
+// Type Badges
+$type-normal: #a8a878;
+$type-fight: #e83000;
+$type-flying-top: #98d8d8;
+$type-flying-bot: #a8a878;
+$type-poison-top: #f85888;
+$type-poison-bot: #a040a0;
+$type-ground-top: #d8e030;
+$type-ground-bot: #b8a038;
+$type-rock: #b8a038;
+$type-bug: #d8e030;
+$type-ghost: #a040a0;
+$type-steel-top: #a8a878;
+$type-steel-bot: #507888;
+$type-fire: #f08030;
+$type-water: #6890f0;
+$type-grass: #78c850;
+$type-electric: #f8b010;
+$type-psychic: #f85888;
+$type-ice: #98d8d8;
+$type-dragon-top: #6890f0;
+$type-dragon-bot: #e83000;
+$type-dark: #507888;
+$type-fairy: pink;

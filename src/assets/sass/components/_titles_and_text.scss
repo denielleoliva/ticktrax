@@ -1,0 +1,110 @@
+@import "../main";
+ul {
+  list-style: none;
+
+  &.quiz-options {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+
+    li {
+      flex-basis: 50%;
+      position: relative;
+      padding: 0 0 0 1rem;
+      margin-bottom: 2rem;
+
+      @include breakpoint(min-width, 'tablet') {
+        padding-left: 2rem;
+        margin-bottom: 0.75rem;
+      }
+
+      input {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+        visibility: hidden;
+      }
+
+      label {
+        cursor: pointer;
+        position: relative;
+        font-size: 1.6rem;
+        @include breakpoint(min-width, 'tablet') {
+          font-size: 2.2rem;
+        }
+        @include breakpoint(min-width, 'laptop') {
+          font-size: 2.0rem;
+        }
+
+        &::before {
+          content: '';
+          font-family: 'Material Icons', serif;
+          position: absolute;
+          top: 0;
+          left: -2rem;
+          color: $text;
+          @include breakpoint(min-width, 'tablet') {
+            top: 2px;
+            left: -2.5rem;
+          }
+        }
+
+        &:hover::before {
+          content: '\e037';
+          margin-top: -8px;
+        }
+      }
+    }
+  }
+
+  li {
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    padding: 0.5rem 0.5rem;
+
+    @include breakpoint(min-width, 'tablet') {
+      font-size: 1.8rem;
+    }
+
+    &.li-columns {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    & > div {
+      position: relative;
+      background: $ui-info-data;
+      border-radius: 0.6rem;
+      margin-left: -0.5rem;
+      width: 100%;
+      padding: 0 1rem;
+      flex-grow: 2;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      span {
+        font-size: 1.8rem;
+      }
+
+      &.abilities {
+        display: grid;
+        grid-template-columns: repeat(2, 250px);
+        background: transparent;
+        gap: 0.2px;
+        margin-top: -15px;
+
+        & > span {
+          background: $ui-info-data;
+          border-radius: 0.3rem;
+          font-size: 1.4rem;
+          padding: 0.3rem 0.7rem;
+          min-height: 25px;
+        }
+      }
+    }
+  }
+}

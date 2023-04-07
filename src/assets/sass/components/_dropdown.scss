@@ -1,0 +1,50 @@
+dropdown {
+  display: inline-block;
+  position: absolute;
+  z-index: 100;
+  font-family: $font-body;
+  text-transform: uppercase;
+}
+dropdown ul li {
+  background-color: #7c7c7c;
+  color: rgba(255, 255, 255, 0.5);
+  display: block;
+  padding: 0.938rem 1.25rem;
+  cursor: pointer;
+  border-bottom: 1px inset rgba(0, 0, 0, 0.5);
+  border-top: 1px inset rgba(255, 255, 255, 0.5);
+
+  &:hover {
+    background: #bcbcbc;
+    color: white;
+  }
+}
+
+dropdown label {
+  position: relative;
+  z-index: 2;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+dropdown input {
+  display: none;
+
+  & ~ ul {
+    position: relative;
+    visibility: hidden;
+    opacity: 0;
+    top: -1.25rem;
+    z-index: 1;
+  }
+
+  &:checked ~ ul {
+    visibility: visible;
+    opacity: 1;
+    top: 0;
+  }
+
+  &:checked + label {
+    background: #0000fc;
+  }
+}

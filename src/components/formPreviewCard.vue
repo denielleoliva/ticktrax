@@ -32,27 +32,31 @@
       </q-card>
     </q-dialog>
     <q-card>
-      <q-card-section class="row q-pa-lg">
+      <q-card-section class="row q-py-lg justify-center">
         <map-element class="col q-mr-md desktop-only"
                      :user-input="coords"
                      marker-msg="Tick observed here."
                      :marker-image="metaData.pngImage"
+                     :show-red-border="showRedBorderMap"
                      @onClickedMarker="onClickedMarker"
                      :geoJson="{}" />
         <div>
-          <div class="q-pr-sm" style="width: 300px">
-            <div class="q-pb-md desktop-only"><q-img v-if="metaData.pngImage != null" :src="metaData.pngImage" style="height: 140px; max-width: 300px" /></div>
+          <div class="q-px-lg" style="width: 300px">
+            <div class="q-pb-md desktop-only">
+              <q-img v-if="metaData.pngImage != null"
+                     :src="metaData.pngImage"
+                     style="height: 140px; max-width: 300px" />
+            </div>
 
-            <p class="text-weight-medium">Observed:</p>
+            <div class="text-weight-medium q-pb-sm">Observed:</div>
             <!--            {{date}}-->
             <!--            <q-icon name="edit" class="q-pb-sm"/>-->
-            <q-input filled v-model="date" class="q-pb-md" @click="hi">
+            <q-input filled v-model="date" :placeholder="'Date' + ' '.repeat(timeSpace + 10) +'Time'" class="q-pb-lg" @click="showDateElement" :rules="[val => !!val || 'Field is required']" :error="showRedDateInput">
               <q-popup-proxy cover transition-show="scale" transition-hide="scale" v-if="showDate">
                 <q-date v-model="date" :mask="`YYYY-MM-DD${' '.repeat(timeSpace)}HH:mm`" minimal >
                   <div class="row items-center justify-end">
-                    <q-btn v-close-popup label="Close" color="grey" flat />
-                    <q-btn label="Next" color="primary" flat >
-                    </q-btn>
+                    <q-btn v-close-popup label="Close" color="primary" flat />
+
                   </div>
                 </q-date>
               </q-popup-proxy>
@@ -91,9 +95,15 @@
                 </q-icon>
               </template>
             </q-input>
-            <map-element class="col q-mr-md mobile-only" style="height: 15rem!important;" :user-input="coords" marker-msg="Tick observed here." :geoJson="{}"  />
-            <div class="q-pt-lg mobile-only"><q-img v-if="metaData.pngImage != null" :src="metaData.pngImage" style="height: 140px; max-width: 300px" /></div>
-            <div class="q-pt-xs q-gutter-xl row justify-between">
+            <map-element class="col q-mr-md mobile-only"
+                         style="height: 15rem!important;"
+                         :user-input="coords"
+                         marker-msg="Tick observed here."
+                         :show-red-border="showRedBorderMap"
+                         @onClickedMarker="onClickedMarker"
+                         :geoJson="{}"  />
+            <div class="q-pt-lg q-pb-md mobile-only"><q-img v-if="metaData.pngImage != null" :src="metaData.pngImage" style="height: 140px; max-width: 300px" /></div>
+            <div class="q-pt-sm q-gutter-xl row justify-between">
               <q-btn color="white" size="md" text-color="black" label="back" @click="goBack" />
               <q-btn color="positive" size="md" label="Submit" @click="onSubmit" />
             </div>
@@ -139,6 +149,11 @@ const coords = ref([]);
 const date = ref('');
 const alert = ref(false);
 const showDate = ref(false);
+
+const showRedBorderMap = ref(false);
+const showRedDateInput = ref(false);
+
+
 const showModal = ref(false);
 const showThanks = ref(false);
 const showFail = ref(false);
@@ -146,7 +161,7 @@ const showFail = ref(false);
 const props = defineProps(['metaData']);
 const emit = defineEmits(['setPreviewCard']);
 
-const timeSpace = 27;
+const timeSpace = 18;
 
 //console.log(props.metaData, "metaData")
 coords.value = [props.metaData.coords.long, props.metaData.coords.lat];
@@ -156,13 +171,14 @@ if (date.value === '') {
   alert.value = true;
 }
 
-function hi(event){
+function showDateElement(event){
   console.log('focused', event.target.offsetWidth, event.clientX);
-  const inputBox = event.target;
+  //const inputBox = event.target;
   const clickX = event.offsetX;
-  const clickY = event.offsetY;
+  //const clickY = event.offsetY;
   console.log(clickX, event.target.offsetWidth/2);
   showDate.value = clickX < event.target.offsetWidth / 2;
+  showRedDateInput.value = false;
 }
 
 
@@ -172,28 +188,38 @@ watch(() => Dark.isActive, val => {
 });
 
 watch(date, (val)=> {
-  console.log(val, "DAYTE")
-})
+  console.log(val, "DATE")
+});
+
 
 function goBack() {
   emit('setPreviewCard', false)
 }
 
 function onClickedMarker(lngLat) {
+  showRedBorderMap.value = false;
   coords.value = lngLat;
 }
 
+
 async function onSubmit() {
   //  set coords to 0 for now
-  let latitude = 0 
+  let latitude = 0
   let longitude = 0
 
-  //  check if we need locational or datetime data
   if (date.value === '' || coords.value.length > 2 || (coords.value[0] === 0 && coords.value[1] === 0)) {
+    if (coords.value.length > 2 || (coords.value[0] === 0 && coords.value[1] === 0)) {
+      showRedBorderMap.value = true;
+    }
+
+    if (date.value === '') {
+      showRedDateInput.value = true;
+    }
+
     alert.value = true;
     return;
   }
-  
+
   //  create formdata object to hold body of post call
   const formData = new FormData();
   formData.append('image', props.metaData.pngImage);
@@ -244,12 +270,12 @@ async function onSubmit() {
   const fileName = Math.random().toString(36).slice(2, 7);
 
   //  to check for database compatibility
-  console.log("photo:", photoData)
-  console.log("filename: ", fileName)
-  console.log("fileType: ", fileType)
-  console.log("latitude: ", longitude)
-  console.log("longitude: ", latitude)
-  console.log("time: ", dateTime)
+  console.log("photo:", photoData);
+  console.log("filename: ", fileName);
+  console.log("fileType: ", fileType);
+  console.log("latitude: ", longitude);
+  console.log("longitude: ", latitude);
+  console.log("time: ", dateTime);
 
   await fetch(url, {
     //  this means we add to database
@@ -267,27 +293,27 @@ async function onSubmit() {
   //  unwrap the response
   .then((response) => {
     if(response.status === 200){
-      //  stops loading 
-      showModal.value = false
+      //  stops loading
+      showModal.value = false;
 
       //  indicate post success
-      console.log("API POST SUCCESS")
-      showModal.value = true
+      console.log("API POST SUCCESS");
+      showModal.value = true;
 
       return
     }
-    showModal.value = false
+    showModal.value = false;
   })
 
   .catch((error) => {
     //  stops loading
-    showModal.value = false
+    showModal.value = false;
 
-    console.log("API POST FAIL")
+    console.log("API POST FAIL");
 
-    showFail.value = true
-    
-    return
+    showFail.value = true;
+
+
   })
 }
 

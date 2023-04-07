@@ -32,6 +32,7 @@
     "firebase": "^9.17.1",
     "heic-convert": "^1.2.4",
     "inaturalistjs": "github:inaturalist/inaturalistjs",
+    "js-confetti": "^0.11.0",
     "js-cookie": "^3.0.1",
     "mapbox-gl": "^0.53.1",
     "pinia": "^2.0.29",
@@ -39,7 +40,8 @@
     "typescript": "^4.9.5",
     "vue-apexcharts": "^1.6.2",
     "vue-cool-lightbox": "^2.7.5",
-    "vue-mapbox": "^0.4.1"
+    "vue-mapbox": "^0.4.1",
+    "worker-timers": "^7.0.63"
   },
   "devDependencies": {
     "@quasar/app": "^2.0.0",

@@ -1,6 +1,7 @@
 import {findEXIFinHEIC, findEXIFinJPEG} from "src/exif-heic";
 import worker from 'workerize-loader!./worker';
 
+
 export function extractMetaData(e) {
   let reader = new FileReader();
 
@@ -10,7 +11,7 @@ export function extractMetaData(e) {
   return new Promise((resolve,reject) => {
     reader.onload = (event) => {
       //console.log(event.target.result);
-      let photoMetadata = null;
+      let photoMetadata;
       if (file.name.toLowerCase().endsWith(".heic")) {
         photoMetadata = findEXIFinHEIC(event.target.result);
       } else {
@@ -275,4 +276,35 @@ export function formatNumber(num) {
   } else {
     return num.toFixed(2);
   }
+}
+
+export async function getTickData() {
+  const sheetId = '1rJaYUmA0Ua26IS6sQsFIQhpTbCdSyxzT9s5W5xXLD7c';
+  const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?`;
+  const sheetName = 'Sheet2';
+  const query = encodeURIComponent('Select *');
+  const url = `${base}&sheet=${sheetName}&tq=${query}`;
+
+  const rawTickData = await fetch(url, {
+    headers: {
+      'Cache-Control': 'max-age=3600'
+    }
+  });
+
+  const tickData = await rawTickData.clone().text();
+
+  //Remove additional text and extract only JSON:
+  return JSON.parse(tickData.substring(47).slice(0, -2)).table;
+}
+
+export function stringToIntHash(str, upperbound, lowerbound) {
+  let result = 0;
+  for (let i = 0; i < str.length; i++) {
+    result = result + str.charCodeAt(i);
+  }
+
+  if (!lowerbound) lowerbound = 0;
+  if (!upperbound) upperbound = 500;
+
+  return (result % (upperbound - lowerbound)) + lowerbound;
 }

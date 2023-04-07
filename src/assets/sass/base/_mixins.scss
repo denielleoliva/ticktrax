@@ -1,0 +1,17 @@
+
+// Responsive design
+@mixin breakpoint($rule, $device) {
+  @media screen and (#{$rule}: map-get(breakpoint($device), #{$rule})) {
+    @content;
+  }
+}
+
+@function breakpoint($device) {
+  $viewports: map-get($breakpoints, $device);
+  @return $viewports;
+}
+
+// Utilities
+@mixin text-shadow($color) {
+  text-shadow: 2px 2px 0 $color;
+}

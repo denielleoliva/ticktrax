@@ -6,6 +6,7 @@ import {getBlob, getStorage, ref} from "firebase/storage";
 import {getMessaging, getToken} from "firebase/messaging";
 import { getFirestore } from "firebase/firestore";
 import { getAnalytics } from "firebase/analytics";
+import { getAuth } from "firebase/auth";
 
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -31,6 +32,8 @@ const users = ref(storage, 'gs://ticktrax-3dc7a.appspot.com/users.json');
 
 export const FirebaseDB = getFirestore(app);
 export const analytics = getAnalytics(app);
+
+export const firebaseAuth = getAuth(app);
 
 
 export async function requestPermission() {
