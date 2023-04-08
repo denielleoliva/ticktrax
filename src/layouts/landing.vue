@@ -25,6 +25,10 @@
           replace
           label="maps"
           />
+          <q-route-tab
+          to="/tickgame"
+          replace
+          label="game"/>
         <!-- if signed in -->
         <q-btn-dropdown v-if="isSignedIn()" class="q-pa-sm" flat :label=greeting()>
           <q-route-tab
