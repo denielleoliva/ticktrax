@@ -36,7 +36,7 @@
     "js-cookie": "^3.0.1",
     "mapbox-gl": "^0.53.1",
     "pinia": "^2.0.29",
-    "quasar": "^1.0.0",
+    "quasar": "^1.22.9",
     "typescript": "^4.9.5",
     "vue-apexcharts": "^1.6.2",
     "vue-cool-lightbox": "^2.7.5",
