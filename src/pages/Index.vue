@@ -111,7 +111,7 @@
         sign up
       </q-btn>
     </div> -->
-    <div v-if="signedIn()">
+    <div>
       <h1 class="q-my-lg " align="center" style="font-family:customfont; font-size:xx-large;">
         Fun facts about ticks
       </h1>
