@@ -12,6 +12,8 @@
           class="text-grey"
           active-color="positive"
           indicator-color="positive"
+          outside-arrows
+          mobile-arrows
         >
           <q-tab name="general"  label="General" />
           <q-tab name="profile"  label="Edit Profile" />
@@ -36,6 +38,8 @@
       indicator-color="positive"
       align="center"
       narrow-indicator
+      outside-arrows
+      mobile-arrows
     >
       <q-tab name="general"  label="General" />
       <q-tab name="profile"  label="Edit Profile" />
