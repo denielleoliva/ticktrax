@@ -16,7 +16,7 @@
                 <div class="q-pa-lg bg-white" align="center">
                     <div class="q-pa-lg" style="font-family:customfont; font-size:x-large">You're signed in!</div>
                     <q-btn class="bg-primary q-mx-md text-white" @click="$router.push('/form')">
-                        Submit a photo
+                        Submit a tick
                     </q-btn>
                     <q-btn class="bg-grey text-white q-mx-md" @click="$router.push('/')"> Go back home </q-btn>
                 </div>
