@@ -122,7 +122,7 @@
         <div class="q-pa-lg bg-white" align="center">
             <div class="q-pa-lg" style="font-family:customfont; font-size:x-large">Photo Submitted!</div>
             <q-btn class="bg-primary text-white q-mx-md" @click="goBack()"> Submit another photo </q-btn>
-            <q-btn class="bg-grey q-mx-md text-white" @click="$router.push('/admin')">
+            <q-btn class="bg-grey q-mx-md text-white" @click="$router.push('/maps')">
                 Check out the heatmap
             </q-btn>
         </div>
