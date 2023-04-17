@@ -11,6 +11,7 @@
         </div>  
       </q-img>
 
+
       <h1 v-if="$q.platform.is.mobile" style="font-family:customfont; font-size:xx-large;">
         Welcome to ticktrax 
         <q-img src="../assets/ticktrax.png" width="50px"/>
@@ -19,7 +20,12 @@
         <q-img src="../assets/ticktrax.png" width="50px"/>
       </h1>
 
-      <!-- <h1 v-if="$q.platform.is.desktop" class="q-my-lg" style="font-family:customfont; font-size:xx-large;">
+
+      <div v-if="$q.platform.is.desktop" class="container">
+        
+      </div>
+
+      <h1 v-if="$q.platform.is.desktop" class="q-my-lg" style="font-family:customfont; font-size:xx-large;">
         Our Purpose
       </h1>
 
@@ -33,7 +39,6 @@
           <q-img src="../assets/trees-gad9fa0b7c_1920.jpg" style="height=80%"/>
         </div>
       </div>
-
       <div v-if="$q.platform.is.desktop" class="row justify-center items-center">
         <div class="col-4 q-pa-md">
           <div style="font-family:customfont; font-size:xx-large">Sign up</div>
@@ -42,7 +47,6 @@
             <path d="M8.256 14a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Z"/>
           </svg>
           <figcaption style="font-family:'Tahoma', sans-serif">create an account to become a member of ticktrax</figcaption>
-          <q-btn v-if="$q.platform.is.mobile" class="bg-primary text-white" @click="$router.push('/register')"> Sign Up </q-btn>
         </div>
 
         <div class="col-4 q-pa-md"> 
@@ -52,7 +56,6 @@
             <path d="M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Zm-1.993-1.679a.5.5 0 0 0-.686.172l-1.17 1.95-.547-.547a.5.5 0 0 0-.708.708l.774.773a.75.75 0 0 0 1.174-.144l1.335-2.226a.5.5 0 0 0-.172-.686Z"/>
           </svg>
           <figcaption style="font-family:'Tahoma', sans-serif">add to our database by posting an image of a tick</figcaption>
-          <q-btn v-if="$q.platform.is.mobile" class="bg-primary text-white" @click="$router.push('/form')"> post </q-btn>
         </div>
 
         <div class="col-4 q-pa-md">
@@ -62,11 +65,26 @@
             <path fill-rule="evenodd" d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z"/>
           </svg>
           <figcaption style="font-family:'Tahoma', sans-serif">see how many and what ticks are in your area </figcaption>
-          <q-btn v-if="$q.platform.is.mobile" class="bg-primary text-white" disabled @click="$router.push('/form')"> heatmap </q-btn>
         </div>
       </div>
 
-      <div v-if="$q.platform.is.mobile" class="column justify-center items-center">
+      
+
+      <div v-if="$q.platform.is.desktop && !signedIn()">
+        <div class="row justify-center items-center" style="background-color:##DEF2C8; font-family:'Tahoma',sans-serif">
+          <div  class="col-4 q-pa-md">
+            <q-video
+          :ratio="16/9"
+          src="https://youtube.com/embed/DcJikkYZm-w"
+          />
+          </div>
+          <div class="col-4" style="font-size: large">
+            Learn more about our project
+          </div>
+        </div>
+      </div>
+
+      <!--<div v-if="$q.platform.is.mobile" class="column justify-center items-center">
         <div class="col-4 q-pa-md">
           <div style="font-family:customfont; font-size:xx-large">Sign up</div>
           <svg xmlns="http://www.w3.org/2000/svg" width="20%" height="20%" fill="currentColor" class="bi bi-person-add" viewBox="0 0 16 16">
@@ -98,6 +116,11 @@
         </div>
       </div>
     </div>-->
+
+      <div v-if="!signedIn()">
+        <q-img id="myImg"/>
+
+      </div>
 
     </div> 
 
@@ -155,7 +178,20 @@ export default{
     signedIn(){
       if(sessionStorage.getItem('token')) return true
       else return false
-    } 
+    } ,
+
+    async getUserPosts(){
+      const url = 'http://localhost:5095/submission'
+
+       fetch(url)
+        .then(response => response.blob())
+        .then(myBlob => {
+        var urlCreator = window.URL || window.webkitURL;
+        var imageUrl = urlCreator.createObjectURL(myBlob);
+        const myImgElem = document.getElementById('my-img');
+        myImgElem.src = imageUrl
+      })
+    }
   }
 }
 </script>
@@ -194,4 +230,14 @@ export default {
   0% {  opacity:0;  }
   100% {  opacity:1;  }
 }
+
+.container {
+  display: grid; 
+  grid-template-columns: 1.3fr 0.7fr; 
+  grid-template-rows: 1fr; 
+  gap: 0px 0px; 
+  grid-template-areas: 
+    ". ."; 
+}
+
 </style>
