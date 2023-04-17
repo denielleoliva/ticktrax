@@ -15,10 +15,10 @@
           replace
           label="home"
         />
-        <q-route-tab
+        <q-route-tab v-if="isSignedIn()"
           to="/form"
           replace
-          label="form"
+          label="add a tick"
         />
         <q-route-tab
           to="/maps"
