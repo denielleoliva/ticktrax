@@ -99,7 +99,7 @@
         >
           <q-icon name="home" size="2em"/>
         </q-route-tab>
-        <q-route-tab to="/heatmap" replace >
+        <q-route-tab to="/maps" replace >
           <q-icon name="map" size="3em"/>
         </q-route-tab>
         <q-route-tab
