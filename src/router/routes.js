@@ -16,6 +16,7 @@ const routes = [
       { path: '/admin', component: () => import('src/pages/searchPage.vue')},
       { path: '/maps', component: () => import('src/pages/maps')},
       {path: '/tickgame', component: () => import('src/pages/idTickGame.vue')},
+      { path: '/ticksavvy', component: () => import('src/pages/identify.vue')},
       { path: '/dashboard', component: () => import('src/pages/dashboard.vue')}
     ]
   },

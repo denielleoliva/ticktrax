@@ -1,0 +1,15 @@
+description: Ultralytics YOLOv8m-cls model trained on outputGenera
+author: Ultralytics
+license: AGPL-3.0 https://ultralytics.com/license
+version: 8.0.81
+stride: 1
+task: classify
+batch: 1
+imgsz:
+- 224
+- 224
+names:
+  0: Amblyomma
+  1: Dermacentor
+  2: Ixodes
+  3: Rhipicephalus

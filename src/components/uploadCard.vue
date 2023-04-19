@@ -1,8 +1,9 @@
 <template>
   <div>
+    <div v-show="!hidePageTitle">
     <p class="text-h5 row justify-center text-weight-medium lt-sm" :class="!isDarkMode ? 'text-grey-9': ''">Submit Tick Photo</p>
     <p class="text-h4 row justify-center text-weight-medium gt-sm" :class="!isDarkMode ? 'text-grey-9': ''">Submit Tick Photo</p>
-
+    </div>
 
 
     <q-card class="my-card" v-show="!showVideoInputAlert">
@@ -10,7 +11,7 @@
                        @dragleave="dragleave"
                        @drop="drop">
 
-        <q-file borderless class="credit" :style="isDragging ? 'pointer-events: none;':''" color="grey" accept=".jpg, .heic, .mp4, .mov" @input="manualUpload">
+        <q-file borderless class="credit" :style="isDragging ? 'pointer-events: none;':''" color="grey" accept=".jpg, .jpeg .heic, .mp4, .mov" @input="manualUpload">
           <div class="absolute-bottom">
             <div class="uploadIcon row justify-center absolute-center q-pt-xs"><q-icon name="pest_control"  size="25px"  /></div>
             <div v-if="isDragging" class="row justify-center absolute-center text q-mt-xl desktop-only">
@@ -76,7 +77,7 @@
 </template>
 
 <script setup>
-import { ref, watch, defineEmits } from 'vue';
+import { ref, watch, defineEmits, defineProps } from 'vue';
 import { Dark } from 'quasar';
 import {extractMetaData} from "src/utils";
 import VideoCard from "components/VideoCard.vue";
@@ -95,6 +96,7 @@ const video = ref(null);
 
 
 const emit = defineEmits(['handleUploadData']);
+const props = defineProps(['hidePageTitle']);
 
 
 watch(() => Dark.isActive, val => {

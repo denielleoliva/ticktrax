@@ -25,6 +25,11 @@
           replace
           label="maps"
           />
+        <q-route-tab
+          to="/ticksavvy"
+          replace
+          label="identify"
+        />
           <q-route-tab
           to="/tickgame"
           replace
@@ -123,7 +128,7 @@
         label-class=""
         label-style=""
         style="background-color:beige"
-    /> 
+    />
 
     <q-page-sticky v-if="$q.platform.is.mobile && isSignedIn()" :offset="[18, 18]">
       <q-btn fab icon="add_circle" color="primary" @click="$router.push('/form')"/>
@@ -155,7 +160,7 @@ export default {
       if(username) return 'welcome ' + username + '!'
 
       //  otherwise just return account
-      else  return 'account' 
+      else  return 'account'
     },
     logOut(){
       //  clear token

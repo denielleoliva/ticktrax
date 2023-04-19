@@ -1,0 +1,21 @@
+description: Ultralytics YOLOv8x-cls model trained on output
+author: Ultralytics
+license: GPL-3.0 https://ultralytics.com/license
+version: 8.0.73
+stride: 1
+task: classify
+batch: 1
+imgsz:
+- 224
+- 224
+names:
+  0: Amblyomma americanum
+  1: Amblyomma maculatum
+  2: Dermacentor marginatus
+  3: Dermacentor occidentalis
+  4: Dermacentor reticulatus
+  5: Dermacentor variabilis
+  6: Ixodes pacificus
+  7: Ixodes ricinus
+  8: Ixodes scapularis
+  9: Rhipicephalus sanguineus
