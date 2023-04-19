@@ -14,6 +14,20 @@
           </q-card-actions>
         </q-card>
       </q-dialog>
+      <q-dialog v-model="showUnsupportedBrowserPopup" persistent transition-show="scale" transition-hide="scale">
+        <q-card class="text-white" style="width: 300px; background-color: #5CAB7D">
+          <q-card-section>
+            <div class="text-h6">Not supported Browser</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            Your browser is currently not supported
+          </q-card-section>
+          <q-card-actions align="right" class="bg-white text-teal">
+            <q-btn flat label="OK" v-close-popup />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
       <div class="q-px-md q-pb-md row items-start q-gutter-md justify-center">
         <q-card class="my-card fit q-px-xl q-pt-none" flat >
           <q-card-section class="q-pb-lg">
@@ -53,12 +67,6 @@
             </div>
             </div>
           </q-card-section>
-          <q-inner-loading
-            :showing="isLoading"
-            label="Please wait..."
-            label-class="text-teal"
-            label-style="font-size: 1.1em"
-          />
         </q-card>
       </div>
     </q-page-container>
@@ -68,10 +76,10 @@
 import {computed, onMounted, ref} from 'vue';
 import {
   Loading,
+  Platform
 } from 'quasar'
 import UploadCard from "components/uploadCard.vue";
-import wwDetector from 'workerize-loader!../get-predictions.worker'
-import * as tf from '@tensorflow/tfjs';
+import wwDetector from 'workerize-loader!../get-predictions.worker';
 import wiki from 'wikijs';
 // const wiki = require('wikijs').default;
 
@@ -82,8 +90,8 @@ export default {
   components: {UploadCard},
   setup () {
     const leftDrawerOpen = ref(false);
-    const model = ref(null);
-    const binaryModel = ref(null);
+    // const model = ref(null);
+    // const binaryModel = ref(null);
     const imageRef = ref(null);
     const canvasRef = ref(null);
     const imageSrc = ref(null);
@@ -93,12 +101,17 @@ export default {
     const predictedLabel = ref({});
     const predictionPercentage = ref(0);
     const tickContent = ref("");
-    const isLoading = ref(false);
     const detector = ref(null);
+    const isUnsupportedBrowser = ref(false);
+    const showUnsupportedBrowserPopup = ref(false);
 
 
     const handleUploadData = async (file) => {
       showResults.value = false;
+      if (isUnsupportedBrowser.value) {
+        showUnsupportedBrowserPopup.value = true;
+        return;
+      }
       //console.log(imageRef.value);
       const base64String = file.pngImage; // a base64 encoded image string
       const img = new Image();
@@ -157,6 +170,11 @@ export default {
     onMounted(() => {
       if (typeof Worker !== `undefined`) {
         detector.value = wwDetector();
+      }
+      if (Platform.is.safari) {
+        isUnsupportedBrowser.value = true;
+        showUnsupportedBrowserPopup.value = true;
+
       }
       // tf.loadGraphModel(`/models/TenClassTickClassifier_web_model/model.json`, {
       //   onProgress: (fractions) => {
@@ -464,7 +482,7 @@ export default {
       showResults,
       tickContent,
       persistent,
-      isLoading,
+      showUnsupportedBrowserPopup,
 
       links1: [
         { icon: 'photo', text: 'Photos' },
