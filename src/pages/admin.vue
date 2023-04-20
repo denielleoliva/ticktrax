@@ -219,10 +219,9 @@
           <q-separator class="col q-mt-xl q-mr-sm" />
         </div>
         <div class="q-px-lg q-gutter-md row items-start justify-between">
-          <chart-viz  :key="'lymeCases' + isDarkMode" type="line" :options="lymeCasesOptions" :series="lymeCasesSeries" style="min-width:400px" />
-          <chart-viz :key="'lymeCasesByGender' + isDarkMode" :type="lymeDiseaseByGender.type" :options="lymeDiseaseByGender.options" :series="lymeDiseaseByGender.series" style="min-width:400px" />
-
-          <chart-viz  :key="'tickHistogram' + isDarkMode" v-if="tickReportsHistogram" :type="tickReportsHistogram.type" :options="tickReportsHistogram.options" :series="tickReportsHistogram.series" style="min-width:400px" />
+          <chart-viz  :key="'lymeCases' + isDarkMode" type="line" :options="lymeCasesOptions" :series="lymeCasesSeries"/>
+          <chart-viz :key="'lymeCasesByGender' + isDarkMode" :type="lymeDiseaseByGender.type" :options="lymeDiseaseByGender.options" :series="lymeDiseaseByGender.series"/>
+          <chart-viz  :key="'tickHistogram' + isDarkMode" v-if="tickReportsHistogram" :type="tickReportsHistogram.type" :options="tickReportsHistogram.options" :series="tickReportsHistogram.series"/>
         </div>
       </div>
 
