@@ -10,6 +10,13 @@
       <q-card-section  @dragover="dragover"
                        @dragleave="dragleave"
                        @drop="drop">
+        <q-uploader
+          @added="onDropUpload"
+          label="Restricted to images"
+          accept=".jpg, .heic .mov .mp4"
+          class="absolute-center fit hidden"
+          style="z-index: 1"
+        ></q-uploader>
 
         <q-file borderless class="credit" :style="isDragging ? 'pointer-events: none;':''" color="grey" accept=".jpg, .jpeg .heic, .mp4, .mov" @input="manualUpload">
           <div class="absolute-bottom">
@@ -135,7 +142,10 @@ async function drop(e) {
 }
 
 
-
+function onDropUpload(e) {
+  console.log(e, "on Drop upload");
+  manualUpload(e[0]);
+}
 async function processImage(file) {
   // e.preventDefault();
   // console.log(e, 'Dropped!');

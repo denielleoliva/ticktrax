@@ -42,8 +42,15 @@
           <q-separator/>
           <q-card-section v-show="showResults">
             <p class="text-h5 text-center">Results</p>
-            <div class="row q-gutter-xl">
-          <img src="" alt="Uploaded tick image" ref="imageRef" class="col"  style="width:100%; height:auto">
+            <div class="row q-gutter-lg">
+          <img src="" alt="Uploaded tick image" ref="imageRef" class="col hidden"  style="width:100%; height:auto">
+              <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12 q-pt-lg">
+                <q-img v-if="imageRef" :ratio="16/9" :src="imageRef.src" >
+                  <div class="absolute-bottom text-subtitle2 text-center">
+                    Predicted Tick Species: {{ predictedLabel.commonName }}
+                  </div>
+                </q-img>
+              </div>
 <!--            <p class="col q-pl-lg text-h5 text-bold">{{ predictedLabel }}</p>-->
 <!--            <p class="col">{{ predictionPercentage }}</p>-->
             <div class="q-pa-md col" >
