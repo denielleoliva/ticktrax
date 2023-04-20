@@ -157,19 +157,19 @@ import {getLymeDiseaseByCountiesData, requestPermission} from "src/FirebaseInit"
           'Cache-Control': 'max-age=3600'
         }
       })
-        .then(res => res.clone().text())
-        .then(rep => {
-          //Remove additional text and extract only JSON:
-          const jsonData = JSON.parse(rep.substring(47).slice(0, -2));
-  
-  
-          const table = JSONtoGeoJSON(jsonData);
-          //tableData.value = jsonData.table.rows;
-          tableData.value = table.features;
-          //console.log(table, 'table')
-          isLoadingTickData.value = false;
-          resolve(table);
-        });
+      .then(res => res.clone().text())
+      .then(rep => {
+        //Remove additional text and extract only JSON:
+        const jsonData = JSON.parse(rep.substring(47).slice(0, -2));
+
+
+        const table = JSONtoGeoJSON(jsonData);
+        //tableData.value = jsonData.table.rows;
+        tableData.value = table.features;
+        //console.log(table, 'table')
+        isLoadingTickData.value = false;
+        resolve(table);
+      });
     });
   
   }

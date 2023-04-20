@@ -30,16 +30,17 @@
           replace
           label="game"/>
         <!-- if signed in -->
-        <q-btn-dropdown v-if="isSignedIn()" class="q-pa-sm" flat :label=greeting()>
+        <q-btn-dropdown v-if="isSignedIn()" class="q-pa-sm" flat :label="greeting()">
           <q-route-tab
             v-if="isSignedIn()"
             style="justify-content:center"
             to="/profile/1"
+            @click="editProfileNav()"
             replace
             label="Edit Profile"
           />
           <q-route-tab
-            v-if="isSignedIn()"
+            v-if="isSignedIn() && isAdmin()"
             style="justify-content:center"
             to="/admin"
             replace
@@ -133,6 +134,7 @@
 
 <script>
 import { Dark } from 'quasar';
+import jwt_decode from "jwt-decode";
 
 export default {
   data () {
@@ -143,6 +145,26 @@ export default {
     }
   },
   methods: {
+    async editProfileNav(){
+      //const response = await fetch("http://localhost:5095/email/" + sessionStorage.getItem("email"))
+      const response = await fetch("https://ticktrax.nevada.dev/email/" + sessionStorage.getItem("email"))
+
+      const data = await response.json()
+
+      sessionStorage.setItem("username", data.userName)
+      sessionStorage.setItem("firstname", data.firstName)
+      sessionStorage.setItem("lastname", data.lastName)
+
+      console.log(data)
+     
+      this.$router.push('/profile/1/')
+    },
+    isAdmin(){
+      const decoded = jwt_decode(sessionStorage.getItem("token"));
+
+      if(decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === "Admin") return true
+      else  return false
+    },
     isSignedIn(){
       if(sessionStorage.getItem("token") !== null) return true
       else if(sessionStorage.getItem("token") === null)  return false
@@ -171,7 +193,7 @@ export default {
       setTimeout(() => {
         this.logOutBar = false
       }, 2000);
-    }
+    },
   }
 }
 </script>

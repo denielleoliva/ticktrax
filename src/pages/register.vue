@@ -26,10 +26,12 @@
 
             <q-input class="q-ma-sm" filled label="Username" hide-bottom-space v-model="fields.username" :error="usernameError" :error-message="usernameErrorMessage"
                 :rules="[ val => val.length > 0 || 'Username is required' ]"/>
+            
 
  
             <q-input class="q-ma-sm" filled label="Email" hide-bottom-space v-model="fields.email"  :error="emailError" :error-message="emailErrorMessage"
                 :rules="[ (val, rules) => rules.email(val) || 'Please enter a valid email address' ]" />
+            
 
 
             <q-input class="q-ma-sm" filled label="Password" lazy-rules hide-bottom-space v-model="fields.password" :error="passwordError" :error-message="passwordErrorMessage"
@@ -41,6 +43,15 @@
                         class="cursor-pointer"
                         @click="hidePassword = !hidePassword"
                     />
+                </template>
+
+                <template v-slot:hint>
+                    Password must have the following:
+                    <ul>
+                        <li>Capital letter: A-Z</li>
+                        <li>At least one symbol: ~`!@#$%^&*()_-+={[}]|\:;"'<,>.?/</li>
+                        <li>At least one number: 0-9</li>
+                    </ul>
                 </template>
             </q-input>
 
@@ -156,7 +167,7 @@ export default{
                 const hasProblem = !(hasUpperCase && hasNumber && hasSpecialChar && hasLowerCase)
 
                 if(isEmpty) return 'Password is required'
-                else if (!(hasUpperCase && hasNumber && hasSpecialChar && hasLowerCase)) return 'Password must include: 1 uppercase, 1 number, 1 special character'
+                else if (!(hasUpperCase && hasNumber && hasSpecialChar && hasLowerCase)) return 'Password must include: 1 uppercase, 1 lowercase, 1 number, 1 special character'
                 else return
             },
 
@@ -167,7 +178,8 @@ export default{
 
                 //  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#uploading_json_data
                 //  url for our api connection
-                const url = 'http://localhost:5095/auth'
+                //const url = 'http://localhost:5095/auth'
+                const url = 'https://ticktrax.nevada.dev/api/auth'
 
                 //  await the response
                 await fetch(url, {
@@ -180,7 +192,7 @@ export default{
                     },
 
                     //  this are the fields in json format (hopefully)
-                    body: JSON.stringify({username: this.fields.username, email: this.fields.email, password: this.fields.password})
+                    body: JSON.stringify({firstName: this.fields.firstName, lastName: this.fields.lastName, username: this.fields.username, email: this.fields.email, password: this.fields.password})
                 })
                 //  reporting successful post
                 .then((data) => {

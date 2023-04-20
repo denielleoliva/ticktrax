@@ -253,7 +253,8 @@ async function onSubmit() {
   if(props.metaData.pngImage.search('image/jpeg') > 0)   fileType = 'jpeg'
 
   //  grab url
-  const url = 'http://localhost:5095/submission'
+  //const url = 'http://localhost:5095/submission'
+  const url = 'https://ticktrax.nevada.dev/api/submission'
 
   //  grab token for auth
   const token = sessionStorage.getItem("token")

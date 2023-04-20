@@ -110,7 +110,7 @@
                          class="enlarge-image"
                          :key="`tick-${i}`"
                          @click="index = i"
-                         :src="image"
+                         :src="chooseImageFormat(image)"
                          :alt="tickPopupInfo.commonName" />
                   </div>
                 </div>
@@ -150,7 +150,7 @@
   import mapboxgl from "mapbox-gl";
   import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
   
-  import {formatDate, JSONtoGeoJSON} from "src/utils";
+  import {formatDate, JSONtoGeoJSON, ourGeoJSON} from "src/utils";
   import axios from "axios";
   import {Geolocation} from "@capacitor/geolocation";
   import CoolLightBox from 'vue-cool-lightbox';
@@ -292,26 +292,27 @@
   
   const center = ref([-111.549668, 39.014]);
   
+  const deepmerge = require('deepmerge');
+
+
   watch(geoJson, (value)=> {
     tickMapKey.value = geoJson.value
     tickCount.value = value.features.length;
   })
-  function init() {
-    return new Promise((resolve, reject) => {
+  async function init() {
+    const promise1 =  await new Promise((resolve, reject) => {
       isLoadingTickData.value = true;
       const cacheName = 'cache-tickData';
-      fetch(url, {
-        headers: {
-          'Cache-Control': 'max-age=3600'
-        }
+      fetch("http://localhost:5095/submission", {
+
       })
-        .then(res => res.clone().text())
+        .then(res => res.json())
         .then(rep => {
           //Remove additional text and extract only JSON:
-          const jsonData = JSON.parse(rep.substring(47).slice(0, -2));
+          const jsonData = rep;
   
   
-          const table = JSONtoGeoJSON(jsonData);
+          const table = ourGeoJSON(jsonData);
           //tableData.value = jsonData.table.rows;
           tableData.value = table.features;
           //console.log(table, 'table')
@@ -319,6 +320,34 @@
           resolve(table);
         });
     });
+
+    const promise2 = await new Promise((resolve, reject) => {
+    isLoadingTickData.value = true;
+    const cacheName = 'cache-tickData';
+    fetch(url, {
+      headers: {
+        'Cache-Control': 'max-age=3600'
+      }
+    })
+      .then(res => res.clone().text())
+      .then(rep => {
+        //Remove additional text and extract only JSON:
+        const jsonData = JSON.parse(rep.substring(47).slice(0, -2));
+
+
+        const table = JSONtoGeoJSON(jsonData);
+        //tableData.value = jsonData.table.rows;
+        tableData.value = table.features;
+        //console.log(table, 'table')
+        isLoadingTickData.value = false;
+        resolve(table);
+      });
+  });
+
+  const promise = deepmerge(promise1, promise2);
+
+  return promise
+
   
   }
   
@@ -362,6 +391,16 @@
   
   
   });
+
+  function chooseImageFormat(image) {
+    if(image.includes('https://')) {
+      return image
+    }
+    else{
+      const returner = 'data:image/jpeg;base64,' + image
+      return returner
+    }
+  }
   
   function changeLymeDiseaseYearMap(year) {
     resetLymeDiseaseCaseMap();

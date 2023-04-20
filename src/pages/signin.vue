@@ -15,10 +15,13 @@
             <q-dialog v-model="signedIn" class="" persistent rounded style="font-size:large; background-color:pink;">
                 <div class="q-pa-lg bg-white" align="center">
                     <div class="q-pa-lg" style="font-family:customfont; font-size:x-large">You're signed in!</div>
-                    <q-btn class="bg-primary q-mx-md text-white" @click="$router.push('/form')">
+                    <div class="row">
+                        <q-btn class="bg-primary q-mx-md text-white col text-nowrap" @click="$router.push('/form')">
                         Submit a tick
-                    </q-btn>
-                    <q-btn class="bg-grey text-white q-mx-md" @click="$router.push('/')"> Go back home </q-btn>
+                        </q-btn>
+                        <q-btn class="bg-grey text-white q-mx-md col text-nowrap" @click="$router.push('/')"> Go back home </q-btn>
+
+                    </div>
                 </div>
             </q-dialog>
 
@@ -39,7 +42,7 @@
                     Sign in
                 </q-btn>
                 <q-btn class="q-ml-sm" flat style="align-self:center;" @click="$router.push('/register')">
-                    Don't have an account? Make one here!
+                    create an account here!
                 </q-btn>
             </div>
  
@@ -89,7 +92,8 @@ export default{
         {
             this.loadingBar = true
             //  url for signin
-            const url = 'http://localhost:5095/auth/signin'
+            //const url = 'http://localhost:5095/auth/signin'
+            const url = 'https://ticktrax.nevada.dev/api/auth/signin'
 
             //  api call
             await fetch(url, {
@@ -117,24 +121,6 @@ export default{
 
                 //  save the entered email in session storage (to reference user data)
                 sessionStorage.setItem("email", this.credentials.email)
-
-                const url = 'http://localhost:5095/email/' + this.credentials.email
-
-                //  api call
-                fetch(url, {
-                    //  this means we add to database
-                    method: 'GET',
-
-                    //  this means we are adding of type json
-                    headers: {
-                    'Content-Type' : 'application/json',
-                    },
-
-                })
-                .then(response => response.json())
-                .then(data => {
-                    sessionStorage.setItem("username", data.userName)
-                })
 
                 //  turn on the signedIn flag (pops dialog)
                 this.signedIn = true
@@ -167,6 +153,11 @@ export default{
                     elem.classList.remove("giveShake")
                 }, 1000);
            })
+           const response = await fetch('http://localhost:5095/email/' + this.credentials.email)
+
+           const data = await response.json()
+           
+           sessionStorage.setItem("username", data.userName)
         }
     }
 }

@@ -23,7 +23,7 @@
                   <q-input
                     dense
                     color="green"
-                    v-model="user_details.user_name"
+                    v-model="username"
                     label="Username"
                   />
                 </q-item-section>
@@ -35,7 +35,7 @@
                   <q-input
                     dense
                     color="green"
-                    v-model="user_details.email"
+                    v-model="email"
                     label="Email"
                   />
                 </q-item-section>
@@ -46,7 +46,7 @@
           </q-card-section>
           <q-card-actions align="right" class="q-pa-md">
             <q-btn v-if="$q.platform.is.mobile" align="left" class="bg-positive text-white" @click="logOut()"> log out </q-btn>
-            <q-btn class="text-capitalize bg-positive text-white"
+            <q-btn class="text-capitalize bg-positive text-white" @click="saveGeneralChanges()"
             >Save Changes</q-btn
             >
           </q-card-actions>
@@ -99,7 +99,7 @@
                       <q-input
                         dense
                         color="green"
-                        v-model="user_details.first_name"
+                        v-model="firstName"
                         label="First Name"
                       />
 
@@ -110,7 +110,7 @@
                   <q-input
                     dense
                     color="green"
-                    v-model="user_details.last_name"
+                    v-model="lastName"
                     label="Last Name"
                   />
 
@@ -120,7 +120,7 @@
             </q-list>
           </q-card-section>
           <q-card-actions align="right" class="q-pa-md">
-            <q-btn class="text-capitalize bg-positive text-white"
+            <q-btn class="text-capitalize bg-positive text-white" @click="saveGeneralChanges()"
             >Save Profile</q-btn
             >
           </q-card-actions>
@@ -145,7 +145,7 @@
                   dense
                   color="green"
                   round
-                  v-model="password_dict.current_password"
+                  v-model="oldPassword"
                   label="Old Password"
                 />
               </q-item-section>
@@ -157,7 +157,7 @@
                   dense
                   color="green"
                   round
-                  v-model="password_dict.new_password"
+                  v-model="newPassword"
                   label="New Password"
                 />
               </q-item-section>
@@ -169,7 +169,7 @@
                   dense
                   color="green"
                   round
-                  v-model="password_dict.confirm_new_password"
+                  v-model="confirmNewPassword"
                   label="Confirm New Password"
                 />
               </q-item-section>
@@ -200,7 +200,7 @@ export default {
   props: {
     tab: String
   },
-  setup() {
+    setup() {
     const image = ref(null);
     const imageUrl = ref('');
     watch(image, ()=>{
@@ -217,17 +217,127 @@ export default {
           subject: ref(''),
           message: ref(''),
       }),
+      username: ref(sessionStorage.getItem("username") || 'no value'),
+      email: ref(sessionStorage.getItem("email")  || 'no value'),
+      firstName: ref(sessionStorage.getItem("firstname")  || 'no value'),
+      lastName: ref(sessionStorage.getItem("lastname") || 'no value'),
+      oldPassword: ref(''),
+      newPassword: ref(''),
+      confirmNewPassword: ref(''),
+      id: ref(''),
+
+      body: ref({
+        userSubmissions: ref(''),
+        firstName: ref(''),
+        lastName: ref(''),
+        profilePhoto: ref(''),
+        isDeleted: ref(''),
+        id: ref(''),
+        userName: ref(''),
+        normalizedUserName: ref(''),
+        email: ref(''),
+        normalizedEmail: ref(''),
+        emailconfirmed: ref(''),
+        passwordHash: ref(''),
+        securityStamp: ref(''),
+        concurrencyStamp: ref(''),
+        phoneNumber: ref(''),
+      }),
     }
   },
   methods:{
-        logOut(){
+    logOut(){
       //  clear token
       sessionStorage.clear()
 
       //  push to home page
       this.$router.push('/')
-    }
-  }
+    },
+    async updatePassword(){
+      // if they didn't give the correct old password
+      if(verifyOldPassword()) return
+
+      // if they didn't give matching new and confirm new password
+      if(this.newPassword !== this.confirmNewPassword) return
+
+      // if the new password doesn't meet the requirements
+
+      // otherwise we change the password in the backend
+      else{
+        // setup url
+        // const url = "http://localhost:5095/"
+
+        // send the new password with fetch
+      }
+    },
+    verifyOldPassword(){
+      // checks if the sent password is the same as the password in the backend
+    },
+    async initializeChanges() {
+      //const response = await fetch("http://localhost:5095/email/" + this.email)
+      const response = await fetch("https://ticktrax.nevada.dev/api/email/" + this.email)
+      
+      const data = await response.json()
+
+        body.userSubmissions = data.userSubmissions
+        body.firstName = this.firstName || data.firstName
+        body.lastName = this.lastName || data.lastName
+        body.profilePhoto = data.profilePhoto
+        body.isDeleted = data.isDeleted
+        body.id = data.id,
+        body.userName = this.username || data.userName,
+        body.normalizedUserName = data.normalizedUserName,
+        body.email = this.email || data.email
+        body.normalizedEmail = data.normalizedEmail
+        body.emailconfirmed = data.emailconfirmed
+        body.passwordHash = data.passwordHash
+        body.securityStamp = data.securityStamp
+        body.concurrencyStamp = data.concurrencyStamp
+        body.phoneNumber = data.phoneNumber
+    },
+    async saveGeneralChanges() {
+      // initialize the other profile values
+      initializeGeneralChanges()
+
+      //  if we sense no changes leave
+      if(this.username === sessionStorage.getItem("username") && this.email === sessionStorage.getItem("email")) return
+      
+      // setup url for api call
+      //const url = "http://localhost:5095/update/" + body.id
+      const url = "https://ticktrax.nevada.dev/api/update/" + sessionStorage.getItem("id")
+
+      // api call for save
+      const response = await fetch(url,{
+        method: "POST",
+        headers: {
+          'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify({
+            userSubmissions: body.userSubmissions,
+            firstName: body.firstName,
+            lastName: body.lastName,
+            profilePhoto: body.profilePhoto,
+            isDeleted: body.isDeleted,
+            id: body.id,
+            userName: body.username,
+            normalizedUserName: body.normalizedUserName,
+            email: body.email,
+            normalizedEmail: body.normalizedEmail,
+            emailconfirmed: body.emailconfirmed,
+            passwordHash: body.passwordHash,
+            securityStamp: body.securityStamp,
+            concurrencyStamp: body.concurrencyStamp,
+            phoneNumber: body.phoneNumber,
+          })
+      })
+
+      const data = await response.json()
+
+      console.log(data)
+    },
+
+
+  },
 }
 </script>
 

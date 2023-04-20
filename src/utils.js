@@ -161,6 +161,81 @@ export function JSONtoGeoJSON(jsonData) {
 
 }
 
+export function ourGeoJSON(Data) {
+
+  let geoJson = {
+    id: "ticks",
+    type: "FeatureCollection",
+    features: []
+  }
+
+  for (let row of Data) {
+    let latitude = '';
+    try {
+      latitude = row.latitude
+    } catch(err) {
+      continue;
+    }
+      const longitude = row.longitude
+
+      const scientificName = 'no value'
+
+      const id = row.id
+
+      let dateObserved = '';
+      let commonName = '';
+
+      try {
+        commonName = 'no value'
+        dateObserved = row.time
+      } catch (err) {}
+
+      let location = '';
+      try {
+        location = row.c[5].v;
+      } catch(err) {}
+
+
+      let photoUrls = '';
+      try {
+        photoUrls = row.photo
+      } catch (err) {}
+
+
+    let attribution = '';
+    try {
+      attribution = 'no value'
+    } catch (err) {}
+
+    let feature = {
+      type: "Feature",
+      geometry: {
+        type: "Point",
+        coordinates: [longitude, latitude]
+      },
+    }
+
+    let properties = {
+      "id": id,
+      "commonName": commonName,
+      "scientificName": scientificName,
+      "location": location,
+      "coordinates": {longitude, latitude},
+      "observedOn": dateObserved,
+      "imageUrls": photoUrls,
+      "attribution": attribution
+    }
+
+    geoJson.features.push(
+      {
+        ...feature,
+        properties
+      }
+    );
+  }
+  return geoJson;
+}
+
 export function formatDate(date) {
 
   const inputDate = new Date(date);

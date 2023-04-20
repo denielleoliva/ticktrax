@@ -1,6 +1,6 @@
 <template>
     <div class="q-pa-md row items-start q-gutter-md" style="justify-content:center;">
-        <q-card class="tickCard shadow-10">
+        <q-card class="tickCard shadow-10" @click="onCardClickSpider" v-ripple>
             <q-img img style="max-height:500px; max-width:300px;" :ratio="1"
                 src="../assets/tickimage_card.jpg">
             </q-img>
@@ -14,8 +14,8 @@
                 </div>
             </div>
         </q-card>
-        
-        <q-card class="tickCard shadow-10">
+
+        <q-card class="tickCard shadow-10" @click="onCardClickPlaces" vripple>
             <q-img img style="max-height:500px; max-width:300px;" :ratio="1"
                 src="../assets/forest-g6c87391d7_1920.jpg"/>
             <div class="caption">
@@ -29,7 +29,7 @@
             </div>
         </q-card>
 
-        <q-card class="tickCard shadow-10">
+        <q-card class="tickCard shadow-10" @click="onCardClickSoaring" v-ripple>
             <q-img img style="max-height:500px; max-width:300px;" :ratio="1"
                 src="../assets/bird_card.jpg"/>
             <div class="caption">
@@ -44,7 +44,7 @@
             </div>
         </q-card>
 
-        <q-card class="tickCard shadow-10">
+        <q-card class="tickCard shadow-10" @click="onCardClickDogs" v-ripple>
             <q-img img style="max-height:500px; max-width:300px;" :ratio="1"
                 src="../assets/english-cocker-spaniel-gb3a107538_1920.jpg"/>
             <div class="caption">
@@ -62,6 +62,21 @@
 
 <script setup>
 
+const onCardClickSpider = () =>{
+    window.location.href="https://www.sciencedaily.com/releases/2019/05/190524081637.htm";
+}
+
+const onCardClickPlaces = () =>{
+    window.location.href="https://www.cdc.gov/relapsing-fever/transmission/index.html";
+}
+
+const onCardClickSoaring = () =>{
+    window.location.href="https://parasitesandvectors.biomedcentral.com/articles/10.1186/s13071-017-2535-4";
+}
+
+const onCardClickDogs = () =>{
+    window.location.href="https://nexgard.com.au/parasites/ticks";
+}
 </script>
 
 <style>
